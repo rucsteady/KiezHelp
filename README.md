@@ -29,7 +29,7 @@ node main.js
 
 ## Current Update
 ```
-Please switch to Sprint01 to check the latest progress (21.April)
+Switch to branch Sprint01 to check the latest progress (21.April)
 ```
 KiezHelp currently has 4 static pages:
 `Home` : A simple landing page letting user switching between volunteer and help requester (helpee)
