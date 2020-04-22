@@ -13,7 +13,7 @@ area is a "match" for them. Users can set up a time and date for activities in t
 chat. 
 
 
-## How to Clone and Open it Properly
+## How to Clone and Run the App Properly
 If you have [node](http://nodejs.org/) you can install with [npm](http://npmjs.org) as node-modules folder is not uploaded to manage the size of the project.
 ```
 npm install
