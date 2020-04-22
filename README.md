@@ -65,4 +65,11 @@ git stash list
 ```
 git stash apply stash@{numberhere}
 ```
-
+If you want to delete a branch locally (!do with caution!)
+```
+git branch -d <branch name>
+```
+Or remotely:
+```
+git push origin --delete  <branch name>
+```
