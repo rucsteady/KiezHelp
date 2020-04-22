@@ -1,6 +1,6 @@
 # KiezHelp
 
-`KiezHelp` During difficult times like these the most vulnerable people — the elderly, people
+During difficult times like these the most vulnerable people — the elderly, people
 with disabilities, or perhaps single parents — in our communities need help with
 everyday tasks such as grocery shopping or getting medicine from the pharmacy,
 or maybe they just wish to chat with someone on the phone to ease the
