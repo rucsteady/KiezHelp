@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Geolocation</title>
+
+
+    <link rel="stylesheet" type="text/css" href="w3.css" />
+    <link rel="stylesheet" type="text/css" href="kiezhelp.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway" />
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+        
+        #aboveMap {
+            width: 60%;
+            margin: auto;
+            margin-bottom: 20px;
+            padding-top: 150px;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            #aboveMap {
+                width: 90%;
+                padding-top: 20px;
+            }
+            #headline {
+                font-size: 30px !important;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="navbar">
+        <a href="/">Home</a>
+        <a href="/volunteer">Volunteer</a>
+        <a href="/requester">Requester</a>
+        <a href="/locate">Locate</a>
+    </div>
+
+    <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+        <div class="w3-display-topleft w3-padding-large w3-xlarge w3-hide-small">
+            KiezHelp
+        </div>
+        <!-- here -->
+        <div class="container  w3-center w3-jumbo">
+            <div id="aboveMap">
+                <h1 class="w3-animate-top" id="headline">Find Help or Volunteer Near You</h1>
+                <hr class="w3-border-grey" style="margin: 10px 0px; width: 100%;" />
+                <button onclick="getLocation()" class="btn w3-black btn-block">Get My Location</button>
+                <h2 class="w3-center" style="text-align:center">or</h2>
+
+                <div id="location-form">
+                    <input type="text" id="location-input" class="form-control form-control-lg" style="margin-bottom: 5px" placeholder="Enter Address">
+                    <!-- <small id="invalid" style="display:none; color: red; font-size: 15px">* Invalid Address</small> -->
+                    <button onclick="enterLocation()" class="btn w3-black btn-block">Submit</button>
+                </div>
+            </div>
+
+            <div id="map"></div>
+
+        </div>
+
+        <div class="w3-display-bottomleft w3-padding-large w3-hide-small">
+            Project
+            <a href="https://www.htw-berlin.de" target="_blank">KiezHelp</a>
+        </div>
+    </div>
+
+
+    <script>
+        //please don't share, disclose, or copy this key as it is my(Fan's) private Google API Key
+        var GoogleAPIKey = 'AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc';
+
+
+        function enterLocation() {
+
+            var location = document.getElementById('location-input').value;
+
+            axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                    params: {
+                        address: location,
+                        key: GoogleAPIKey
+                    }
+                })
+                .then(function(response) {
+                    console.log(response);
+                    var myLat = response.data.results[0].geometry.location.lat;
+                    var myLng = response.data.results[0].geometry.location.lng;
+                    if (myLat && myLng) {
+                        console.log('oo');
+                        // document.getElementById('invalid').style.display = 'none !important';
+                    }
+                    initMap(myLat, myLng);
+                })
+                .catch(function(err) {
+                    // document.getElementById('invalid').style.display = 'inline-block';
+
+                    console.log(err);
+                });
+        }
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showLocationOnMap);
+            } else {
+                //warning: "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showLocationOnMap(position) {
+            var myLat = position.coords.latitude;
+            var myLng = position.coords.longitude;
+            initMap(myLat, myLng);
+        }
+
+        function initMap(myLat, myLng) {
+            //set default location to alexanderplatz' coordinates
+            if (!myLat || !myLng) {
+                myLat = 52.520817;
+                myLng = 13.409419;
+            }
+            //set map center and zoom
+            var options = {
+                    zoom: 11,
+                    center: {
+                        lat: myLat,
+                        lng: myLng
+                    }
+                }
+                //new map
+            var map = new google.maps.Map(document.getElementById('map'), options);
+            //new marker
+            var marker = new google.maps.Marker({
+                map: map
+            });
+            //new infowindow
+            var infoWindow = new google.maps.InfoWindow({
+                content: '<h1>detail not found</h1>'
+            });
+
+            marker.addListener('click', function() {
+                infoWindow.open(map, marker);
+            });
+            // Array of markers
+            var markers = [{
+                coords: {
+                    lat: myLat,
+                    lng: myLng
+                },
+                iconImage: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+
+            }, {
+                coords: {
+                    lat: 52.530017,
+                    lng: 13.519419
+                },
+                content: '<h4>Grocery Shopping</h4><h4>May 03</h4><h4>14:30-16:30</h4><a href="#">See Detail</a>'
+            }, {
+                coords: {
+                    lat: 52.583817,
+                    lng: 13.407420
+                },
+                content: '<h4>Dog Walking</h4><h4>May 03</h4><h4>14:30-16:30</h4><a href="#">See Detail</a>'
+            }];
+
+            // Loop through markers
+            for (var i = 0; i < markers.length; i++) {
+                addMarker(markers[i]);
+            }
+
+            // Add Marker Function
+            function addMarker(props) {
+                var marker = new google.maps.Marker({
+                    position: props.coords,
+                    map: map,
+                    icon: props.iconImage
+                });
+
+                // Check for customicon
+                if (props.iconImage) {
+                    // Set icon image
+                    marker.setIcon(props.iconImage);
+                }
+
+                // Check content
+                if (props.content) {
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: props.content
+                    });
+
+                    marker.addListener('click', function() {
+                        infoWindow.open(map, marker);
+                    });
+                }
+            }
+
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc&callback=initMap&enterLocation">
+    </script>
+</body>
+
+</html>
