@@ -1,40 +1,105 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>KiezHelp</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" href="w3.css" />
     <link rel="stylesheet" type="text/css" href="kiezhelp.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Raleway"
-    />
-  </head>
-  <body>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway" />
+    <style>
+        small {
+            color: yellow;
+        }
+        
+        .form-container {
+            width: 400px;
+            margin: auto;
+            padding-top: 130px;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .form-container {
+                width: 90% !important;
+                margin: auto;
+                padding-top: 0px;
+            }
+            #headline {
+                font-size: 30px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
     <div id="navbar">
-      <a href="/">Home</a>
-      <a href="/volunteer">Volunteer</a>
-      <a href="/requester">Requester</a>
+        <a href="/">Home</a>
+        <a href="/volunteer">Volunteer</a>
+        <a href="/requester">Requester</a>
+        <a href="/locate">Locate</a>
     </div>
 
     <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
-      <div class="w3-display-topleft w3-padding-large w3-xlarge">
-        Logo
-      </div>
-      <div class="w3-display-middle">
-        <h1 class="w3-jumbo w3-animate-top">VOLUNTEER <br />COMING SOON</h1>
-        <hr class="w3-border-grey" style="margin: auto; width: 40%;" />
-        <p class="w3-large w3-center">35 days left</p>
-        <form class="contact-form" action="/" method="POST">
-          <input type="email" name="email" required />
-          <input class="button" type="submit" value="submit" />
-        </form>
-      </div>
-      <div class="w3-display-bottomleft w3-padding-large">
-        Project
-        <a href="https://www.htw-berlin.de" target="_blank">KiezHelp</a>
-      </div>
+        <div class="w3-display-topleft w3-padding-large w3-xlarge w3-hide-small">
+            KiezHelp
+        </div>
+        <div class="form-container  w3-jumbo">
+            <form class="request-form w3-animate-top" action="/" method="POST">
+                <h1 class="w3-jumbo w3-animate-top" style="text-align: left;" id="headline">OFFER <br />YOUR HELP</h1>
+                <hr class="w3-border-grey" style="margin: auto; width: 100%;" />
+                <div class="w3-row-padding w3-large ">
+                    <div>
+                        <label>Name</label"> <small>*required</small>
+                    <input class="w3-input w3-border" type="text" placeholder="Jane Doe" required>
+                   </div>
+                   <div>
+                       <label>Postal Code</label"> <small>*required</small>
+                        <input class="w3-input w3-border" type="number" placeholder="eg. 10771" required>
+                    </div>
+                    <div>
+                        <label>Help Genre</label> <small>*required</small>
+                        <div class="w3-dropdown-hover w3-block">
+                            <select class="w3-select" name="option" required>
+                              <option value="" disabled selected>Choose one or click other</option>
+                              <option value="1">Grocery Shopping</option>
+                              <option value="2">Babysitting</option>
+                              <option value="3">Run Errands</option>
+                              <option value="4">Friendly Chat</option>
+                              <option value="5">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Date</label>
+                        <input class="w3-block" type="date" name="date">
+                    </div>
+
+                    <div>
+                        <label>Duration</label>
+                        <div class="w3-block">
+                            <input class="w3-third" type="time" id="appt" name="appt">
+                            <p class="w3-third w3-center" style="margin:0;">to</p>
+                            <input class="w3-third" type="time" id="appt" name="appt">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Message</label">
+                        <textarea class="w3-input w3-border" placeholder="Provide more detail..."></textarea>
+                    </div>
+ 
+                    <p><input class="button w3-button w3-black w3-block" type="submit" value="Volunteer"></p>
+ 
+                </div>
+            </form>
+        </div>
+        <div class="w3-display-bottomleft w3-padding-large w3-hide-small">
+            Project
+            <a href="https://www.htw-berlin.de" target="_blank">KiezHelp</a>
+        </div>
     </div>
-  </body>
+</body>
+ 
 </html>
