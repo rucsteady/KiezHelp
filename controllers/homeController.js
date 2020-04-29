@@ -1,22 +1,20 @@
-exports.sendIndexRes = (req, res) => {
-    res.render("index");
-  };
-  
-  exports.respondWithName = (req, res) => {
+exports.sendReqParam = (req, res) => {
+    let paramsType = req.params.type;
+    let paramsCat = req.params.category;
+    res.render("locate", { type: paramsType, category: paramsCat });
+};
+
+exports.respondWithName = (req, res) => {
     let paramsName = req.params.name;
     res.render("index", { name: paramsName });
-  };
+};
 
-  exports.respondToVol = (req, res) => {
-      res.render("volunteer");
-  }
+exports.logErrors = (error, req, res, next) => {
+    console.error(error.stack);
+    next(error);
+};
 
-  exports.respondToReq = (req, res) => {
-    res.render("requester");
-}
-
-exports.respondToLoc = (req, res) => {
-    res.render("locate");
-}
-  
-  
+exports.respondWithPage = (req, res) => {
+    // console.log(req.params.page);
+    res.render(`${req.params.page}`);
+};

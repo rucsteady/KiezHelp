@@ -1,43 +1,126 @@
 body {
-  background-color: indigo;  
+    background-color: indigo;
 }
+
 h1 {
-  font-family: "Raleway", sans-serif;
+    font-family: "Raleway", sans-serif;
 }
+
 body,
 html {
-  height: 100%;
+    height: 100%;
 }
+
 .bgimg {
-  background-image: url("../images/kiezhelp_bg.jpg");
-  min-height: 100%;
-  background-position: center;
-  background-size: cover;
+    /* background-image: url("../images/kiezhelp_bg.jpg"); */
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
 }
 
 #navbar {
-  overflow: hidden;
-  background-color: #333;
+    overflow: hidden;
+    background-color: #333;
 }
 
 #navbar a {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
 }
 
 .content {
-  padding: 16px;
-}
-.sticky {
-  position: fixed;
-  top: 0;
-  width: 100%;
+    padding: 16px;
 }
 
-.sticky + .content {
-  padding-top: 60px;
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.sticky+.content {
+    padding-top: 60px;
+}
+
+#footer {
+    color: #f2f2f2;
+}
+
+.index-container {
+    width: 400px;
+    margin: auto;
+    padding-top: 250px;
+}
+
+
+/* #aboveMap {
+width: 60%;
+margin: auto;
+margin-bottom: 20px;
+} */
+
+@media only screen and (max-width: 600px) {
+    .index-container {
+        width: 90% !important;
+        margin: auto;
+        padding-top: 100px;
+    }
+    #headline {
+        font-size: 30px !important;
+    }
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+    text-decoration: none;
+}
+
+small {
+    color: yellow;
+}
+
+.form-container {
+    width: 400px;
+    margin: auto;
+    padding-top: 130px;
+}
+
+@media only screen and (max-width: 600px) {
+    .form-container {
+        width: 90% !important;
+        margin: auto;
+        padding-top: 0px;
+    }
+    #headline {
+        font-size: 30px !important;
+    }
+}
+
+#map {
+    height: 600px;
+    width: 100%;
+    color: black;
+}
+
+#aboveMap {
+    width: 60%;
+    margin: auto;
+    margin-bottom: 20px;
+    padding-top: 150px;
+}
+
+@media only screen and (max-width: 600px) {
+    #aboveMap {
+        width: 90%;
+        padding-top: 20px;
+    }
+    #headline {
+        font-size: 30px !important;
+    }
 }
