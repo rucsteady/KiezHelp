@@ -11,8 +11,10 @@ app.get("view engine");
 app.use(layouts);
 app.use(express.static("public"));
 
-
 app.get("/", homeController.sendIndexRes);
+app.get("/volunteer", homeController.respondToVol);
+app.get("/requester", homeController.respondToReq);
+app.get ("/locate", homeController.respondToLoc);
 
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
