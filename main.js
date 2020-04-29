@@ -1,49 +1,23 @@
-const port = 3000,
-    http = require("http"),
-    httpStatus = require("http-status-codes"),
-    router = require("./router"),
-    contentTypes = require("./contentTypes"),
-    utils = require("./utils");
+const express = require("express"),
+  app = express();
 
-router.get("/", (req, res) => {
-    res.writeHead(httpStatus.OK, contentTypes.htm);
-    utils.getFile("views/index.html", res);
-});
+const homeController = require("./controllers/homeController");
+const errorController = require("./controllers/errorController");
+const layouts = require("express-ejs-layouts");
 
-router.get("/volunteer", (req, res) => {
-    res.writeHead(httpStatus.OK, contentTypes.html);
-    utils.getFile("views/volunteer.html", res);
-});
+app.set("port", process.env.PORT || 3000);
+app.set("view engine", "ejs");
+app.get("view engine");
+app.use(layouts);
+app.use(express.static("public"));
 
-router.get("/requester", (req, res) => {
-    res.writeHead(httpStatus.OK, contentTypes.html);
-    utils.getFile("views/requester.html", res);
-});
 
-router.get("/locate", (req, res) => {
-    res.writeHead(httpStatus.OK, contentTypes.html);
-    utils.getFile("views/locate.html", res);
-});
+app.get("/", homeController.sendIndexRes);
 
-router.get("/kiezhelp.css", (req, res) => {
-    res.writeHead(httpStatus.OK, contentTypes.css);
-    utils.getFile("public/css/kiezhelp.css", res);
-});
+app.use(errorController.respondNoResourceFound);
+app.use(errorController.respondInternalError);
 
-router.get("/w3.css", (req, res) => {
-    res.writeHead(httpStatus.OK, contentTypes.css);
-    utils.getFile("public/css/w3.css", res);
-});
-
-router.get("/contact.html", (req, res) => {
-    res.writeHead(httpStatus.OK, contentTypes.html);
-    utils.getFile("views/contact.html", res);
-});
-
-router.get("kiezhelp_bg.jpg", (req, res) => {
-    res.writeHead(httpStatus.OK, contentTypes.jpg);
-    utils.getFile("public/images/kiezhelp_bg.jpg", res);
-});
-
-http.createServer(router.handle).listen(port);
-console.log(`The server is listening on port number: ${port}`);
+app.listen(app.get("port"), () => {
+    console.log(`Server running at http://localhost:${app.get("port")}`);
+  });
+  
