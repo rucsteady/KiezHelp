@@ -14,12 +14,11 @@ app.use(express.static("public"));
 app.get("/", homeController.sendIndexRes);
 app.get("/volunteer", homeController.respondToVol);
 app.get("/requester", homeController.respondToReq);
-app.get ("/locate", homeController.respondToLoc);
+app.get("/locate", homeController.respondToLoc);
 
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
 
 app.listen(app.get("port"), () => {
-    console.log(`Server running at http://localhost:${app.get("port")}`);
-  });
-  
+  console.log(`Server running at http://localhost:${app.get("port")}`);
+});
