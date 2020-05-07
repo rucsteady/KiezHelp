@@ -1,0 +1,241 @@
+<div class="container  w3-center w3-jumbo">
+    <div id="aboveMap">
+        <h1 class="w3-animate-top" id="headline">
+            <% if (type == "helpee&volunteer") { %>
+                Find Help or Volunteer Near You
+                <%} else if(type == "helpee"){ %>
+                    Find Helpee Near You
+                    <%} else if(type == "volunteer"){ %>
+                        Find Volunteer Near You
+                        <% } %>
+        </h1>
+        <hr class="w3-border-grey" style="margin: 10px 0px; width: 100%;" />
+        <button onclick="getLocation()" class="btn w3-black btn-block">Get My Location</button>
+        <h2 class="w3-center" style="text-align:center; font-size:17px">or</h2>
+
+        <div id="location-form">
+            <input type="text" id="location-input" class="form-control form-control-lg" style="margin-bottom: 5px" placeholder="Enter Address">
+            <!-- <small id="invalid" style="display:none; color: red; font-size: 15px">* Invalid Address</small> -->
+            <button onclick="enterLocation()" class="btn w3-black btn-block">Submit</button>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+</div>
+
+<script>
+    //please don't share, disclose, or copy this key as it is my(Fan's) private Google API Key
+    var GoogleAPIKey = 'AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc';
+
+    function enterLocation() {
+        var location = document.getElementById('location-input').value;
+        axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                params: {
+                    address: location,
+                    key: GoogleAPIKey
+                }
+            })
+            .then(function(response) {
+                console.log(response);
+                var myLat = response.data.results[0].geometry.location.lat;
+                var myLng = response.data.results[0].geometry.location.lng;
+                if (myLat && myLng) {
+                    console.log('oo');
+                    // document.getElementById('invalid').style.display = 'none !important';
+                }
+                initMap(myLat, myLng);
+            })
+            .catch(function(err) {
+                // document.getElementById('invalid').style.display = 'inline-block';
+                console.log(err);
+            });
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showLocationOnMap);
+        } else {
+            //warning: "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showLocationOnMap(position) {
+        var myLat = position.coords.latitude;
+        var myLng = position.coords.longitude;
+        initMap(myLat, myLng);
+    }
+
+    function initMap(myLat, myLng) {
+        //set default location to alexanderplatz' coordinates
+        if (!myLat || !myLng) {
+            myLat = 52.520817;
+            myLng = 13.409419;
+        }
+        //set map center and zoom
+        var options = {
+                zoom: 13,
+                center: {
+                    lat: myLat,
+                    lng: myLng
+                }
+            }
+            //new map
+        var mapTag = document.getElementById('map')
+        var map = new google.maps.Map(mapTag, options);
+        //new marker
+        var marker = new google.maps.Marker({
+            map: map
+        });
+        //new infowindow
+        var infoWindow = new google.maps.InfoWindow({
+            content: '<h1>detail not found</h1>'
+        });
+        marker.addListener('click', function() {
+            infoWindow.open(map, marker);
+        });
+        // Array of markers
+        var myLocMarker = {
+            position: new google.maps.LatLng(myLat, myLng),
+            type: 'myloc'
+        };
+        addMarker(myLocMarker);
+        var contentString = '<div id="content">' +
+            '<div id="siteNotice">' +
+            '</div>' +
+            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+            '<div id="bodyContent">' +
+            '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+            'sandstone rock formation in the southern part of the ' +
+            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
+            'south west of the nearest large town, Alice Springs; 450&#160;km ' +
+            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
+            'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
+            'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
+            'Aboriginal people of the area. It has many springs, waterholes, ' +
+            'rock caves and ancient paintings. Uluru is listed as a World ' +
+            'Heritage Site.</p>' +
+            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+            'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
+            '(last visited June 22, 2009).</p>' +
+            '</div>' +
+            '</div>';
+        var markers = [{
+            position: new google.maps.LatLng(52.533818, 13.419417),
+            type: 'helpee',
+            title: 'groceryShopping',
+            content: '<h4>groceryShopping</h4>'
+        }, {
+            position: new google.maps.LatLng(52.533110, 13.413417),
+            type: 'helpee',
+            title: 'groceryShopping',
+            content: '<h4>groceryShopping</h4>'
+        }, {
+            position: new google.maps.LatLng(52.500815, 13.429417),
+            type: 'helpee',
+            title: 'dogWalking',
+            content: '<h4>dogWalking</h4>'
+        }, {
+            position: new google.maps.LatLng(52.501815, 13.429417),
+            type: 'helpee',
+            title: 'dogWalking',
+            content: '<h4>dogWalking</h4>'
+        }, {
+            position: new google.maps.LatLng(52.510833, 13.429419),
+            type: 'helpee',
+            title: 'groceryShopping',
+            content: '<h4>Grocery Shopping</h4>'
+        }, {
+            position: new google.maps.LatLng(52.521818, 13.419419),
+            type: 'volunteer',
+            title: 'dogWalking',
+            content: '<h4>dogWalking</h4>'
+        }, {
+            position: new google.maps.LatLng(52.530919, 13.409420),
+            type: 'volunteer',
+            title: 'groceryShopping',
+            content: '<h4>Grocery Shopping</h4>'
+        }, {
+            position: new google.maps.LatLng(52.521818, 13.319419),
+            type: 'volunteer',
+            title: 'dogWalking',
+            content: '<h4>dogWalking</h4>'
+        }, {
+            position: new google.maps.LatLng(52.530919, 12.409420),
+            type: 'volunteer',
+            title: 'groceryShopping',
+            content: '<h4>Grocery Shopping</h4>'
+        }, {
+            position: new google.maps.LatLng(52.521818, 13.414419),
+            type: 'volunteer',
+            title: 'dogWalking',
+            content: '<h4>dogWalking</h4>'
+        }, {
+            position: new google.maps.LatLng(52.540919, 13.409420),
+            type: 'volunteer',
+            title: 'groceryShopping',
+            content: '<h4>Grocery Shopping</h4>'
+        }];
+        // Loop through markers
+        for (var i = 0; i < markers.length; i++) {
+            addMarker(markers[i]);
+        }
+        // Add Marker Function
+        function addMarker(props) {
+            //filter out other types
+            var filterType = `<%=type%>`;
+            var filterCat = `<%=category%>`;
+            //filter type
+            if (props.type !== "myloc") {
+                if (filterType !== "helpee&amp;volunteer" && props.type !== filterType) {
+                    return;
+                }
+                //filter category
+                if (filterCat !== "allcategory" && props.title !== filterCat) {
+                    return;
+                }
+            }
+            //filter only the wanted ones
+            var titles = [
+                'groceryShopping',
+                'dogWalking'
+            ];
+            var icons = {
+                myloc: {
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        fillColor: '#fc0339',
+                        fillOpacity: 0.9,
+                        strokeColor: '#540314',
+                        strokeOpacity: 0.9,
+                        strokeWeight: 1,
+                        scale: 9
+                    }
+                },
+                helpee: {
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png'
+                },
+                volunteer: {
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                }
+            };
+            var marker = new google.maps.Marker({
+                position: props.position,
+                map: map,
+                icon: icons[props.type].icon
+            });
+            // Check content
+            if (props.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+                marker.addListener('mouseover', function() {
+                    infoWindow.open(map, marker);
+                });
+                marker.addListener('mouseout', function() {
+                    infoWindow.close(map, marker);
+                });
+            }
+        }
+    }
+</script>
