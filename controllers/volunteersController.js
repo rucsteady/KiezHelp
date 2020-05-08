@@ -1,15 +1,16 @@
-const Mongoose = require("mongoose"),
-  Volunteer = require("../models/volunteer");
+"use strict";
+
+const Volunteer = require("../models/volunteer");
 
 exports.getAllVolSubscribers = (req, res) => {
-  Subscriber.find({})
+  Volunteer.find({})
     .exec()
-    .then((volunteers) => {
+    .then(volunteers => {
       res.render("volunteers", {
-        volunteers: volunteers,
+        volunteers: volunteers
       });
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error.message);
       return [];
     })
@@ -19,14 +20,14 @@ exports.getAllVolSubscribers = (req, res) => {
 };
 
 exports.getVolSubscriptionPage = (req, res) => {
-  res.render("volunteers");
+  res.render("volunteer");
 };
 
 exports.saveVolSubscriber = (req, res) => {
   let newVolSubscriber = new Volunteer({
     name: req.body.name,
     email: req.body.email,
-    zipCode: req.body.zipCode,
+    zipcode: req.body.zipcode,
   });
   newVolSubscriber
     .save()
@@ -37,9 +38,3 @@ exports.saveVolSubscriber = (req, res) => {
       if (error) res.send(error);
     });
 };
-
-exports.getVolunteer = (req, res) => {
-  res.render("volunteer");
-};
-
-
