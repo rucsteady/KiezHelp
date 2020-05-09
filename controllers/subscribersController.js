@@ -6,12 +6,12 @@ const Requester = require("../models/requester");
 exports.getAllVolSubscribers = (req, res) => {
   Volunteer.find({})
     .exec()
-    .then(volunteers => {
+    .then((volunteers) => {
       res.render("volunteers", {
-        volunteers: volunteers
+        volunteers: volunteers,
       });
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error.message);
       return [];
     })
@@ -28,6 +28,9 @@ exports.saveVolSubscriber = (req, res) => {
   let newVolSubscriber = new Volunteer({
     name: req.body.name,
     zipcode: req.body.zipcode,
+    date: req.body.date,
+    durafrom: req.body.durafrom,
+    durato: req.body.durato,
     message: req.body.message,
   });
   newVolSubscriber
@@ -40,16 +43,15 @@ exports.saveVolSubscriber = (req, res) => {
     });
 };
 
-
 exports.getAllReqSubscribers = (req, res) => {
   Requester.find({})
     .exec()
-    .then(requesters => {
+    .then((requesters) => {
       res.render("requesters", {
-        requesters: requesters
+        requesters: requesters,
       });
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error.message);
       return [];
     })
@@ -66,6 +68,9 @@ exports.saveReqSubscriber = (req, res) => {
   let newReqSubscriber = new Requester({
     name: req.body.name,
     zipcode: req.body.zipcode,
+    date: req.body.date,
+    durafrom: req.body.durafrom,
+    durato: req.body.durato,
     message: req.body.message,
   });
   newReqSubscriber

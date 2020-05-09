@@ -7,7 +7,19 @@
         <div>
             <label>Postal Code</label> <small>*required</small>
             <input class="w3-input w3-border w3-block" name="zipcode" type="text" placeholder="eg. 10771" required>
-        </div>       
+        </div>     
+        <div>
+            <label>Date</label>
+            <input class="w3-block" type="date" name="date">
+        </div>          
+        <div>
+            <label>Duration</label>
+            <div class="w3-block">
+                <input class="w3-third" type="time" id="appt" name="durafrom">
+                <p class="w3-third w3-center" style="margin:0;">to</p>
+                <input class="w3-third" type="time" id="appt" name="durato">
+            </div>
+        </div>     
         <div>
             <label>Message</label>
             <textarea class="w3-input w3-border" name="message" placeholder="Provide more detail..."></textarea>
