@@ -8,6 +8,22 @@
             <label>Postal Code</label> <small>*required</small>
             <input class="w3-input w3-border w3-block" name="zipcode" type="text" placeholder="eg. 10771" required>
         </div>     
+
+        <div>
+            <label>Help Genre</label> <small>*required</small>
+            <div class="w3-dropdown-hover w3-block">
+                <select class="w3-select" name="option" required >
+                    <option value="" disabled selected>Choose one or click other</option>
+                    <option value="1">Grocery Shopping</option>
+                    <option value="2">Babysitting</option>
+                    <option value="3">Run Errands</option>
+                    <option value="4">Friendly Chat</option>
+                    <option value="5">Other</option>
+                </select>
+            </div>
+        </div>
+
+        
         <div>
             <label>Date</label>
             <input class="w3-block" type="date" name="date">

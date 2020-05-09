@@ -28,6 +28,7 @@ exports.saveVolSubscriber = (req, res) => {
   let newVolSubscriber = new Volunteer({
     name: req.body.name,
     zipcode: req.body.zipcode,
+    option: req.body.option,
     date: req.body.date,
     durafrom: req.body.durafrom,
     durato: req.body.durato,
@@ -68,6 +69,7 @@ exports.saveReqSubscriber = (req, res) => {
   let newReqSubscriber = new Requester({
     name: req.body.name,
     zipcode: req.body.zipcode,
+    option: req.body.option,
     date: req.body.date,
     durafrom: req.body.durafrom,
     durato: req.body.durato,
