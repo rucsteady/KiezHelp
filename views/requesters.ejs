@@ -1,21 +1,21 @@
 <div class="form-container w3-jumbo">
   <h1 class="w3-jumbo w3-animate-top" style="text-align: left;" id="headline">
-    ALL <br />VOLUNTEERS
+    ALL <br />REQUESTERS
   </h1>
   <hr class="w3-border-grey" style="margin: auto; width: 100%;" />
-  <% volunteers.forEach(v => { %>
+  <% requester.forEach(r => { %>
   <div class="subscriber">
     <p>
       <span class="item-label">Name:</span>
-      <%= v.name %>
+      <%= r.name %>
     </p>
     <p>
       <span class="item-label">Zip Code:</span>
-      <%= v.zipcode %>
+      <%= r.zipcode %>
     </p>
     <p>
       <span class="item-label">Message:</span>
-      <%= v.message %>
+      <%= r.message %>
     </p>
   </div>
   <% }); %>

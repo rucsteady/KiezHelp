@@ -4,7 +4,7 @@ const express = require("express"),
   app = express(),
   homeController = require("./controllers/homeController"),
   errorController = require("./controllers/errorController"),
-  volunteersController = require("./controllers/volunteersController"),
+  subscribersController = require("./controllers/subscribersController"),
   layouts = require("express-ejs-layouts");
 
 const mongoose = require("mongoose");
@@ -24,11 +24,15 @@ app.use(layouts);
 app.use(express.static("public"));
 
 app.get("/", homeController.getIndex);
-app.get("/volunteers", volunteersController.getAllVolSubscribers);
-app.get("/volunteer", volunteersController.getVolSubscriptionPage);
-app.post("/subscribe", volunteersController.saveVolSubscriber);
 
-app.get("/requester", homeController.getRequester);
+app.get("/volunteers", subscribersController.getAllVolSubscribers);
+app.get("/volunteer", subscribersController.getVolSubscriptionPage);
+app.post("/subscribeVol", subscribersController.saveVolSubscriber);
+
+app.get("/requesters", subscribersController.getAllReqSubscribers);
+app.get("/requester", subscribersController.getReqSubscriptionPage);
+app.post("/subscribeReq", subscribersController.saveReqSubscriber);
+
 app.get("/locate/:type/:category", homeController.sendReqParam);
 
 app.use(errorController.respondNoResourceFound);

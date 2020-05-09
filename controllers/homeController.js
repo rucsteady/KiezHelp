@@ -13,10 +13,6 @@ exports.getIndex = (req, res) => {
   res.render("index");
 };
 
-exports.getRequester = (req, res) => {
-  res.render("requester");
-};
-
 // exports.respondWithPage = (req, res) => {
   // console.log(req.params.page);
 //  res.render(`${req.params.page}`);

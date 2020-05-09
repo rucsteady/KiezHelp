@@ -1,0 +1,19 @@
+<div class="w3-row-padding w3-large ">
+    <form class="request-form w3-animate-top" action="/subscribeReq" method="post">
+        <div>
+            <label>Name</label> <small>*required</small>
+            <input class="w3-input w3-border" name="name" type="text" placeholder="Jane Doe" required>
+        </div>
+        <div>
+            <label>Postal Code</label> <small>*required</small>
+            <input class="w3-input w3-border w3-block" name="zipcode" type="text" placeholder="eg. 10771" required>
+        </div>       
+        <div>
+            <label>Message</label>
+            <textarea class="w3-input w3-border" name="message" placeholder="Provide more detail..."></textarea>
+        </div>
+        <div>
+            <input class="button w3-button w3-black w3-block" style="margin:20px 0" type="submit" value=<%=buttonText%>>
+        </div>
+    </form>
+</div>
