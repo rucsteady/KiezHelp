@@ -1,0 +1,40 @@
+<div class="form-container w3-jumbo">
+  <h1 class="w3-jumbo w3-animate-top" style="text-align: left;" id="headline">
+    ALL <br />VOLUNTEERS
+  </h1>
+  <hr class="w3-border-grey" style="margin: auto; width: 100%;" />
+  <% volunteers.forEach(v => { %>
+  <div class="subscriber">
+    <p>
+      <span class="item-label">Name:</span>
+      <%= v.name %>
+    </p>
+    <p>
+      <span class="item-label">Zip Code:</span>
+      <%= v.zipcode %>
+    </p>
+
+    <p>
+      <span class="item-label">Option:</span>
+      <%= v.option %>
+    </p>
+
+    <p>
+      <span class="item-label">Date:</span>
+      <%= v.date %>
+    </p>
+    <p>
+      <span class="item-label">From:</span>
+      <%= v.durafrom %>
+    </p>
+    <p>
+      <span class="item-label">to:</span>
+      <%= v.durato %>
+    </p>
+    <p>
+      <span class="item-label">Message:</span>
+      <%= v.message %>
+    </p>
+  </div>
+  <% }); %>
+</div>

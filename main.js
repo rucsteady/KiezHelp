@@ -1,32 +1,43 @@
-const port = process.env.PORT || 3000,
-    express = require("express"),
-    layouts = require("express-ejs-layouts"),
-    homeController = require("./controllers/homeController"),
-    errorController = require("./controllers/errorController"),
-    app = express();
+"use strict";
 
-app.use(express.static("public"));
-app.set("view engine", "ejs")
-app.use(layouts);
-app.get("/", (req, res) => {
-        res.render("index");
-    })
-    .listen(port, () => {
-        console.log(`The Express.js server has started and is listening
-        ➥ on port number: ${port}`);
-    });
-app.get("/:page", homeController.respondWithPage);
-app.get("/locate/:type/:category", homeController.sendReqParam);
-app.use(
-    express.urlencoded({
-        extended: false
-    })
-);
-app.use(express.json());
-app.post("/", (req, res) => {
-    console.log(req.body);
-    console.log(req.query);
-    res.send("POST Successful!");
+const express = require("express"),
+  app = express(),
+  homeController = require("./controllers/homeController"),
+  errorController = require("./controllers/errorController"),
+  subscribersController = require("./controllers/subscribersController"),
+  layouts = require("express-ejs-layouts");
+
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost:27017/kiezhelp", {
+  useNewUrlParser: true,
 });
+const db = mongoose.connection;
+db.once("open", () => {
+  console.log("Successfully connected to MongoDB using Mongoose!");
+});
+mongoose.set("useCreateIndex", true);
+app.set("view engine", "ejs");
+app.set("port", process.env.PORT || 3000);
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(layouts);
+app.use(express.static("public"));
+
+app.get("/", homeController.getIndex);
+
+app.get("/volunteers", subscribersController.getAllVolSubscribers);
+app.get("/volunteer", subscribersController.getVolSubscriptionPage);
+app.post("/subscribeVol", subscribersController.saveVolSubscriber);
+
+app.get("/requesters", subscribersController.getAllReqSubscribers);
+app.get("/requester", subscribersController.getReqSubscriptionPage);
+app.post("/subscribeReq", subscribersController.saveReqSubscriber);
+
+app.get("/locate/:type/:category", homeController.sendReqParam);
+
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
+
+app.listen(app.get("port"), () => {
+  console.log(`Server running at http://localhost:${app.get("port")}`);
+});
