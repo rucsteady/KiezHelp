@@ -8,9 +8,11 @@ const express = require("express"),
   layouts = require("express-ejs-layouts");
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/kiezhelp", {
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r", {
   useNewUrlParser: true,
 });
+
 const db = mongoose.connection;
 db.once("open", () => {
   console.log("Successfully connected to MongoDB using Mongoose!");
