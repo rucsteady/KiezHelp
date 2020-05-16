@@ -1,0 +1,19 @@
+<div class="form-container w3-jumbo">
+    <h1 class="w3-jumbo w3-animate-top" style="text-align: left;" id="headline">
+        ADMIN
+    </h1>
+    <form action="/generateFakeData" method="post" style="display:inline"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Generate Fake Data"></form>
+    <hr class="w3-border-grey" style="margin: auto;" />
+    <div style="width: 80vw; position: absolute; left: 10vw; display:flex; flex-direction: horizontal;">
+        <div style="width:50%">
+            <h1 style="display:inline">Volunteers</h1>
+            <form action="/delete/Volunteer" method="post" style="display:inline"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete All Volunteers"></form>
+            <%- include('Volunteers',{ volunteers, type: "Volunteer" }) %>
+        </div>
+        <div style="width:50%">
+            <h1 style="display:inline">Requesters</h1>
+            <form action="/delete/Request" method="post" style="display:inline"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete All Requests"></form>
+            <%- include('Volunteers',{ volunteers, type: "Request" }) %>
+        </div>
+    </div>
+</div>
