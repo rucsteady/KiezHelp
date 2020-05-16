@@ -1,7 +1,6 @@
 "use strict";
 
 const Volunteer = require("../models/volunteer");
-const faker = require('faker');
 const rp = require('request-promise');
 const $ = require('cheerio');
 
