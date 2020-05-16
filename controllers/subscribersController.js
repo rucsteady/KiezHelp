@@ -77,7 +77,6 @@ exports.deleteSubscribers = (req, res) => {
 exports.deleteOneSubscriber = (req, res) => {
 
     let paramsId = req.params.id;
-    console.log("pId" + paramsId);
     Volunteer.deleteOne({ _id: paramsId })
         .exec()
         .catch((error) => {
@@ -169,11 +168,11 @@ exports.saveFakeData = (req, res) => {
     var options = ['GroceryShopping', 'DogWalking', 'Babysitting', 'RunErrands', 'FriendlyChat', 'Other'];
     rp(url)
         .then(function(html) {
-            // console.log(html);
+
             for (let i = 0; i < 6; i++) {
-                // wikiUrls.push($('li > .font-18 > b > span', html)[i].children[0].data);
+
                 var newAdd = $('li > .font-18 > b > span', html)[i].children[0].data;
-                console.log(newAdd);
+
                 var randType = (Math.random() * types.length);
                 var randOption = (Math.random() * options.length);
                 let newVolSubscriber = new Volunteer({

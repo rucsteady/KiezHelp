@@ -52,11 +52,9 @@
                 }
             })
             .then(function(response) {
-                console.log(response);
                 var myLat = response.data.results[0].geometry.location.lat;
                 var myLng = response.data.results[0].geometry.location.lng;
                 if (myLat && myLng) {
-                    console.log('oo');
                     // document.getElementById('invalid').style.display = 'none !important';
                 }
                 initMap(myLat, myLng);
@@ -118,8 +116,6 @@
 
 
         Array.from(vol).forEach((v) => {
-            console.log("v:" + v.querySelector("#type").value);
-            console.log("v:" + v.querySelector("#address").value);
             var type = v.querySelector("#type").value;
             var name = v.querySelector("#name").value;
             var option = v.querySelector("#option").value;
@@ -133,7 +129,6 @@
                     }
                 })
                 .then(function(response) {
-                    console.log(response);
                     lat = response.data.results[0].geometry.location.lat;
                     lng = response.data.results[0].geometry.location.lng;
 
@@ -160,12 +155,8 @@
             //filter out other types
             var filterType = `<%=type%>`;
             var filterCat = `<%=category%>`;
-            console.log("op:" + props.title);
-            console.log("cat:" + filterCat);
-            console.log("p.type" + props.type);
             if (props.type == "Volunteer") props.type = "volunteer";
             else if (props.type == "Request") props.type = "helpee";
-            console.log("p.type" + props.type);
             //filter type
             if (props.type !== "myloc") {
                 if (filterType !== "helpee&amp;volunteer" && props.type !== filterType) {
