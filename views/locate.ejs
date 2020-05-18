@@ -1,208 +1,214 @@
-<div class="container  w3-center w3-jumbo">
-    <div style="display:none">
-        <% volunteers.forEach(v => {  %>
-            <div class="vol">
-                <input id="type" value=<%=v.type %>>
-                <input id="name" value=<%=v.name %>>
-                <input id="address" value=<%=v.address %>>
-                <input id="option" value=<%=v.option %>>
-                <input id="date" value=<%=v.date %>>
-                <input id="from" value=<%=v.durafrom %>>
-                <input id="to" value=<%=v.durato %>>
-                <input id="message" value=<%=v.message %>>
-            </div>
-            <% }); %>
+<div class="container w3-center w3-jumbo">
+  <div style="display: none;">
+    <% volunteers.forEach(v => { %>
+    <div class="vol">
+      <input id="type" value="<%" ="v.type" % />>
+      <input id="name" value="<%" ="v.name" % />>
+      <input id="address" value="<%" ="v.address" % />>
+      <input id="option" value="<%" ="v.option" % />>
+      <input id="date" value="<%" ="v.date" % />>
+      <input id="from" value="<%" ="v.durafrom" % />>
+      <input id="to" value="<%" ="v.durato" % />>
+      <input id="message" value="<%" ="v.message" % />>
     </div>
-    <div id="aboveMap">
-        <h1 class="w3-animate-top" id="headline">
-            <% if (type == "helpee&volunteer") { %>
-                Find Help or Volunteer Near You
-                <%} else if(type == "helpee"){ %>
-                    Find Helpee Near You
-                    <%} else if(type == "volunteer"){ %>
-                        Find Volunteer Near You
-                        <% } %>
-        </h1>
-        <hr class="w3-border-grey" style="margin: 10px 0px; width: 100%;" />
-        <button onclick="getLocation()" class="btn w3-black btn-block">Get My Location</button>
-        <h2 class="w3-center" style="text-align:center; font-size:17px">or</h2>
+    <% }); %>
+  </div>
+  <div id="aboveMap">
+    <h1 class="w3-animate-top" id="headline">
+      <% if (type == "helpee&volunteer") { %> Find Help or Volunteer Near You
+      <%} else if(type == "helpee"){ %> Find Helpee Near You <%} else if(type ==
+      "volunteer"){ %> Find Volunteer Near You <% } %>
+    </h1>
+    <hr class="w3-border-grey" style="margin: 10px 0px; width: 100%;" />
+    <button onclick="getLocation()" class="btn w3-black btn-block">
+      Get My Location
+    </button>
+    <h2 class="w3-center" style="text-align: center; font-size: 17px;">or</h2>
 
-        <div id="location-form">
-            <input type="text" id="location-input" class="form-control form-control-lg" style="margin-bottom: 5px" placeholder="Enter Address">
-            <!-- <small id="invalid" style="display:none; color: red; font-size: 15px">* Invalid Address</small> -->
-            <button onclick="enterLocation()" class="btn w3-black btn-block">Submit</button>
-        </div>
+    <div id="location-form">
+      <input
+        type="text"
+        id="location-input"
+        class="form-control form-control-lg"
+        style="margin-bottom: 5px;"
+        placeholder="Enter Address"
+      />
+      <!-- <small id="invalid" style="display:none; color: red; font-size: 15px">* Invalid Address</small> -->
+      <button onclick="enterLocation()" class="btn w3-black btn-block">
+        Submit
+      </button>
     </div>
+  </div>
 
-    <div id="map"></div>
-
+  <div id="map"></div>
 </div>
 
 <script>
-    //please don't share, disclose, or copy this key as it is my(Fan's) private Google API Key
-    var GoogleAPIKey = 'AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc';
-    var vol = document.getElementsByClassName('vol');
+  //please don't share, disclose, or copy this key as it is my(Fan's) private Google API Key
+  var GoogleAPIKey = "AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc";
+  var vol = document.getElementsByClassName("vol");
 
-    function enterLocation() {
-        var location = document.getElementById('location-input').value;
-        axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-                params: {
-                    address: location,
-                    key: GoogleAPIKey
-                }
-            })
-            .then(function(response) {
-                var myLat = response.data.results[0].geometry.location.lat;
-                var myLng = response.data.results[0].geometry.location.lng;
-                if (myLat && myLng) {
-                    // document.getElementById('invalid').style.display = 'none !important';
-                }
-                initMap(myLat, myLng);
-            })
-            .catch(function(err) {
-                // document.getElementById('invalid').style.display = 'inline-block';
-                console.log(err);
-            });
-    }
-
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showLocationOnMap);
-        } else {
-            //warning: "Geolocation is not supported by this browser.";
+  function enterLocation() {
+    var location = document.getElementById("location-input").value;
+    axios
+      .get("https://maps.googleapis.com/maps/api/geocode/json", {
+        params: {
+          address: location,
+          key: GoogleAPIKey,
+        },
+      })
+      .then(function (response) {
+        var myLat = response.data.results[0].geometry.location.lat;
+        var myLng = response.data.results[0].geometry.location.lng;
+        if (myLat && myLng) {
+          // document.getElementById('invalid').style.display = 'none !important';
         }
-    }
-
-    function showLocationOnMap(position) {
-        var myLat = position.coords.latitude;
-        var myLng = position.coords.longitude;
         initMap(myLat, myLng);
+      })
+      .catch(function (err) {
+        // document.getElementById('invalid').style.display = 'inline-block';
+        console.log(err);
+      });
+  }
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showLocationOnMap);
+    } else {
+      //warning: "Geolocation is not supported by this browser.";
     }
+  }
 
-    function initMap(myLat, myLng) {
-        //set default location to alexanderplatz' coordinates
-        if (!myLat || !myLng) {
-            myLat = 52.520817;
-            myLng = 13.409419;
-        }
-        //set map center and zoom
-        var options = {
-                zoom: 13,
-                center: {
-                    lat: myLat,
-                    lng: myLng
-                }
-            }
-            //new map
-        var mapTag = document.getElementById('map')
-        var map = new google.maps.Map(mapTag, options);
-        //new marker
-        var marker = new google.maps.Marker({
-            map: map
-        });
-        //new infowindow
-        var infoWindow = new google.maps.InfoWindow({
-            content: '<h1>detail not found</h1>'
-        });
-        marker.addListener('click', function() {
-            infoWindow.open(map, marker);
-        });
-        // Array of markers
-        var myLocMarker = {
-            position: new google.maps.LatLng(myLat, myLng),
-            type: 'myloc'
-        };
-        addMarker(myLocMarker);
+  function showLocationOnMap(position) {
+    var myLat = position.coords.latitude;
+    var myLng = position.coords.longitude;
+    initMap(myLat, myLng);
+  }
 
+  function initMap(myLat, myLng) {
+    //set default location to alexanderplatz' coordinates
+    if (!myLat || !myLng) {
+      myLat = 52.520817;
+      myLng = 13.409419;
+    }
+    //set map center and zoom
+    var options = {
+      zoom: 13,
+      center: {
+        lat: myLat,
+        lng: myLng,
+      },
+    };
+    //new map
+    var mapTag = document.getElementById("map");
+    var map = new google.maps.Map(mapTag, options);
+    //new marker
+    var marker = new google.maps.Marker({
+      map: map,
+    });
+    //new infowindow
+    var infoWindow = new google.maps.InfoWindow({
+      content: "<h1>detail not found</h1>",
+    });
+    marker.addListener("click", function () {
+      infoWindow.open(map, marker);
+    });
+    // Array of markers
+    var myLocMarker = {
+      position: new google.maps.LatLng(myLat, myLng),
+      type: "myloc",
+    };
+    addMarker(myLocMarker);
 
-        Array.from(vol).forEach((v) => {
-            var type = v.querySelector("#type").value;
-            var name = v.querySelector("#name").value;
-            var option = v.querySelector("#option").value;
-            var message = v.querySelector("#message").value;
-            var ad = v.querySelector("#address").value;
-            var lat, lng;
-            axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-                    params: {
-                        address: ad,
-                        key: GoogleAPIKey
-                    }
-                })
-                .then(function(response) {
-                    lat = response.data.results[0].geometry.location.lat;
-                    lng = response.data.results[0].geometry.location.lng;
+    Array.from(vol).forEach((v) => {
+      var type = v.querySelector("#type").value;
+      var name = v.querySelector("#name").value;
+      var option = v.querySelector("#option").value;
+      var message = v.querySelector("#message").value;
+      var ad = v.querySelector("#address").value;
+      var lat, lng;
+      axios
+        .get("https://maps.googleapis.com/maps/api/geocode/json", {
+          params: {
+            address: ad,
+            key: GoogleAPIKey,
+          },
+        })
+        .then(function (response) {
+          lat = response.data.results[0].geometry.location.lat;
+          lng = response.data.results[0].geometry.location.lng;
 
-                    if (lat && lng) {
-
-                        var contentString = `<h1>${option}</h1><h4>type: ${type}</h4><p>name: ${name}</p><p>message: ${message}</p>`;
-                        var mar = {
-                            position: new google.maps.LatLng(lat, lng),
-                            type: type,
-                            title: option,
-                            content: contentString
-                        };
-                        addMarker(mar);
-                    }
-                })
-                .catch(function(err) {
-                    console.log(err);
-                });
-
-
-        });
-        // Add Marker Function
-        function addMarker(props) {
-            //filter out other types
-            var filterType = `<%=type%>`;
-            var filterCat = `<%=category%>`;
-            if (props.type == "Volunteer") props.type = "volunteer";
-            else if (props.type == "Request") props.type = "helpee";
-            //filter type
-            if (props.type !== "myloc") {
-                if (filterType !== "helpee&amp;volunteer" && props.type !== filterType) {
-                    return;
-                }
-                //filter category
-                if (filterCat !== "allcategory" && props.title !== filterCat) {
-                    return;
-                }
-            }
-            var icons = {
-                myloc: {
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        fillColor: '#fc0339',
-                        fillOpacity: 0.9,
-                        strokeColor: '#540314',
-                        strokeOpacity: 0.9,
-                        strokeWeight: 1,
-                        scale: 9
-                    }
-                },
-                helpee: {
-                    icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png'
-                },
-                volunteer: {
-                    icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-                }
+          if (lat && lng) {
+            var contentString = `<h1>${option}</h1><h4>type: ${type}</h4><p>name: ${name}</p><p>message: ${message}</p>`;
+            var mar = {
+              position: new google.maps.LatLng(lat, lng),
+              type: type,
+              title: option,
+              content: contentString,
             };
-            var marker = new google.maps.Marker({
-                position: props.position,
-                map: map,
-                icon: icons[props.type].icon
-            });
-            // Check content
-            if (props.content) {
-                var infoWindow = new google.maps.InfoWindow({
-                    content: props.content
-                });
-                marker.addListener('mouseover', function() {
-                    infoWindow.open(map, marker);
-                });
-                marker.addListener('mouseout', function() {
-                    infoWindow.close(map, marker);
-                });
-            }
+            addMarker(mar);
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    });
+    // Add Marker Function
+    function addMarker(props) {
+      //filter out other types
+      var filterType = `<%=type%>`;
+      var filterCat = `<%=category%>`;
+      if (props.type == "Volunteer") props.type = "volunteer";
+      else if (props.type == "Request") props.type = "helpee";
+      //filter type
+      if (props.type !== "myloc") {
+        if (
+          filterType !== "helpee&amp;volunteer" &&
+          props.type !== filterType
+        ) {
+          return;
         }
+        //filter category
+        if (filterCat !== "allcategory" && props.title !== filterCat) {
+          return;
+        }
+      }
+      var icons = {
+        myloc: {
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: "#fc0339",
+            fillOpacity: 0.9,
+            strokeColor: "#540314",
+            strokeOpacity: 0.9,
+            strokeWeight: 1,
+            scale: 9,
+          },
+        },
+        helpee: {
+          icon: "http://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+        },
+        volunteer: {
+          icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        },
+      };
+      var marker = new google.maps.Marker({
+        position: props.position,
+        map: map,
+        icon: icons[props.type].icon,
+      });
+      // Check content
+      if (props.content) {
+        var infoWindow = new google.maps.InfoWindow({
+          content: props.content,
+        });
+        marker.addListener("mouseover", function () {
+          infoWindow.open(map, marker);
+        });
+        marker.addListener("mouseout", function () {
+          infoWindow.close(map, marker);
+        });
+      }
     }
+  }
 </script>

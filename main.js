@@ -1,19 +1,23 @@
 "use strict";
 
 const express = require("express"),
-    app = express(),
-    homeController = require("./controllers/homeController"),
-    errorController = require("./controllers/errorController"),
-    subscribersController = require("./controllers/subscribersController"),
-    layouts = require("express-ejs-layouts");
+  app = express(),
+  homeController = require("./controllers/homeController"),
+  errorController = require("./controllers/errorController"),
+  subscribersController = require("./controllers/subscribersController"),
+  layouts = require("express-ejs-layouts");
 
 const mongoose = require("mongoose");
-mongoose.connect(process.env.MONGODB_URI || "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r", {
+mongoose.connect(
+  process.env.MONGODB_URI ||
+    "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r",
+  {
     useNewUrlParser: true,
-});
+  }
+);
 const db = mongoose.connection;
 db.once("open", () => {
-    console.log("Successfully connected to MongoDB using Mongoose!");
+  console.log("Successfully connected to MongoDB using Mongoose!");
 });
 mongoose.set("useCreateIndex", true);
 app.set("view engine", "ejs");
@@ -43,5 +47,5 @@ app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
 
 app.listen(app.get("port"), () => {
-    console.log(`Server running at http://localhost:${app.get("port")}`);
+  console.log(`Server running at http://localhost:${app.get("port")}`);
 });
