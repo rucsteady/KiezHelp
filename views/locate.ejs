@@ -1,4 +1,18 @@
 <div class="container  w3-center w3-jumbo">
+    <div style="display:none">
+        <% volunteers.forEach(v => {  %>
+            <div class="vol">
+                <input id="type" value=<%=v.type %>>
+                <input id="name" value=<%=v.name %>>
+                <input id="address" value=<%=v.address %>>
+                <input id="option" value=<%=v.option %>>
+                <input id="date" value=<%=v.date %>>
+                <input id="from" value=<%=v.durafrom %>>
+                <input id="to" value=<%=v.durato %>>
+                <input id="message" value=<%=v.message %>>
+            </div>
+            <% }); %>
+    </div>
     <div id="aboveMap">
         <h1 class="w3-animate-top" id="headline">
             <% if (type == "helpee&volunteer") { %>
@@ -27,6 +41,7 @@
 <script>
     //please don't share, disclose, or copy this key as it is my(Fan's) private Google API Key
     var GoogleAPIKey = 'AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc';
+    var vol = document.getElementsByClassName('vol');
 
     function enterLocation() {
         var location = document.getElementById('location-input').value;
@@ -37,11 +52,9 @@
                 }
             })
             .then(function(response) {
-                console.log(response);
                 var myLat = response.data.results[0].geometry.location.lat;
                 var myLng = response.data.results[0].geometry.location.lng;
                 if (myLat && myLng) {
-                    console.log('oo');
                     // document.getElementById('invalid').style.display = 'none !important';
                 }
                 initMap(myLat, myLng);
@@ -100,91 +113,50 @@
             type: 'myloc'
         };
         addMarker(myLocMarker);
-        var contentString = '<div id="content">' +
-            '<div id="siteNotice">' +
-            '</div>' +
-            '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
-            '<div id="bodyContent">' +
-            '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-            'sandstone rock formation in the southern part of the ' +
-            'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
-            'south west of the nearest large town, Alice Springs; 450&#160;km ' +
-            '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
-            'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
-            'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
-            'Aboriginal people of the area. It has many springs, waterholes, ' +
-            'rock caves and ancient paintings. Uluru is listed as a World ' +
-            'Heritage Site.</p>' +
-            '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-            'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
-            '(last visited June 22, 2009).</p>' +
-            '</div>' +
-            '</div>';
-        var markers = [{
-            position: new google.maps.LatLng(52.533818, 13.419417),
-            type: 'helpee',
-            title: 'groceryShopping',
-            content: '<h4>groceryShopping</h4>'
-        }, {
-            position: new google.maps.LatLng(52.533110, 13.413417),
-            type: 'helpee',
-            title: 'groceryShopping',
-            content: '<h4>groceryShopping</h4>'
-        }, {
-            position: new google.maps.LatLng(52.500815, 13.429417),
-            type: 'helpee',
-            title: 'dogWalking',
-            content: '<h4>dogWalking</h4>'
-        }, {
-            position: new google.maps.LatLng(52.501815, 13.429417),
-            type: 'helpee',
-            title: 'dogWalking',
-            content: '<h4>dogWalking</h4>'
-        }, {
-            position: new google.maps.LatLng(52.510833, 13.429419),
-            type: 'helpee',
-            title: 'groceryShopping',
-            content: '<h4>Grocery Shopping</h4>'
-        }, {
-            position: new google.maps.LatLng(52.521818, 13.419419),
-            type: 'volunteer',
-            title: 'dogWalking',
-            content: '<h4>dogWalking</h4>'
-        }, {
-            position: new google.maps.LatLng(52.530919, 13.409420),
-            type: 'volunteer',
-            title: 'groceryShopping',
-            content: '<h4>Grocery Shopping</h4>'
-        }, {
-            position: new google.maps.LatLng(52.521818, 13.319419),
-            type: 'volunteer',
-            title: 'dogWalking',
-            content: '<h4>dogWalking</h4>'
-        }, {
-            position: new google.maps.LatLng(52.530919, 12.409420),
-            type: 'volunteer',
-            title: 'groceryShopping',
-            content: '<h4>Grocery Shopping</h4>'
-        }, {
-            position: new google.maps.LatLng(52.521818, 13.414419),
-            type: 'volunteer',
-            title: 'dogWalking',
-            content: '<h4>dogWalking</h4>'
-        }, {
-            position: new google.maps.LatLng(52.540919, 13.409420),
-            type: 'volunteer',
-            title: 'groceryShopping',
-            content: '<h4>Grocery Shopping</h4>'
-        }];
-        // Loop through markers
-        for (var i = 0; i < markers.length; i++) {
-            addMarker(markers[i]);
-        }
+
+
+        Array.from(vol).forEach((v) => {
+            var type = v.querySelector("#type").value;
+            var name = v.querySelector("#name").value;
+            var option = v.querySelector("#option").value;
+            var message = v.querySelector("#message").value;
+            var ad = v.querySelector("#address").value;
+            var lat, lng;
+            axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                    params: {
+                        address: ad,
+                        key: GoogleAPIKey
+                    }
+                })
+                .then(function(response) {
+                    lat = response.data.results[0].geometry.location.lat;
+                    lng = response.data.results[0].geometry.location.lng;
+
+                    if (lat && lng) {
+
+                        var contentString = `<h1>${option}</h1><h4>type: ${type}</h4><p>name: ${name}</p><p>message: ${message}</p>`;
+                        var mar = {
+                            position: new google.maps.LatLng(lat, lng),
+                            type: type,
+                            title: option,
+                            content: contentString
+                        };
+                        addMarker(mar);
+                    }
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
+
+
+        });
         // Add Marker Function
         function addMarker(props) {
             //filter out other types
             var filterType = `<%=type%>`;
             var filterCat = `<%=category%>`;
+            if (props.type == "Volunteer") props.type = "volunteer";
+            else if (props.type == "Request") props.type = "helpee";
             //filter type
             if (props.type !== "myloc") {
                 if (filterType !== "helpee&amp;volunteer" && props.type !== filterType) {
@@ -195,11 +167,6 @@
                     return;
                 }
             }
-            //filter only the wanted ones
-            var titles = [
-                'groceryShopping',
-                'dogWalking'
-            ];
             var icons = {
                 myloc: {
                     icon: {

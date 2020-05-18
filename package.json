@@ -4,17 +4,30 @@
     "description": "Project KiezHelp - WTAT1 HTW Berlin",
     "main": "main.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest",
         "start": "node main.js"
     },
     "author": "nbr",
     "license": "ISC",
     "dependencies": {
+        "axios": "^0.19.2",
+        "cheerio": "^1.0.0-rc.3",
         "ejs": "^3.1.2",
         "express": "^4.17.1",
         "express-ejs-layouts": "^2.5.0",
         "http-status-codes": "^1.4.0",
         "mongoose": "^5.9.12",
-        "nodemon": "^2.0.3"
+        "nodemon": "^2.0.3",
+        "puppeteer": "^3.0.4",
+        "request": "^2.88.2",
+        "request-promise": "^4.2.5"
+    },
+    "devDependencies": {
+        "@shelf/jest-mongodb": "^1.1.5",
+        "babel-cli": "^6.26.0",
+        "babel-preset-env": "^1.7.0",
+        "jest": "^26.0.1",
+        "superagent": "^5.2.2",
+        "supertest": "^4.0.2"
     }
 }

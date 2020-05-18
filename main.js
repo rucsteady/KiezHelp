@@ -1,21 +1,19 @@
 "use strict";
 
 const express = require("express"),
-  app = express(),
-  homeController = require("./controllers/homeController"),
-  errorController = require("./controllers/errorController"),
-  subscribersController = require("./controllers/subscribersController"),
-  layouts = require("express-ejs-layouts");
+    app = express(),
+    homeController = require("./controllers/homeController"),
+    errorController = require("./controllers/errorController"),
+    subscribersController = require("./controllers/subscribersController"),
+    layouts = require("express-ejs-layouts");
 
 const mongoose = require("mongoose");
-
 mongoose.connect(process.env.MONGODB_URI || "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r", {
-  useNewUrlParser: true,
+    useNewUrlParser: true,
 });
-
 const db = mongoose.connection;
 db.once("open", () => {
-  console.log("Successfully connected to MongoDB using Mongoose!");
+    console.log("Successfully connected to MongoDB using Mongoose!");
 });
 mongoose.set("useCreateIndex", true);
 app.set("view engine", "ejs");
@@ -29,17 +27,21 @@ app.get("/", homeController.getIndex);
 
 app.get("/volunteers", subscribersController.getAllVolSubscribers);
 app.get("/volunteer", subscribersController.getVolSubscriptionPage);
-app.post("/subscribeVol", subscribersController.saveVolSubscriber);
+app.post("/subscribe", subscribersController.saveAllSubscriber);
 
 app.get("/requesters", subscribersController.getAllReqSubscribers);
 app.get("/requester", subscribersController.getReqSubscriptionPage);
-app.post("/subscribeReq", subscribersController.saveReqSubscriber);
 
-app.get("/locate/:type/:category", homeController.sendReqParam);
+app.get("/locate/:type/:category", subscribersController.getAllSubscribers);
+
+app.get("/admin", subscribersController.getAdmin);
+app.post("/delete/:type", subscribersController.deleteSubscribers);
+app.post("/deleteOne/:id", subscribersController.deleteOneSubscriber);
+app.post("/generateFakeData", subscribersController.saveFakeData);
 
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
 
 app.listen(app.get("port"), () => {
-  console.log(`Server running at http://localhost:${app.get("port")}`);
+    console.log(`Server running at http://localhost:${app.get("port")}`);
 });

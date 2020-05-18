@@ -1,4 +1,5 @@
 <div class="w3-row-padding w3-large ">
+<<<<<<< HEAD
     <form class="request-form w3-animate-top" action="/" method="POST">
         <div>
             <label>Name</label> <small>*required</small>
@@ -7,12 +8,24 @@
         <div>
             <label>Postal Code</label> <small>*required</small>
             <input class="w3-input w3-border w3-block" type="text" placeholder="eg. 10771" required>
+=======
+    <form class="request-form w3-animate-top" action=<%=submitAction%> method="post">
+        <div>
+            <label>Name</label> <small>*required</small>
+            <input class="w3-input w3-border" name="name" type="text" placeholder="Jane Doe" required>
+        </div>
+        <div>
+            <label>Address</label> <small>*required</small>
+            <input class="button w3-button w3-black locate" style="display:inline; margin-bottom:15px" value="Locate">
+            <input class="w3-input w3-border w3-block" name="address" type="text" placeholder="eg. Herbert-von-Karajan-Straße 1, 10785 Berlin" required>
+>>>>>>> Sprint_04v2
         </div>
         <div>
             <label>Help Genre</label> <small>*required</small>
             <div class="w3-dropdown-hover w3-block">
                 <select class="w3-select" name="option" required>
                     <option value="" disabled selected>Choose one or click other</option>
+<<<<<<< HEAD
                     <option value="1">Grocery Shopping</option>
                     <option value="2">Babysitting</option>
                     <option value="3">Run Errands</option>
@@ -21,6 +34,19 @@
                 </select>
             </div>
         </div>
+=======
+                    <option value="GroceryShopping">Grocery Shopping</option>
+                    <option value="Babysitting">Babysitting</option>
+                    <option value="DogWalking">Dog walking</option>
+                    <option value="RunErrands">Run Errands</option>
+                    <option value="FriendlyChat">Friendly Chat</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+
+
+>>>>>>> Sprint_04v2
         <div>
             <label>Date</label>
             <input class="w3-block" type="date" name="date">
@@ -28,17 +54,30 @@
         <div>
             <label>Duration</label>
             <div class="w3-block">
+<<<<<<< HEAD
                 <input class="w3-third" type="time" id="appt" name="appt">
                 <p class="w3-third w3-center" style="margin:0;">to</p>
                 <input class="w3-third" type="time" id="appt" name="appt">
+=======
+                <input class="w3-third" type="time" id="appt" name="durafrom">
+                <p class="w3-third w3-center" style="margin:0;">to</p>
+                <input class="w3-third" type="time" id="appt" name="durato">
+>>>>>>> Sprint_04v2
             </div>
         </div>
         <div>
             <label>Message</label>
+<<<<<<< HEAD
             <textarea class="w3-input w3-border" placeholder="Provide more detail..."></textarea>
         </div>
         <div>
             <input class="button w3-button w3-black w3-block" style="margin:20px 0" type="submit" value=<%=buttonText%>>
+=======
+            <textarea class="w3-input w3-border" name="message" placeholder="Provide more detail..."></textarea>
+        </div>
+        <div>
+            <input class="button w3-button w3-black w3-block" style="margin:20px 0" type="submit" name="type" value=<%=buttonText%>>
+>>>>>>> Sprint_04v2
         </div>
     </form>
 </div>
