@@ -13,4 +13,3 @@ const mongoose = require("mongoose"),
     });
 
 module.exports = mongoose.model("Volunteer", volunteerSchema);
-module.exports = mongoose.model("Volunteer", volunteerSchema);
