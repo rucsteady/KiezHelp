@@ -1,6 +1,6 @@
 "use strict";
 
-const Volunteer = require("../models/volunteer");
+const Subscriber = require("../models/subscriber");
 const rp = require("request-promise");
 const $ = require("cheerio");
 
@@ -9,7 +9,7 @@ exports.getVolSubscriptionPage = (req, res) => {
 };
 
 exports.saveAllSubscriber = (req, res) => {
-  let newVolSubscriber = new Volunteer({
+  let newVolSubscriber = new Subscriber({
     type: req.body.type,
     name: req.body.name,
     address: req.body.address,
@@ -30,7 +30,7 @@ exports.saveAllSubscriber = (req, res) => {
 };
 
 exports.getAllReqSubscribers = (req, res) => {
-  Volunteer.find({ type: "Request" })
+  Subscriber.find({ type: "Request" })
     .exec()
     .then((volunteers) => {
       res.render("volunteers", {
@@ -48,7 +48,7 @@ exports.getAllReqSubscribers = (req, res) => {
 };
 exports.deleteSubscribers = (req, res) => {
   let paramsType = req.params.type;
-  Volunteer.deleteMany({ type: paramsType })
+  Subscriber.deleteMany({ type: paramsType })
     .exec()
     .catch((error) => {
       console.log(error.message);
@@ -57,7 +57,7 @@ exports.deleteSubscribers = (req, res) => {
     .then(() => {
       console.log("promise complete");
     });
-  Volunteer.find({})
+  Subscriber.find({})
     .exec()
     .then((volunteers) => {
       res.render("admin", {
@@ -75,7 +75,7 @@ exports.deleteSubscribers = (req, res) => {
 
 exports.deleteOneSubscriber = (req, res) => {
   let paramsId = req.params.id;
-  Volunteer.deleteOne({ _id: paramsId })
+  Subscriber.deleteOne({ _id: paramsId })
     .exec()
     .catch((error) => {
       console.log(error.message);
@@ -84,7 +84,7 @@ exports.deleteOneSubscriber = (req, res) => {
     .then(() => {
       console.log("del One promise complete");
     });
-  Volunteer.find({})
+  Subscriber.find({})
     .exec()
     .then((volunteers) => {
       res.render("admin", {
@@ -107,7 +107,7 @@ exports.getAllSubscribers = (req, res) => {
   let paramsType = req.params.type;
   let paramsCat = req.params.category;
 
-  Volunteer.find({})
+  Subscriber.find({})
     .exec()
     .then((volunteers) => {
       res.render("locate", {
@@ -126,7 +126,7 @@ exports.getAllSubscribers = (req, res) => {
 };
 
 exports.getAllVolSubscribers = (req, res) => {
-  Volunteer.find({ type: "Volunteer" })
+  Subscriber.find({ type: "Volunteer" })
     .exec()
     .then((volunteers) => {
       res.render("volunteers", {
@@ -144,7 +144,7 @@ exports.getAllVolSubscribers = (req, res) => {
 };
 
 exports.getAdmin = (req, res) => {
-  Volunteer.find({})
+  Subscriber.find({})
     .exec()
     .then((volunteers) => {
       res.render("admin", {
@@ -162,7 +162,7 @@ exports.getAdmin = (req, res) => {
 
 exports.saveFakeData = (req, res) => {
   // const da = scrapper.getRandomData;
-  var wikiUrls = [];
+  // var wikiUrls = [];
   const url = "https://www.coolgenerator.com/de-address-generator";
 
   var types = ["Volunteer", "Request"];
@@ -242,7 +242,7 @@ exports.saveFakeData = (req, res) => {
         var randOption = Math.random() * options.length;
         var randomFromTime = Math.random() * fromTimes.length;
         var randomToTime = Math.random() * toTimes.length;
-        let newVolSubscriber = new Volunteer({
+        let newVolSubscriber = new Subscriber({
           type: types[Math.floor(randType)],
           name: names[Math.floor(randName)],
           address: newAdd,
@@ -261,7 +261,7 @@ exports.saveFakeData = (req, res) => {
           .then(() => {
             console.log("save promise complete");
           });
-        Volunteer.find({})
+        Subscriber.find({})
           .exec()
           .then((volunteers) => {
             res.render("admin", {

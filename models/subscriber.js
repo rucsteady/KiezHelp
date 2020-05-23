@@ -1,7 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose"),
-    volunteerSchema = mongoose.Schema({
+    subscriberSchema = mongoose.Schema({
         type: String,
         name: String,
         address: String,
@@ -12,4 +12,4 @@ const mongoose = require("mongoose"),
         message: String,
     });
 
-module.exports = mongoose.model("Volunteer", volunteerSchema);
+module.exports = mongoose.model("Subscriber", subscriberSchema);
