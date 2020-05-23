@@ -1,5 +1,8 @@
 <div class="w3-row-padding w3-large ">
     <form class="request-form w3-animate-top" action=<%=submitAction%> method="post">
+        <% if(userId) { %>
+            <input class="w3-input w3-border" name="userId" type="text" style="display:none" value=<%=userId%> >
+                <% } %>
         <div>
             <label>Name</label> <small>*required</small>
             <input class="w3-input w3-border" name="name" type="text" placeholder="Jane Doe" required>

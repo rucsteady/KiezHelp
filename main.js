@@ -34,7 +34,7 @@ router.get("/login", usersController.getLogin);
 router.post("/loginAction", usersController.loginAction, usersController.redirectView);
 
 router.post("/subscribe", subscribersController.saveAllSubscriber, usersController.redirectView);
-
+router.get("/profile", usersController.getUserProfile);
 
 app.get("/", homeController.getIndex);
 // app.get("/register", usersController.getRegister);

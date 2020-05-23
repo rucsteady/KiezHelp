@@ -11,6 +11,11 @@ function MonthsFromNow(months) {
 }
 const mongoose = require("mongoose"),
     subscriberSchema = mongoose.Schema({
+        userId: {
+            type: String,
+            required: 'userId is required',
+            trim: true
+        },
         type: {
             type: String,
             required: 'Type is required',

@@ -70,7 +70,13 @@ exports.loginAction = (req, res, next) => {
             console.log("promise complete");
         });
 };
-
+exports.getUserProfile = (req, res) => {
+    if (req.query && req.query.userId) {
+        res.render('profile', { userId: req.query.userId });
+    } else {
+        res.render('profile', { userId: '' });
+    }
+};
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
     if (redirectPath) {
