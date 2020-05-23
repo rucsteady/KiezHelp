@@ -22,19 +22,14 @@ exports.saveAllSubscriber = (req, res, next) => {
     var subId;
     Subscriber.create(newVolReqEntry)
         .then((entry) => {
-            console.log("entry:"+entry);
             subId = entry._id;
-            console.log("here?");
-            console.log("subId:"+subId);
             User.findOne({_id:req.body.userId})
             .then((user)=>{
                 user.subscribers.push(subId);
                 user.save();
-                console.log("useeer:"+user);
             }).catch((error) => {
                 if (error) res.send(error);
             });
-            console.log("annnd?");
             res.locals.redirect = '/profile';
             res.locals.userId = req.body.userId;
             next();

@@ -76,7 +76,6 @@ exports.getUserProfile = (req, res) => {
     if (req.query && req.query.userId) {
         User.findOne({ _id: req.query.userId })
         .then((user) => {
-            console.log("uu:"+user);
             res.render('profile', { user:user });
         })
         .catch((error) => {
