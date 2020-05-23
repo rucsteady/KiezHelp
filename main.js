@@ -25,20 +25,25 @@ app.use(express.static("public"));
 
 app.get("/", homeController.getIndex);
 
-app.get("/volunteers", subscribersController.getAllVolSubscribers);
+//fill out form
 app.get("/volunteer", subscribersController.getVolSubscriptionPage);
-app.post("/subscribe", subscribersController.saveAllSubscriber);
-
-app.get("/requesters", subscribersController.getAllReqSubscribers);
 app.get("/requester", subscribersController.getReqSubscriptionPage);
 
+//save form input
+app.post("/subscribe", subscribersController.saveAllSubscriber);
+
+//view entries on map
 app.get("/locate/:type/:category", subscribersController.getAllSubscribers);
 
+//view and modify db
 app.get("/admin", subscribersController.getAdmin);
+app.get("/volunteers", subscribersController.getAllVolSubscribers);
+app.get("/requesters", subscribersController.getAllReqSubscribers);
 app.post("/delete/:type", subscribersController.deleteSubscribers);
 app.post("/deleteOne/:id", subscribersController.deleteOneSubscriber);
 app.post("/generateFakeData", subscribersController.saveFakeData);
 
+//error
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
 
