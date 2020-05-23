@@ -1,0 +1,29 @@
+<% if(user){ %>
+    <div class="subscriber">
+        <p>
+            <span class="item-label">userId:</span>
+            <%= user._id %>
+        </p>
+        <p>
+            <span class="item-label">Name:</span>
+            <%= user.name.first %> <%= user.name.last %>
+        </p>
+        <p>
+            <span class="item-label">Email:</span>
+            <%= user.email %> 
+        </p>
+        <p>
+            <span class="item-label">Password:</span>
+            <%= user.password %> 
+        </p>
+        <p>
+            <span class="item-label">Address:</span>
+            <%= user.address %>
+        </p>
+        <p>
+            <span class="item-label">About Me:</span>
+            <%= user.aboutMe %>
+        </p>
+        <form action="/deleteOne/<%=user._id%>" method="post"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete"></form>
+    </div>
+    <% } %>
