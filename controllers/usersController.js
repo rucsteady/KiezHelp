@@ -25,7 +25,7 @@ exports.createUser = (req, res, next) => {
     };
     User.create(newUser)
         .then((user) => {
-            res.locals.user = user;
+            res.locals.userId = user.id;
             // res.redirect('/');
             res.locals.redirect = '/';
             next();
@@ -46,7 +46,7 @@ exports.loginAction = (req, res, next) => {
         .exec()
         .then((user) => {
             if (user) {
-                res.locals.user = user;
+                res.locals.userId = user.id;
                 // res.redirect('/');
                 res.locals.redirect = '/';
                 next();
@@ -73,6 +73,13 @@ exports.loginAction = (req, res, next) => {
 
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    if (redirectPath) res.redirect(redirectPath);
-    else next();
+    if (redirectPath) {
+        // res.redirect(redirectPath);
+        res.redirect(url.format({
+            pathname: redirectPath,
+            query: {
+                "userId": res.locals.userId
+            }
+        }));
+    } else next();
 }
