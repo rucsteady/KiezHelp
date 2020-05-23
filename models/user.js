@@ -3,12 +3,14 @@
 const mongoose = require("mongoose"),
     userSchema = mongoose.Schema({
         name: {
-            type: String,
-            required: 'Name is required',
-            default: '',
-            minlength: 5,
-            maxlength: 30,
-            trim: true
+            first: {
+                type: String,
+                trim: true
+            },
+            last: {
+                type: String,
+                trim: true
+            }
         },
         address: {
             type: String,
@@ -17,11 +19,6 @@ const mongoose = require("mongoose"),
             minlength: 8,
             maxlength: 50,
             trim: true
-        },
-        dateCreated: {
-            type: Date,
-            default: Date.now,
-            optional: true
         },
         email: {
             type: String,
@@ -45,9 +42,18 @@ const mongoose = require("mongoose"),
             minlength: 8,
             //Minimum eight characters, at least one letter, one number and one special character
             match: [/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, 'Please provide a valid password']
-        }
+        },
+        dateCreated: {
+            type: Date,
+            default: Date.now,
+            optional: true
+        },
     });
 
-// 
+userSchema.virtual("fullName")
+    .get(function() {
+        return `${this.name.first} ${this.name.last}`;
+    });
+
 //should also add which user posted it so they can communicate through dms
 module.exports = mongoose.model("User", userSchema);

@@ -6,8 +6,8 @@ const $ = require("cheerio");
 
 
 
-exports.saveAllSubscriber = (req, res) => {
-    let newVolReqEntry = new Subscriber({
+exports.saveAllSubscriber = (req, res, next) => {
+    let newVolReqEntry = {
         type: req.body.type,
         name: req.body.name,
         address: req.body.address,
@@ -16,11 +16,12 @@ exports.saveAllSubscriber = (req, res) => {
         durafrom: req.body.durafrom,
         durato: req.body.durato,
         message: req.body.message,
-    });
-    newVolReqEntry
-        .save()
+    };
+    Subscriber.create(newVolReqEntry)
         .then(() => {
-            res.render("success", { action: "SUBMIT" });
+            res.locals.redirect = '/';
+            next();
+            // res.render("success", { action: "SUBMIT" });
         })
         .catch((error) => {
             if (error) res.send(error);
