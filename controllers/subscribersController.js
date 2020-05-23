@@ -19,7 +19,7 @@ exports.saveAllSubscriber = (req, res, next) => {
         durato: req.body.durato,
         message: req.body.message,
     };
-    var subId,entryFromSub, subscribersFromUser;
+    var subId;
     Subscriber.create(newVolReqEntry)
         .then((entry) => {
             console.log("entry:"+entry);
@@ -43,44 +43,7 @@ exports.saveAllSubscriber = (req, res, next) => {
         .catch((error) => {
             if (error) res.send(error);
         });
-    //User all needs to add this to their subscribers array
-    // subscribers: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Subscriber"
-    // }],
-    // User.findOne({_id:req.body.userId}).then((user)=>{
-    //     console.log("in here");
-    //     console.log("user:"+user);
-    //     subscribersFromUser = user;
-    // })
-    // .catch((error) => {
-    //     if (error) res.send(error);
-    // });
-    // console.log("subscribersFromUser:"+subscribersFromUser);
-    // subscribersFromUser.subscribers.push(entryFromSub);
-    // console.log("[]:"+subscribersFromUser.subscribers);
-    // subscribersFromUser.save();
-    // console.log("[]:"+subscribersFromUser.subscribers);
-    // User.populate(subscribersFromUser,"subscribers").then(user =>
-    //     console.log(user)
-    //    ).catch((error) => {
-    //     if (error) res.send(error);
-    // });
-    // console.log("here?");
-    // let userParams = {
-    //     subscribers: subscribers.push(subId)
-    //      };
-    //      console.log("then?");
-    // User.findByIdAndUpdate(req.body.userId,{$set:userParams}).then((user)=>{
-    //     console.log("useeer:"+user);
-    //     res.locals.redirect = '/';
-    //     next();
-    // }).catch((error) => {
-    //     if (error) res.send(error);
-    //     next(error);
-    // });
-    // console.log("annnd?");
-   
+    
 };
 
 exports.getAllReqSubscribers = (req, res) => {
@@ -345,7 +308,6 @@ exports.saveFakeData = (req, res) => {
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
     if (redirectPath && res.locals && res.locals.userId) {
-        // res.redirect(redirectPath);
         res.redirect(url.format({
             pathname: redirectPath,
             query: {
