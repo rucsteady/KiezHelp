@@ -24,6 +24,13 @@
             <span class="item-label">About Me:</span>
             <%= user.aboutMe %>
         </p>
+        Subscribers:
+        <% user.subscribers.forEach(sub => { if(sub){ %>
+        <p>
+            <span class="item-label">Subscriber Id:</span>
+            <%= sub %>
+        </p>
+        <% }}); %>
         <form action="/deleteOne/<%=user._id%>" method="post"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete"></form>
     </div>
     <% } %>
