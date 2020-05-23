@@ -43,8 +43,8 @@ app.get("/", homeController.getIndex);
 // app.post("/createUser", usersController.createUser);
 
 //fill out form
-app.get("/volunteer", subscribersController.getVolSubscriptionPage);
-app.get("/requester", subscribersController.getReqSubscriptionPage);
+app.get("/volunteer/:userId", subscribersController.getVolSubscriptionPage);
+app.get("/requester/:userId", subscribersController.getReqSubscriptionPage);
 
 //save form input
 // app.post("/subscribe", subscribersController.saveAllSubscriber);

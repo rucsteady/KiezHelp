@@ -10,9 +10,9 @@
 // };
 
 exports.getIndex = (req, res) => {
-    if (res.locals && res.locals.user) {
-        res.render('index', { currentUser: res.locals.user });
+    if (req.query && req.query.userId) {
+        res.render('index', { userId: req.query.userId });
     } else {
-        res.render('index', { currentUser: '' });
+        res.render('index', { userId: '' });
     }
 };

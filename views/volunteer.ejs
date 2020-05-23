@@ -1,5 +1,8 @@
 <div class="form-container w3-jumbo">
     <h1 class="w3-jumbo w3-animate-top" style="text-align: left;" id="headline">OFFER TO<br />VOLUNTEER</h1>
     <hr class="w3-border-grey" style="margin: auto; width: 100%;" />
-    <%- include('partials/formVolReq',{ buttonText: "Volunteer" ,submitAction: "/subscribe"}) %>
+    <% if(userId) { %>
+        <%=userId%>
+            <% } %>
+                <%- include('partials/formVolReq',{ buttonText: "Volunteer" ,submitAction: "/subscribe"}) %>
 </div>

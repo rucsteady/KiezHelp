@@ -100,11 +100,13 @@ exports.deleteOneSubscriber = (req, res) => {
 };
 
 exports.getVolSubscriptionPage = (req, res) => {
-    res.render("volunteer");
+    let queryUserId = req.query.userId;
+    res.render("volunteer", { userId: queryUserId });
 };
 
 exports.getReqSubscriptionPage = (req, res) => {
-    res.render("requester");
+    let queryUserId = req.query.userId;
+    res.render("requester", { userId: queryUserId });
 };
 
 exports.getAllSubscribers = (req, res) => {
