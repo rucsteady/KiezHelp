@@ -26,6 +26,8 @@ app.use(express.static("public"));
 
 app.get("/", homeController.getIndex);
 app.get("/register", usersController.getRegister);
+app.get("/login", usersController.getLogin);
+app.post("/loginAction", usersController.loginAction);
 app.post("/saveUser", usersController.saveUser);
 
 //fill out form

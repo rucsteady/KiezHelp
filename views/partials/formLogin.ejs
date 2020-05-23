@@ -1,0 +1,17 @@
+<div class="w3-row-padding w3-large ">
+    <form class="request-form w3-animate-top" action=<%=submitAction%> method="post">
+        <div>
+            <label>Email</label> <small>*required</small>
+            <input class="w3-input w3-border" name="email" type="text" placeholder="" required>
+        </div>
+        <div>
+            <label>Password</label> <small>*required</small>
+            <br/>
+            <small>* Minimum eight characters, at least one letter and one number </small>
+            <input class="w3-input w3-border" name="password" type="text" placeholder="" required>
+        </div>
+        <div>
+            <input class="button w3-button w3-black w3-block" style="margin:20px 0" type="submit" name="type" value=<%=buttonText%>>
+        </div>
+    </form>
+</div>

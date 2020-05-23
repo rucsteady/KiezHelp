@@ -8,20 +8,11 @@ exports.getRegister = (req, res) => {
     res.render("register", { error: '' });
 };
 
-function validateEmail(email) {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
-}
+exports.getLogin = (req, res) => {
+    res.render("login", { error: '' });
+};
 
-function validatePassword(password) {
-    return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(password);
-}
-
-function confirmPassword(confirmPassword, password) {
-    return confirmPassword.equals(password);
-}
 exports.saveUser = (req, res) => {
-    // if (!validateEmail(req.body.email) || !validatePassword(req.body.password) || !confirmPassword(req.body.confirmPassword, req.body.password)) {
-
     let newUser = new User({
         name: req.body.name,
         address: req.body.address,
@@ -32,11 +23,34 @@ exports.saveUser = (req, res) => {
     newUser
         .save()
         .then(() => {
-            res.render("success");
-            //TODO: save this ObjectId to global so i can add subscribes
+            res.render("success", { action: "REGISTER" });
+            //TODO: save this ObjectId to global so I can add subscribes to the logged in user
         })
         .catch((error) => {
             console.log(error.message);
             if (error) res.render("register", { error: error.message });
+        });
+};
+
+//TODO check if there's such user with the mail and correct password
+exports.loginAction = (req, res) => {
+    console.log(req.body.email);
+    console.log(req.body.password);
+    User.findOne({ email: req.body.email, password: req.body.password })
+        .exec()
+        .then((found) => {
+            console.log("found:" + found);
+            if (found)
+                res.render("success", { action: "LOG IN" });
+            else {
+                res.render("login", { error: "Incorrect Input" });
+            }
+        })
+        .catch((error) => {
+            console.log(error.message);
+            return [];
+        })
+        .then(() => {
+            console.log("promise complete");
         });
 };

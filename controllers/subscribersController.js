@@ -20,7 +20,7 @@ exports.saveAllSubscriber = (req, res) => {
     newVolReqEntry
         .save()
         .then(() => {
-            res.render("success");
+            res.render("success", { action: "SUBMIT" });
         })
         .catch((error) => {
             if (error) res.send(error);
