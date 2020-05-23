@@ -5,6 +5,7 @@ const express = require("express"),
     homeController = require("./controllers/homeController"),
     errorController = require("./controllers/errorController"),
     subscribersController = require("./controllers/subscribersController"),
+    usersController = require("./controllers/usersController"),
     layouts = require("express-ejs-layouts");
 
 const mongoose = require("mongoose");
@@ -24,6 +25,8 @@ app.use(layouts);
 app.use(express.static("public"));
 
 app.get("/", homeController.getIndex);
+app.get("/register", usersController.getRegister);
+app.post("/saveUser", usersController.saveUser);
 
 //fill out form
 app.get("/volunteer", subscribersController.getVolSubscriptionPage);
