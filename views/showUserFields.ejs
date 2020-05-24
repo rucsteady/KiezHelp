@@ -1,36 +1,41 @@
 <% if(user){ %>
-    <div class="subscriber">
-        <p>
-            <span class="item-label">userId:</span>
-            <%= user._id %>
-        </p>
-        <p>
-            <span class="item-label">Name:</span>
-            <%= user.name.first %> <%= user.name.last %>
-        </p>
-        <p>
-            <span class="item-label">Email:</span>
-            <%= user.email %> 
-        </p>
-        <p>
-            <span class="item-label">Password:</span>
-            <%= user.password %> 
-        </p>
-        <p>
-            <span class="item-label">Address:</span>
-            <%= user.address %>
-        </p>
-        <p>
-            <span class="item-label">About Me:</span>
-            <%= user.aboutMe %>
-        </p>
-        Subscribers:
-        <% user.subscribers.forEach(sub => { if(sub){ %>
-        <p>
-            <span class="item-label">Subscriber Id:</span>
-            <%= sub %>
-        </p>
-        <% }}); %>
-        <form action="/deleteOne/<%=user._id%>" method="post"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete"></form>
-    </div>
+    <div class="w3-row-padding w3-large ">
+            <div>
+                    <label>User Id</label> 
+                    <input class="w3-input w3-border" name="id" type="text" value=<%= user._id %> required>
+                </div>
+                <div>
+                        <label>First Name</label> 
+                        <input class="w3-input w3-border" name="firstName" type="text" value=<%= user.name.first %> required>
+                    </div>
+                    <div>
+                            <label>Last Name</label> 
+                            <input class="w3-input w3-border" name="lastName" type="text" value=<%= user.name.last %> required>
+                        </div>
+                        <div>
+                                <label>Email</label> 
+                                <input class="w3-input w3-border" name="email" type="text" value=<%= user.email %> required>
+                            </div>
+                            <div>
+                                    <label>Password</label> 
+                                    <input class="w3-input w3-border" name="password" type="text" value=<%= user.password %> required>
+                                </div>
+                                <div>
+                                        <label>Address</label> 
+                                        <input class="w3-input w3-border" name="address" type="text" value=<%= user.address %> required>
+                                    </div>
+                                    <div>
+                                            <label>About Me</label> 
+                                            <input class="w3-input w3-border" name="aboutMe" type="text" value=<%= user.aboutMe %>>
+                                        </div>
+                                        <h3>Subscribers:</h3>
+                                       
+                                        <% user.subscribers.forEach(sub=>{ if(sub){%>
+                                            <div>
+                                                    <input class="w3-input w3-border" name="subId" type="text" value=<%= sub %>><form action="/deleteSub" method="post" style="display:inline;"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete"></form>
+
+                                                </div>
+                                                <% }}); %>
+                                                <form action="/saveProfileChanges" method="post" style="display:inline;"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Save Changes"></form>
+        </div>
     <% } %>

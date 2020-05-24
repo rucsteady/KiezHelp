@@ -26,9 +26,10 @@ exports.saveAllSubscriber = (req, res, next) => {
             User.findOne({_id:req.body.userId})
             .then((user)=>{
                 user.subscribers.push(subId);
+                //TODO need to update the subscribers id whenever there's a deletion in admin so user don't have subs that are already deleted
                 user.save();
                 Subscriber.populate(user, "subscribers").then((populatedUser) =>{
-                    console.log("sub:"+populatedUser);
+                    // console.log("sub:"+populatedUser);
                     res.locals.subs = populatedUser.subscribers;
                 });
             }).catch((error) => {

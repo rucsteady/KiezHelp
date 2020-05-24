@@ -26,7 +26,7 @@ exports.createUser = (req, res, next) => {
     User.create(newUser)
         .then((user) => {
             res.locals.userId = user.id;
-            res.locals.redirect = '/';
+            res.locals.redirect = '/profile';
             next();
             // res.locals.redirect = '/';
             // res.render("index", { currentUser: res.locals.user });
@@ -46,7 +46,7 @@ exports.loginAction = (req, res, next) => {
         .then((user) => {
             if (user) {
                 res.locals.userId = user.id;
-                res.locals.redirect = '/';
+                res.locals.redirect = '/profile';
                 next();
                 // res.locals.redirect = '/';
                 // res.render("success", { action: "LOG IN" });
