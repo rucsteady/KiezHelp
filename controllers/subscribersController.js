@@ -27,6 +27,10 @@ exports.saveAllSubscriber = (req, res, next) => {
             .then((user)=>{
                 user.subscribers.push(subId);
                 user.save();
+                Subscriber.populate(user, "subscribers").then((populatedUser) =>{
+                    console.log("sub:"+populatedUser);
+                    res.locals.subs = populatedUser.subscribers;
+                });
             }).catch((error) => {
                 if (error) res.send(error);
             });
@@ -302,11 +306,12 @@ exports.saveFakeData = (req, res) => {
 };
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    if (redirectPath && res.locals && res.locals.userId) {
+    if (redirectPath && res.locals && res.locals.userId && res.locals.subs) {
         res.redirect(url.format({
             pathname: redirectPath,
             query: {
-                "userId": res.locals.userId
+                "userId": res.locals.userId,
+                "subs": res.locals.subs
             }
         }));
     } else if(redirectPath){

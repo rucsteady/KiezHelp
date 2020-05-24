@@ -65,7 +65,10 @@ exports.loginAction = (req, res, next) => {
 exports.getUserProfile = (req, res) => {
     //TODOpopulate subscriber and pass it to render so it cna be shown in profile
     //TODO also need to add edit posibility for update
-    if (req.query && req.query.userId) {
+    if(req.query.subs){
+        console.log("reqsbus:"+req.query.subs);
+    }
+    if (req.query && req.query.userId ) {
         User.findOne({ _id: req.query.userId })
         .then((user) => {
             res.render('profile', { user:user });
