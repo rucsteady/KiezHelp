@@ -26,7 +26,6 @@ exports.createUser = (req, res, next) => {
     User.create(newUser)
         .then((user) => {
             res.locals.userId = user.id;
-            // res.redirect('/');
             res.locals.redirect = '/';
             next();
             // res.locals.redirect = '/';
@@ -47,18 +46,11 @@ exports.loginAction = (req, res, next) => {
         .then((user) => {
             if (user) {
                 res.locals.userId = user.id;
-                // res.redirect('/');
                 res.locals.redirect = '/';
                 next();
                 // res.locals.redirect = '/';
                 // res.render("success", { action: "LOG IN" });
             } else {
-                // res.redirect(url.format({
-                //     pathname: "/login",
-                //     query: {
-                //         "error": "Incorrect_Input"
-                //     }
-                // }));
                 res.render("login", { error: "Incorrect Input" });
             }
         })
