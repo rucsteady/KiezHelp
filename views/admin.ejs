@@ -8,12 +8,12 @@
         <div style="width:50%">
             <h1 style="display:inline">Volunteers</h1>
             <form action="/delete/Volunteer" method="post" style="display:inline"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete All Volunteers"></form>
-            <%- include('Volunteers',{ volunteers, type: "Volunteer" }) %>
+            <%- include('showEachCategory',{ volunteers, type: "Volunteer" }) %>
         </div>
         <div style="width:50%">
             <h1 style="display:inline">Requesters</h1>
             <form action="/delete/Request" method="post" style="display:inline"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete All Requests"></form>
-            <%- include('Volunteers',{ volunteers, type: "Request" }) %>
+            <%- include('showEachCategory',{ volunteers, type: "Request" }) %>
         </div>
     </div>
 </div>

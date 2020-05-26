@@ -1,0 +1,38 @@
+<div class="w3-row-padding w3-large ">
+    <form class="request-form w3-animate-top" action=<%=submitAction%> method="post">
+        <div>
+            <label>First Name</label> <small>*required</small>
+            <input class="w3-input w3-border" name="firstName" type="text" placeholder="Jane" required>
+        </div>
+        <div>
+            <label>Last Name</label> <small>*required</small>
+            <input class="w3-input w3-border" name="lastName" type="text" placeholder="Smith" required>
+        </div>
+        <div>
+            <label>Address</label> <small>*required</small>
+            <input class="button w3-button w3-black locate" style="display:inline;" value="Locate">
+            <input class="w3-input w3-border w3-block" name="address" type="text" placeholder="eg. Herbert-von-Karajan-Straße 1, 10785 Berlin" required>
+        </div>
+        <div>
+            <label>Email</label> <small>*required</small>
+            <input class="w3-input w3-border" name="email" type="text" placeholder="" required>
+        </div>
+        <div>
+            <label>Password</label> <small>*required</small>
+            <br/>
+            <small>* Minimum eight characters, at least one letter and one number </small>
+            <input class="w3-input w3-border" name="password" type="text" placeholder="" required>
+        </div>
+        <div>
+            <label>Confirm your password</label> <small>*required</small>
+            <input class="w3-input w3-border" name="passwordConfirm" type="text" placeholder="" required>
+        </div>
+        <div>
+            <label>About Me</label>
+            <textarea class="w3-input w3-border" name="aboutMe" placeholder="Tell us more about you..."></textarea>
+        </div>
+        <div>
+            <input class="button w3-button w3-black w3-block" style="margin:20px 0" type="submit" name="type" value=<%=buttonText%>>
+        </div>
+    </form>
+</div>
