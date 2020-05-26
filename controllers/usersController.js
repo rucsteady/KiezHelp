@@ -96,6 +96,7 @@ exports.saveProfileEdit = (req, res, next) => {
 
 //TODO check if there's such user with the mail and correct password
 exports.loginAction = (req, res, next) => {
+    console.log("Running loginAction");
     User.findOne({ email: req.body.email, password: req.body.password })
         .exec()
         .then((user) => {
@@ -103,33 +104,33 @@ exports.loginAction = (req, res, next) => {
                 res.locals.userId = user.id;
                 res.locals.redirect = '/profile';
                 next();
-                // res.locals.redirect = '/';
-                // res.render("success", { action: "LOG IN" });
             } else {
                 res.render("login", { error: "Incorrect Input" });
             }
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error login action: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("promise complete");
         });
 };
 exports.getUserProfile = (req, res) => {
-    //TODOpopulate subscriber and pass it to render so it cna be shown in profile
-    //TODO also need to add edit posibility for update
+    console.log("Running getUserProfile");
+    //TODO: in order for users to view the vol/req they submitted, 
+    // we need to populate subscriber and pass it render so it can be shown in profile
+    // atm, we can only see ID of those entries, not the entire content. Maybe we can 
+
     if (req.query.subs) {
         console.log("reqsbus:" + req.query.subs);
     }
-    if (req.query && req.query.userId) {
+    if (req.query.userId) {
         User.findOne({ _id: req.query.userId })
             .then((user) => {
                 res.render('profile', { user: user });
             })
             .catch((error) => {
-                console.log(error.message);
+                //TODO: myabe we can customise all the error message so we get a better idea of what's wrong , like:
+                // console.log(`Error <the purpose of this function>: ${error.message}`);
+                console.log(`Error getting user profile by Id: ${error.message}`);
                 return [];
             });
 
@@ -137,10 +138,72 @@ exports.getUserProfile = (req, res) => {
         res.render('profile', { user: '' });
     }
 };
+
+//using update method from Unit4 to update profile info( except subscribers part)
+exports.update = (req, res, next) => {
+    console.log("Running update");
+    const userId = req.params.userId;
+    res.locals.userId = userId;
+
+    const newFirstName = req.body.firstName,
+        newLastName = req.body.lastName,
+        newAddress = req.body.address,
+        newEmail = req.body.email,
+        newPassword = req.body.password,
+        newAboutMe = req.body.aboutMe;
+    console.log("userId in update:" + userId);
+    //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
+    let alerts = [];
+    //regex same as user.js 
+    var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //usual email regex
+    var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/; //regex for password with minimum eight characters, at least one letter, one number and one special character
+    //if didn't pass test, push to alerts and reload profile with no changes updated
+    if (!emailRegex.test(newEmail) || !passwordRegex.test(newPassword)) {
+        if (!emailRegex.test(newEmail))
+            alerts.push('Please provide a valid email address');
+        if (!passwordRegex.test(newPassword))
+            alerts.push('Password must have at least eight characters, at least one letter, one number and one special character');
+
+
+        res.locals.redirect = '/profile';
+        // res.locals.alerts = alerts;
+        // res.render(`/profile?userId=${userId}`, { alerts: alerts });
+        next();
+    } else {
+        //if passed validations, update profile
+        User.findByIdAndUpdate(userId, {
+                // using $currentDate to update dateEdited as doing this: dateEdited: Date.now doesn't work
+                // you can find look up on $currentDate from MongoDB
+                $currentDate: {
+                    dateEdited: true
+                },
+                $set: {
+                    address: newAddress,
+                    email: newEmail,
+                    password: newPassword,
+                    aboutMe: newAboutMe,
+                    name: {
+                        first: newFirstName,
+                        last: newLastName
+                    }
+                }
+            })
+            .then((user) => {
+
+                res.locals.redirect = '/profile';
+                next();
+            })
+            .catch(error => {
+                console.log(`Error updating user by ID: ${error.message}`);
+                next(error);
+            });
+    }
+}
+
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
+    console.log("in red:" + res.locals.userId);
     if (redirectPath) {
-        // res.redirect(redirectPath);
         res.redirect(url.format({
             pathname: redirectPath,
             query: {

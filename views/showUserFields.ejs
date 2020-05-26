@@ -1,6 +1,7 @@
 <% if(user){ %>
+
     <div class="w3-row-padding w3-large ">
-        <form action="/saveProfileEdit" method="post" style="display:inline;">
+        <form method="POST" action="<%=`/users/${user._id}/update?_method=PUT`%>" style="display:inline;">
             <div>
                 <label>User Id</label>
                 <input class="w3-input w3-border" style="color: grey" name="userId" type="text" value=<%=user._id %> readonly required>

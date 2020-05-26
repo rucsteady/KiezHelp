@@ -7,7 +7,8 @@ const express = require("express"),
     subscribersController = require("./controllers/subscribersController"),
     usersController = require("./controllers/usersController"),
     layouts = require("express-ejs-layouts"),
-    router = express.Router();
+    router = express.Router(),
+    methodOverride = require("method-override");
 
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r", {
@@ -36,6 +37,12 @@ router.post("/saveProfileEdit", usersController.saveProfileEdit, usersController
 
 router.post("/subscribe", subscribersController.saveAllSubscriber, usersController.redirectView);
 router.get("/profile", usersController.getUserProfile);
+
+//put
+router.use(methodOverride("_method", {
+    methods: ["POST", "GET"]
+}));
+router.put("/users/:userId/update", usersController.update, usersController.redirectView);
 
 app.get("/", homeController.getIndex);
 // app.get("/register", usersController.getRegister);
