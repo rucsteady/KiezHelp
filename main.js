@@ -33,6 +33,8 @@ router.get("/register", usersController.getRegister);
 router.post("/createUser", usersController.createUser, usersController.redirectView);
 router.get("/login", usersController.getLogin);
 router.post("/loginAction", usersController.loginAction, usersController.redirectView);
+//only for adding vol/req under a certain user account
+router.post("/loginToVol", usersController.loginToVol, usersController.redirectView);
 router.post("/saveProfileEdit", usersController.saveProfileEdit, usersController.redirectView);
 
 router.post("/subscribe", subscribersController.saveAllSubscriber, usersController.redirectView);

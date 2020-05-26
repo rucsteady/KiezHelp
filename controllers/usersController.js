@@ -3,8 +3,7 @@
 const User = require("../models/user"),
     rp = require("request-promise"),
     $ = require("cheerio"),
-    url = require('url'),
-    session = require('express-session');
+    url = require('url');
 exports.getRegister = (req, res) => {
     res.render("register", { error: '' });
 };
@@ -102,6 +101,29 @@ exports.loginAction = (req, res, next) => {
             return [];
         });
 };
+
+//exchange loginAction to this to add vol/req with a certain user account
+exports.loginToVol = (req, res, next) => {
+    console.log("Running loginToVol");
+    User.findOne({ email: req.body.email, password: req.body.password })
+        .exec()
+        .then((user) => {
+            if (user) {
+                res.locals.userId = user.id;
+                res.locals.alerts = [];
+                res.locals.redirect = `/volunteer/${user.id}`;
+                next();
+            } else {
+                res.render("login", { error: "Incorrect Input" });
+            }
+        })
+        .catch((error) => {
+            console.log(`Error login action: ${error.message}`);
+            return [];
+        });
+};
+
+
 exports.getUserProfile = (req, res) => {
     console.log("Running getUserProfile");
     //TODO: in order for users to view the vol/req they submitted, 
@@ -109,11 +131,9 @@ exports.getUserProfile = (req, res) => {
     // atm, we can only see ID of those entries, not the entire content. Maybe we can 
 
     console.log("alerts in getprofile:" + req.query.alerts);
-    // console.log("alerts length:" + req.query.alerts.length);
-    // console.log("alerts size:" + req.query.alerts.size);
-    if (req.query.subs) {
-        console.log("reqsbus:" + req.query.subs);
-    }
+    // if (req.query.subs) {
+    //     console.log("reqsbus:" + req.query.subs);
+    // }
     if (req.query.userId) {
         User.findOne({ _id: req.query.userId })
             .then((user) => {
