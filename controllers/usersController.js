@@ -1,9 +1,10 @@
 "use strict";
 
-const User = require("../models/user");
-const rp = require("request-promise");
-const $ = require("cheerio");
-const url = require('url');
+const User = require("../models/user"),
+    rp = require("request-promise"),
+    $ = require("cheerio"),
+    url = require('url'),
+    session = require('express-session');
 exports.getRegister = (req, res) => {
     res.render("register", { error: '' });
 };
@@ -27,6 +28,7 @@ exports.createUser = (req, res, next) => {
     User.create(newUser)
         .then((user) => {
             res.locals.userId = user.id;
+            res.locals.alerts = [];
             res.locals.redirect = '/profile';
             next();
             // res.locals.redirect = '/';
@@ -69,28 +71,14 @@ exports.saveProfileEdit = (req, res, next) => {
         })
         .then((user) => {
             console.log("user:" + user);
+            res.locals.alerts = [];
             res.locals.redirect = '/profile';
             res.locals.userId = req.body.userId;
             next();
         })
         .catch((error) => {
             if (error) res.send(error);
-        })
-        .then(() => {
-            console.log("promise complete");
         });
-    //     } else {
-    //         res.locals.redirect = '/profile';
-    //         res.locals.userId = req.body.userId;
-    //         next();
-    //     }
-    // })
-    // .catch((error) => {
-    //     if (error) res.send(error);
-    // })
-    // .then(() => {
-    //     console.log("promise complete");
-    // });
 
 };
 
@@ -102,6 +90,7 @@ exports.loginAction = (req, res, next) => {
         .then((user) => {
             if (user) {
                 res.locals.userId = user.id;
+                res.locals.alerts = [];
                 res.locals.redirect = '/profile';
                 next();
             } else {
@@ -119,13 +108,16 @@ exports.getUserProfile = (req, res) => {
     // we need to populate subscriber and pass it render so it can be shown in profile
     // atm, we can only see ID of those entries, not the entire content. Maybe we can 
 
+    console.log("alerts in getprofile:" + req.query.alerts);
+    // console.log("alerts length:" + req.query.alerts.length);
+    // console.log("alerts size:" + req.query.alerts.size);
     if (req.query.subs) {
         console.log("reqsbus:" + req.query.subs);
     }
     if (req.query.userId) {
         User.findOne({ _id: req.query.userId })
             .then((user) => {
-                res.render('profile', { user: user });
+                res.render('profile', { user: user, alerts: req.query.alerts });
             })
             .catch((error) => {
                 //TODO: myabe we can customise all the error message so we get a better idea of what's wrong , like:
@@ -154,6 +146,7 @@ exports.update = (req, res, next) => {
     console.log("userId in update:" + userId);
     //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
     let alerts = [];
+    alerts.push('');
     //regex same as user.js 
     var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //usual email regex
     var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/; //regex for password with minimum eight characters, at least one letter, one number and one special character
@@ -164,10 +157,8 @@ exports.update = (req, res, next) => {
         if (!passwordRegex.test(newPassword))
             alerts.push('Password must have at least eight characters, at least one letter, one number and one special character');
 
-
         res.locals.redirect = '/profile';
-        // res.locals.alerts = alerts;
-        // res.render(`/profile?userId=${userId}`, { alerts: alerts });
+        res.locals.alerts = alerts;
         next();
     } else {
         //if passed validations, update profile
@@ -191,6 +182,7 @@ exports.update = (req, res, next) => {
             .then((user) => {
 
                 res.locals.redirect = '/profile';
+                res.locals.alerts = alerts;
                 next();
             })
             .catch(error => {
@@ -207,7 +199,8 @@ exports.redirectView = (req, res, next) => {
         res.redirect(url.format({
             pathname: redirectPath,
             query: {
-                "userId": res.locals.userId
+                "userId": res.locals.userId,
+                'alerts': res.locals.alerts
             }
         }));
     } else next();

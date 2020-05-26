@@ -45,10 +45,6 @@ router.use(methodOverride("_method", {
 router.put("/users/:userId/update", usersController.update, usersController.redirectView);
 
 app.get("/", homeController.getIndex);
-// app.get("/register", usersController.getRegister);
-// app.get("/login", usersController.getLogin);
-// app.post("/loginAction", usersController.loginAction);
-// app.post("/createUser", usersController.createUser);
 
 //fill out form
 app.get("/volunteer/:userId", subscribersController.getVolSubscriptionPage);

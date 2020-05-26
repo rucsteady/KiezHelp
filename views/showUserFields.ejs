@@ -1,5 +1,4 @@
 <% if(user){ %>
-
     <div class="w3-row-padding w3-large ">
         <form method="POST" action="<%=`/users/${user._id}/update?_method=PUT`%>" style="display:inline;">
             <div>
@@ -36,9 +35,8 @@
             </div>
             <div>
                 <label>About Me</label>
-                <input class="w3-input w3-border" name="aboutMe" type="text" value=<%=user.aboutMe %>>
+                <textarea class="w3-input w3-border" name="aboutMe" type="text" rows="4" cols="50"><%=user.aboutMe %></textarea>
             </div>
-
             <input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Save Changes">
 
         </form>
