@@ -33,6 +33,9 @@ router.get("/register", usersController.getRegister);
 router.post("/createUser", usersController.createUser, usersController.redirectView);
 router.get("/login", usersController.getLogin);
 router.post("/loginAction", usersController.loginAction, usersController.redirectView);
+//only for adding vol/req under a certain user account
+router.post("/loginToVol", usersController.loginToVol, usersController.redirectView);
+
 router.post("/saveProfileEdit", usersController.saveProfileEdit, usersController.redirectView);
 
 router.post("/subscribe", subscribersController.saveAllSubscriber, usersController.redirectView);
@@ -42,8 +45,9 @@ router.get("/profile", usersController.getUserProfile);
 router.use(methodOverride("_method", {
     methods: ["POST", "GET"]
 }));
-router.put("/users/:userId/update", usersController.update, usersController.redirectView);
+router.put("/users/:userId/update", usersController.updateUser, usersController.redirectView);
 router.delete("/users/:userId/delete", usersController.delete, usersController.redirectView);
+router.put("/users/:subId/update", usersController.updateSub, usersController.redirectView);
 
 app.get("/", homeController.getIndex);
 

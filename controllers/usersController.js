@@ -104,6 +104,26 @@ exports.loginAction = (req, res, next) => {
         });
 };
 
+//exchange loginAction to this to add vol/req with a certain user account
+exports.loginToVol = (req, res, next) => {
+    console.log("Running loginToVol");
+    User.findOne({ email: req.body.email, password: req.body.password })
+        .exec()
+        .then((user) => {
+            if (user) {
+                res.locals.userId = user.id;
+                res.locals.alerts = [];
+                res.locals.redirect = `/volunteer/${user.id}`;
+                next();
+            } else {
+                res.render("login", { error: "Incorrect Input" });
+            }
+        })
+        .catch((error) => {
+            console.log(`Error login action: ${error.message}`);
+            return [];
+        });
+};
 
 exports.getUserProfile = (req, res) => {
     console.log("Running getUserProfile");
@@ -144,7 +164,67 @@ exports.getUserProfile = (req, res) => {
 };
 
 //using update method from Unit4 to update profile info( except subscribers part)
-exports.update = (req, res, next) => {
+exports.updateUser = (req, res, next) => {
+        console.log("Running update");
+        const userId = req.params.userId;
+        res.locals.userId = userId;
+
+        const newFirstName = req.body.firstName,
+            newLastName = req.body.lastName,
+            newAddress = req.body.address,
+            newEmail = req.body.email,
+            newPassword = req.body.password,
+            newAboutMe = req.body.aboutMe;
+        console.log("userId in update:" + userId);
+        //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
+        let alerts = [];
+        alerts.push('');
+        //regex same as user.js 
+        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //usual email regex
+        var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/; //regex for password with minimum eight characters, at least one letter, one number and one special character
+        //if didn't pass test, push to alerts and reload profile with no changes updated
+        if (!emailRegex.test(newEmail) || !passwordRegex.test(newPassword)) {
+            if (!emailRegex.test(newEmail))
+                alerts.push('Please provide a valid email address');
+            if (!passwordRegex.test(newPassword))
+                alerts.push('Password must have at least eight characters, at least one letter, one number and one special character');
+
+            res.locals.redirect = '/profile';
+            res.locals.alerts = alerts;
+            next();
+        } else {
+            //if passed validations, update profile
+            User.findByIdAndUpdate(userId, {
+                    // using $currentDate to update dateEdited as doing this: dateEdited: Date.now doesn't work
+                    // you can find look up on $currentDate from MongoDB
+                    $currentDate: {
+                        dateEdited: true
+                    },
+                    $set: {
+                        address: newAddress,
+                        email: newEmail,
+                        password: newPassword,
+                        aboutMe: newAboutMe,
+                        name: {
+                            first: newFirstName,
+                            last: newLastName
+                        }
+                    }
+                })
+                .then((user) => {
+
+                    res.locals.redirect = '/profile';
+                    res.locals.alerts = alerts;
+                    next();
+                })
+                .catch(error => {
+                    console.log(`Error updating user by ID: ${error.message}`);
+                    next(error);
+                });
+        }
+    }
+    //updating subscriber from user profile
+exports.updateSub = (req, res, next) => {
     console.log("Running update");
     const userId = req.params.userId;
     res.locals.userId = userId;
