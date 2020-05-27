@@ -32,10 +32,6 @@ exports.createUser = (req, res, next) => {
             res.locals.alerts = [];
             res.locals.redirect = '/profile';
             next();
-            // res.locals.redirect = '/';
-            // res.render("index", { currentUser: res.locals.user });
-            // res.render("success", { action: "REGISTER" });
-            //TODO: save this ObjectId to global so I can add subscribes to the logged in user
         })
         .catch((error) => {
             console.log(error.message);
@@ -140,7 +136,6 @@ exports.getUserProfile = (req, res) => {
                 Subscriber.find({ userId: user._id }).exec()
                     .then((subs) => {
                         subs.forEach((sub) => {
-                            console.log("sub:" + sub);
                             subsArray.push(sub);
                         });
                     }).catch((error) => {
@@ -148,7 +143,6 @@ exports.getUserProfile = (req, res) => {
                         return [];
                     })
                     .then(() => {
-                        console.log("subsArray:" + subsArray);
                         res.render('profile', { user: user, alerts: req.query.alerts, subs: subsArray });
                     });
             })
@@ -165,67 +159,7 @@ exports.getUserProfile = (req, res) => {
 
 //using update method from Unit4 to update profile info( except subscribers part)
 exports.updateUser = (req, res, next) => {
-        console.log("Running update");
-        const userId = req.params.userId;
-        res.locals.userId = userId;
-
-        const newFirstName = req.body.firstName,
-            newLastName = req.body.lastName,
-            newAddress = req.body.address,
-            newEmail = req.body.email,
-            newPassword = req.body.password,
-            newAboutMe = req.body.aboutMe;
-        console.log("userId in update:" + userId);
-        //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
-        let alerts = [];
-        alerts.push('');
-        //regex same as user.js 
-        var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //usual email regex
-        var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/; //regex for password with minimum eight characters, at least one letter, one number and one special character
-        //if didn't pass test, push to alerts and reload profile with no changes updated
-        if (!emailRegex.test(newEmail) || !passwordRegex.test(newPassword)) {
-            if (!emailRegex.test(newEmail))
-                alerts.push('Please provide a valid email address');
-            if (!passwordRegex.test(newPassword))
-                alerts.push('Password must have at least eight characters, at least one letter, one number and one special character');
-
-            res.locals.redirect = '/profile';
-            res.locals.alerts = alerts;
-            next();
-        } else {
-            //if passed validations, update profile
-            User.findByIdAndUpdate(userId, {
-                    // using $currentDate to update dateEdited as doing this: dateEdited: Date.now doesn't work
-                    // you can find look up on $currentDate from MongoDB
-                    $currentDate: {
-                        dateEdited: true
-                    },
-                    $set: {
-                        address: newAddress,
-                        email: newEmail,
-                        password: newPassword,
-                        aboutMe: newAboutMe,
-                        name: {
-                            first: newFirstName,
-                            last: newLastName
-                        }
-                    }
-                })
-                .then((user) => {
-
-                    res.locals.redirect = '/profile';
-                    res.locals.alerts = alerts;
-                    next();
-                })
-                .catch(error => {
-                    console.log(`Error updating user by ID: ${error.message}`);
-                    next(error);
-                });
-        }
-    }
-    //updating subscriber from user profile
-exports.updateSub = (req, res, next) => {
-    console.log("Running update");
+    console.log("Running user update");
     const userId = req.params.userId;
     res.locals.userId = userId;
 
@@ -235,7 +169,6 @@ exports.updateSub = (req, res, next) => {
         newEmail = req.body.email,
         newPassword = req.body.password,
         newAboutMe = req.body.aboutMe;
-    console.log("userId in update:" + userId);
     //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
     let alerts = [];
     alerts.push('');
@@ -284,13 +217,12 @@ exports.updateSub = (req, res, next) => {
     }
 }
 
+
 //Unit 4 delete
-exports.delete = (req, res, next) => {
-    console.log("Running delete");
+exports.deleteSub = (req, res, next) => {
+    console.log("Running deleteSub");
     const userId = req.params.userId,
         subId = req.body.subId;
-    console.log("subId:" + subId);
-    console.log("userId:" + userId);
     //first delete it from subscriber, then delete from user
     Subscriber.findByIdAndRemove(subId)
         .then()
@@ -298,13 +230,8 @@ exports.delete = (req, res, next) => {
             console.log(`Error deleting in Sub by subId: ${error.message}`);
             next(error);
         });
-    console.log("in first");
     User.findOne({ _id: userId })
         .then((user) => {
-            console.log("innnn");
-            console.log("user:" + user);
-            console.log("user:" + user.name);
-            console.log("user:" + user.subscribers);
             user.subscribers = user.subscribers.filter((sub) => { sub != subId });
             user.save();
             res.locals.userId = userId;
@@ -315,6 +242,29 @@ exports.delete = (req, res, next) => {
         .catch(error => {
             console.log(`Error deleting in User by subId: ${error.message}`);
             next(error);
+        });
+}
+
+//if we delete a user, we also need to delete the subscribers that relates to them
+exports.deleteUser = (req, res) => {
+    console.log("Running deleteUser");
+    const userId = req.params.userId;
+    console.log("userId:" + userId);
+    //first delete subscribers, then delete the user
+
+    Subscriber.deleteMany({ userId: userId })
+        .then()
+        .catch(error => {
+            console.log(`Error removing subs with this userId: ${error.message}`);
+        });
+    console.log("here");
+    User.findByIdAndRemove(userId)
+        .then(() => {
+            console.log("in update here");
+            res.render("register", { error: '' });
+        })
+        .catch(error => {
+            console.log(`Error deleting user by Id: ${error.message}`);
         });
 }
 

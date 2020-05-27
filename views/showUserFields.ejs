@@ -39,6 +39,7 @@
             </div>
             <input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Save Changes">
 
+            <a href="<%=`/users/${user._id}/delete?_method=DELETE`%>"><input class="button w3-button w3-black " style="font-size:15px;" name="type" value="Delete"></a>
         </form>
         <h3>Subscribers:</h3>
 
@@ -52,7 +53,7 @@
 
                 <%  if(subs){ subs.forEach((s)=>{%>
 
-                    <form action="<%=`/users/${user._id}/delete?_method=DELETE`%>" method="POST">
+                    <form action="<%=`/subscribers/${user._id}/delete?_method=DELETE`%>" method="POST">
                         <input class="w3-input w3-border" name="subId" type="text" value=<%=s._id %>>
                         <input class="w3-input w3-border" name="type" type="text" value=<%=s.type %>>
                         <input class="w3-input w3-border" name="address" type="text" value=<%=s.address %>>
@@ -61,7 +62,6 @@
                         <input class="w3-input w3-border" name="durafrom" type="text" value=<%=s.durafrom %>>
                         <input class="w3-input w3-border" name="durato" type="text" value=<%=s.durato %>>
 
-                        <input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" href="/users/${s._id}/update?_method=PUT" value="Save Changes">
                         <input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="delete" value="Delete">
                     </form>
 
