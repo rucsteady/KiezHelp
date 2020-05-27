@@ -23,27 +23,28 @@ exports.saveAllSubscriber = (req, res, next) => {
     Subscriber.create(newVolReqEntry)
         .then((entry) => {
             subId = entry._id;
-            User.findOne({_id:req.body.userId})
-            .then((user)=>{
-                user.subscribers.push(subId);
-                //TODO need to update the subscribers id whenever there's a deletion in admin so user don't have subs that are already deleted
-                user.save();
-                Subscriber.populate(user, "subscribers").then((populatedUser) =>{
-                    // console.log("sub:"+populatedUser);
-                    res.locals.subs = populatedUser.subscribers;
+            User.findOne({ _id: req.body.userId })
+                .then((user) => {
+                    user.subscribers.push(subId);
+                    //TODO need to update the subscribers id whenever there's a deletion in admin so user don't have subs that are already deleted
+                    user.save();
+                    Subscriber.populate(user, "subscribers").then((populatedUser) => {
+                        // console.log("sub:"+populatedUser);
+                        res.locals.subs = populatedUser.subscribers;
+                    });
+                }).catch((error) => {
+                    if (error) res.send(error);
                 });
-            }).catch((error) => {
-                if (error) res.send(error);
-            });
             res.locals.redirect = '/profile';
             res.locals.userId = req.body.userId;
             next();
             // res.render("success", { action: "SUBMIT" });
         })
         .catch((error) => {
+            console.log(`Error save vol or req entry in /volunteer or /requester: ${error.message}`);
             if (error) res.send(error);
         });
-    
+
 };
 
 exports.getAllReqSubscribers = (req, res) => {
@@ -56,11 +57,8 @@ exports.getAllReqSubscribers = (req, res) => {
             });
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error get all req: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("promise complete");
         });
 };
 exports.deleteSubscribers = (req, res) => {
@@ -68,11 +66,8 @@ exports.deleteSubscribers = (req, res) => {
     Subscriber.deleteMany({ type: paramsType })
         .exec()
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error delete sub: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("promise complete");
         });
     Subscriber.find({})
         .exec()
@@ -82,11 +77,8 @@ exports.deleteSubscribers = (req, res) => {
             });
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error read subs for admin: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("promise complete");
         });
 };
 
@@ -95,11 +87,8 @@ exports.deleteOneSubscriber = (req, res) => {
     Subscriber.deleteOne({ _id: paramsId })
         .exec()
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error delete one sub: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("del One promise complete");
         });
     Subscriber.find({})
         .exec()
@@ -109,11 +98,8 @@ exports.deleteOneSubscriber = (req, res) => {
             });
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error read subs for admin: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("admin promise complete");
         });
 };
 
@@ -141,11 +127,8 @@ exports.getAllSubscribers = (req, res) => {
             });
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error read subs for locate: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("promise complete");
         });
 };
 
@@ -159,11 +142,8 @@ exports.getAllVolSubscribers = (req, res) => {
             });
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error read subs for diff type of sub entry: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("promise complete");
         });
 };
 
@@ -176,11 +156,8 @@ exports.getAdmin = (req, res) => {
             });
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error read sub for admin: ${error.message}`);
             return [];
-        })
-        .then(() => {
-            console.log("promise complete");
         });
 };
 
@@ -292,11 +269,8 @@ exports.saveFakeData = (req, res) => {
                         });
                     })
                     .catch((error) => {
-                        console.log(error.message);
+                        console.log(`Error read subs for admin: ${error.message}`);
                         return [];
-                    })
-                    .then(() => {
-                        console.log("admin promise complete");
                     });
             }
         })
@@ -315,10 +289,10 @@ exports.redirectView = (req, res, next) => {
                 "subs": res.locals.subs
             }
         }));
-    } else if(redirectPath){
+    } else if (redirectPath) {
         res.redirect(url.format({
             pathname: redirectPath
         }));
-    
-    }else next();
+
+    } else next();
 }

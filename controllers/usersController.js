@@ -31,18 +31,15 @@ exports.createUser = (req, res, next) => {
             res.locals.alerts = [];
             res.locals.redirect = '/profile';
             next();
-            // res.locals.redirect = '/';
-            // res.render("index", { currentUser: res.locals.user });
-            // res.render("success", { action: "REGISTER" });
             //TODO: save this ObjectId to global so I can add subscribes to the logged in user
         })
         .catch((error) => {
-            console.log(error.message);
+            console.log(`Error create user from registration: ${error.message}`);
             if (error) res.render("register", { error: error.message });
         });
 };
 
-
+//when "save changes" on profile page clicked, save the input fields
 exports.saveProfileEdit = (req, res, next) => {
 
     const userId = req.body.userId,
@@ -82,7 +79,7 @@ exports.saveProfileEdit = (req, res, next) => {
 
 };
 
-//TODO check if there's such user with the mail and correct password
+//show profile after login or registration
 exports.loginAction = (req, res, next) => {
     console.log("Running loginAction");
     User.findOne({ email: req.body.email, password: req.body.password })
@@ -131,6 +128,7 @@ exports.getUserProfile = (req, res) => {
     // we need to populate subscriber and pass it render so it can be shown in profile
     // atm, we can only see ID of those entries, not the entire content. Maybe we can 
 
+    //Story_027 show vol/req in profile in detail, needs to $LookAt Subscriber from User
     // console.log("alerts in getprofile:" + req.query.alerts);
     // if (req.query.subs) {
     //     console.log("reqsbus:" + req.query.subs);
@@ -218,8 +216,6 @@ exports.delete = (req, res, next) => {
     console.log("Running delete");
     const userId = req.params.userId,
         subId = req.body.subId;
-    console.log("subId:" + subId);
-    console.log("userId:" + userId);
     //first delete it from subscriber, then delete from user
     Subscriber.findByIdAndRemove(subId)
         .then()
@@ -227,13 +223,9 @@ exports.delete = (req, res, next) => {
             console.log(`Error deleting in Sub by subId: ${error.message}`);
             next(error);
         });
-    console.log("in first");
     User.findOne({ _id: userId })
         .then((user) => {
-            console.log("innnn");
-            console.log("user:" + user);
-            console.log("user:" + user.name);
-            console.log("user:" + user.subscribers);
+
             user.subscribers = user.subscribers.filter((sub) => { sub != subId });
             user.save();
             res.locals.userId = userId;
@@ -249,7 +241,6 @@ exports.delete = (req, res, next) => {
 
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    console.log("in red:" + res.locals.userId);
     if (redirectPath) {
         res.redirect(url.format({
             pathname: redirectPath,
