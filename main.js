@@ -43,6 +43,7 @@ router.use(methodOverride("_method", {
     methods: ["POST", "GET"]
 }));
 router.put("/users/:userId/update", usersController.update, usersController.redirectView);
+router.delete("/users/:userId/delete", usersController.delete, usersController.redirectView);
 
 app.get("/", homeController.getIndex);
 

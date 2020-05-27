@@ -1,6 +1,7 @@
 "use strict";
 
 const User = require("../models/user"),
+    Subscriber = require("../models/subscriber"),
     rp = require("request-promise"),
     $ = require("cheerio"),
     url = require('url'),
@@ -102,29 +103,51 @@ exports.loginAction = (req, res, next) => {
             return [];
         });
 };
+
+
 exports.getUserProfile = (req, res) => {
     console.log("Running getUserProfile");
-    //TODO: in order for users to view the vol/req they submitted, 
-    // we need to populate subscriber and pass it render so it can be shown in profile
-    // atm, we can only see ID of those entries, not the entire content. Maybe we can 
 
-    console.log("alerts in getprofile:" + req.query.alerts);
-    // console.log("alerts length:" + req.query.alerts.length);
-    // console.log("alerts size:" + req.query.alerts.size);
     if (req.query.subs) {
         console.log("reqsbus:" + req.query.subs);
     }
     if (req.query.userId) {
         User.findOne({ _id: req.query.userId })
             .then((user) => {
-                res.render('profile', { user: user, alerts: req.query.alerts });
+                //getting the full detail info of subscribers that have userId that matches this user
+                let subs = [];
+                subs.push({
+                    "_id": "5ece74614f8417cbaa6ce009",
+                    "type": "Volunteer",
+                    "name": "test01",
+                    "address": "Königsweg 314B",
+                    "option": "GroceryShopping",
+                    "message": "",
+                    "userId": "5eccf78d20ce6e0efa52c7e1",
+                    "date": null,
+                    "durafrom": "",
+                    "durato": "",
+                    "__v": 0
+                });
+                Subscriber.find({ userId: req.query.userId })
+                    .then((subscribers) => {
+                        console.log("subs in find:" + subscribers);
+                        subs.push(subscribers);
+                        console.log("subbbs:" + subs);
+                    })
+                    .catch((error) => {
+                        console.log(`Error getting subs entered by a certain user: ${error.message}`);
+                        return [];
+                    });
+
+                //pass subs to profile so we can show them in view
+                res.render('profile', { user: user, alerts: req.query.alerts, subs: subs });
             })
             .catch((error) => {
-                //TODO: myabe we can customise all the error message so we get a better idea of what's wrong , like:
-                // console.log(`Error <the purpose of this function>: ${error.message}`);
                 console.log(`Error getting user profile by Id: ${error.message}`);
                 return [];
             });
+        console.log("in if userId");
 
     } else {
         res.render('profile', { user: '' });
@@ -192,9 +215,43 @@ exports.update = (req, res, next) => {
     }
 }
 
+//Unit 4 delete
+exports.delete = (req, res, next) => {
+    console.log("Running delete");
+    const userId = req.params.userId,
+        subId = req.body.subId;
+    console.log("subId:" + subId);
+    console.log("userId:" + userId);
+    //first delete it from subscriber, then delete from user
+    Subscriber.findByIdAndRemove(subId)
+        .then()
+        .catch(error => {
+            console.log(`Error deleting in Sub by subId: ${error.message}`);
+            next(error);
+        });
+    console.log("in first");
+    User.findOne({ _id: userId })
+        .then((user) => {
+            console.log("innnn");
+            console.log("user:" + user);
+            console.log("user:" + user.name);
+            console.log("user:" + user.subscribers);
+            user.subscribers = user.subscribers.filter((sub) => { sub != subId });
+            user.save();
+            res.locals.userId = userId;
+            res.locals.redirect = '/profile';
+            res.locals.alerts = [];
+            next();
+        })
+        .catch(error => {
+            console.log(`Error deleting in User by subId: ${error.message}`);
+            next(error);
+        });
+}
+
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    console.log("in red:" + res.locals.userId);
+    // console.log("in red:" + res.locals.userId);
     if (redirectPath) {
         res.redirect(url.format({
             pathname: redirectPath,
