@@ -1,6 +1,7 @@
 "use strict";
 
 const User = require("../models/user"),
+    Subscriber = require("../models/subscriber"),
     rp = require("request-promise"),
     $ = require("cheerio"),
     url = require('url');
@@ -130,7 +131,7 @@ exports.getUserProfile = (req, res) => {
     // we need to populate subscriber and pass it render so it can be shown in profile
     // atm, we can only see ID of those entries, not the entire content. Maybe we can 
 
-    console.log("alerts in getprofile:" + req.query.alerts);
+    // console.log("alerts in getprofile:" + req.query.alerts);
     // if (req.query.subs) {
     //     console.log("reqsbus:" + req.query.subs);
     // }
@@ -210,6 +211,40 @@ exports.update = (req, res, next) => {
                 next(error);
             });
     }
+}
+
+//Unit 4 delete
+exports.delete = (req, res, next) => {
+    console.log("Running delete");
+    const userId = req.params.userId,
+        subId = req.body.subId;
+    console.log("subId:" + subId);
+    console.log("userId:" + userId);
+    //first delete it from subscriber, then delete from user
+    Subscriber.findByIdAndRemove(subId)
+        .then()
+        .catch(error => {
+            console.log(`Error deleting in Sub by subId: ${error.message}`);
+            next(error);
+        });
+    console.log("in first");
+    User.findOne({ _id: userId })
+        .then((user) => {
+            console.log("innnn");
+            console.log("user:" + user);
+            console.log("user:" + user.name);
+            console.log("user:" + user.subscribers);
+            user.subscribers = user.subscribers.filter((sub) => { sub != subId });
+            user.save();
+            res.locals.userId = userId;
+            res.locals.redirect = '/profile';
+            res.locals.alerts = [];
+            next();
+        })
+        .catch(error => {
+            console.log(`Error deleting in User by subId: ${error.message}`);
+            next(error);
+        });
 }
 
 exports.redirectView = (req, res, next) => {

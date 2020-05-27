@@ -40,11 +40,13 @@ router.post("/saveProfileEdit", usersController.saveProfileEdit, usersController
 router.post("/subscribe", subscribersController.saveAllSubscriber, usersController.redirectView);
 router.get("/profile", usersController.getUserProfile);
 
-//put
+//Unit 4 using methodOverride to update and delete
 router.use(methodOverride("_method", {
     methods: ["POST", "GET"]
 }));
 router.put("/users/:userId/update", usersController.update, usersController.redirectView);
+router.delete("/users/:userId/delete", usersController.delete, usersController.redirectView);
+
 
 app.get("/", homeController.getIndex);
 

@@ -42,13 +42,12 @@
         </form>
         <h3>Subscribers:</h3>
 
+
         <% user.subscribers.forEach(sub=>{ if(sub){%>
-            <div>
+            <form action="<%=`/users/${user._id}/delete?_method=DELETE`%>" method="POST">
                 <input class="w3-input w3-border" name="subId" type="text" value=<%=sub %>>
-                <form action="/deleteSub" method="post" style="display:inline;"><input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="type" value="Delete"></form>
-
-            </div>
+                <input class="button w3-button w3-black " style="font-size:15px;" type="submit" name="delete" value="Delete">
+            </form>
             <% }}); %>
-
     </div>
     <% } %>
