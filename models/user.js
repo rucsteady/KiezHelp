@@ -48,6 +48,11 @@ const mongoose = require("mongoose"),
             default: Date.now,
             optional: true
         },
+        dateEdited: {
+            type: Date,
+            default: Date.now,
+            optional: true
+        },
     });
 
 userSchema.virtual("fullName")

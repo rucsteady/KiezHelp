@@ -7,7 +7,8 @@ const express = require("express"),
     subscribersController = require("./controllers/subscribersController"),
     usersController = require("./controllers/usersController"),
     layouts = require("express-ejs-layouts"),
-    router = express.Router();
+    router = express.Router(),
+    methodOverride = require("method-override");
 
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI || "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r", {
@@ -32,15 +33,23 @@ router.get("/register", usersController.getRegister);
 router.post("/createUser", usersController.createUser, usersController.redirectView);
 router.get("/login", usersController.getLogin);
 router.post("/loginAction", usersController.loginAction, usersController.redirectView);
+//only for adding vol/req under a certain user account
+router.post("/loginToVol", usersController.loginToVol, usersController.redirectView);
+
+router.post("/saveProfileEdit", usersController.saveProfileEdit, usersController.redirectView);
 
 router.post("/subscribe", subscribersController.saveAllSubscriber, usersController.redirectView);
 router.get("/profile", usersController.getUserProfile);
 
+//put
+router.use(methodOverride("_method", {
+    methods: ["POST", "GET"]
+}));
+router.put("/users/:userId/update", usersController.updateUser, usersController.redirectView);
+router.delete("/users/:userId/delete", usersController.deleteUser);
+router.delete("/subscribers/:userId/delete", usersController.deleteSub, usersController.redirectView);
+
 app.get("/", homeController.getIndex);
-// app.get("/register", usersController.getRegister);
-// app.get("/login", usersController.getLogin);
-// app.post("/loginAction", usersController.loginAction);
-// app.post("/createUser", usersController.createUser);
 
 //fill out form
 app.get("/volunteer/:userId", subscribersController.getVolSubscriptionPage);
