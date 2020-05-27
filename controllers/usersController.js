@@ -113,41 +113,30 @@ exports.getUserProfile = (req, res) => {
     }
     if (req.query.userId) {
         User.findOne({ _id: req.query.userId })
+            .exec()
             .then((user) => {
                 //getting the full detail info of subscribers that have userId that matches this user
-                let subs = [];
-                subs.push({
-                    "_id": "5ece74614f8417cbaa6ce009",
-                    "type": "Volunteer",
-                    "name": "test01",
-                    "address": "Königsweg 314B",
-                    "option": "GroceryShopping",
-                    "message": "",
-                    "userId": "5eccf78d20ce6e0efa52c7e1",
-                    "date": null,
-                    "durafrom": "",
-                    "durato": "",
-                    "__v": 0
-                });
-                Subscriber.find({ userId: req.query.userId })
-                    .then((subscribers) => {
-                        console.log("subs in find:" + subscribers);
-                        subs.push(subscribers);
-                        console.log("subbbs:" + subs);
-                    })
-                    .catch((error) => {
-                        console.log(`Error getting subs entered by a certain user: ${error.message}`);
+                let subsArray = [];
+                Subscriber.find({ userId: user._id }).exec()
+                    .then((subs) => {
+                        subs.forEach((sub) => {
+                            console.log("sub:" + sub);
+                            subsArray.push(sub);
+                        });
+                    }).catch((error) => {
+                        console.log(`Error getting subs by userId: ${error.message}`);
                         return [];
+                    })
+                    .then(() => {
+                        console.log("subsArray:" + subsArray);
+                        res.render('profile', { user: user, alerts: req.query.alerts, subs: subsArray });
                     });
-
-                //pass subs to profile so we can show them in view
-                res.render('profile', { user: user, alerts: req.query.alerts, subs: subs });
             })
             .catch((error) => {
                 console.log(`Error getting user profile by Id: ${error.message}`);
                 return [];
             });
-        console.log("in if userId");
+
 
     } else {
         res.render('profile', { user: '' });
