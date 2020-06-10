@@ -1,25 +1,31 @@
 "use strict";
 
 const express = require("express"),
-    app = express(),
-    homeController = require("./controllers/homeController"),
-    errorController = require("./controllers/errorController"),
-    subscribersController = require("./controllers/subscribersController"),
-    usersController = require("./controllers/usersController"),
-    layouts = require("express-ejs-layouts"),
-    router = express.Router(),
-    methodOverride = require("method-override");
+  app = express(),
+  homeController = require("./controllers/homeController"),
+  errorController = require("./controllers/errorController"),
+  subscribersController = require("./controllers/subscribersController"),
+  usersController = require("./controllers/usersController"),
+  layouts = require("express-ejs-layouts"),
+  router = express.Router(),
+  expressSession = require("express-session"),
+  cookieParser = require("cookie-parser"),
+  connectFlash = require("connect-flash"),
+  methodOverride = require("method-override");
 
 const mongoose = require("mongoose");
-mongoose.connect(process.env.MONGODB_URI || "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r", {
+mongoose.connect(
+  process.env.MONGODB_URI ||
+    "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r",
+  {
     useNewUrlParser: true,
-});
+  }
+);
 const db = mongoose.connection;
 db.once("open", () => {
-    console.log("Successfully connected to MongoDB using Mongoose!");
+  console.log("Successfully connected to MongoDB using Mongoose!");
 });
 mongoose.set("useCreateIndex", true);
-
 
 app.set("view engine", "ejs");
 app.set("port", process.env.PORT || 3000);
@@ -27,27 +33,75 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(layouts);
 app.use(express.static("public"));
-
 app.use("/", router);
+
+router.use(cookieParser("secret_passcode"));
+router.use(
+  expressSession({
+    secret: "secret_passcode",
+    cookie: {
+      maxAge: 4000000,
+    },
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+router.use(connectFlash());
+
+router.use((req, res, next) => {
+  res.locals.flashMessages = req.flash();
+  next();
+});
+
 router.get("/register", usersController.getRegister);
-router.post("/createUser", usersController.createUser, usersController.redirectView);
+router.post(
+  "/createUser",
+  usersController.createUser,
+  usersController.redirectView
+);
 router.get("/login", usersController.getLogin);
-router.post("/loginAction", usersController.loginAction, usersController.redirectView);
+router.post(
+  "/loginAction",
+  usersController.loginAction,
+  usersController.redirectView
+);
 //only for adding vol/req under a certain user account
-router.post("/loginToVol", usersController.loginToVol, usersController.redirectView);
+router.post(
+  "/loginToVol",
+  usersController.loginToVol,
+  usersController.redirectView
+);
 
-router.post("/saveProfileEdit", usersController.saveProfileEdit, usersController.redirectView);
+router.post(
+  "/saveProfileEdit",
+  usersController.saveProfileEdit,
+  usersController.redirectView
+);
 
-router.post("/subscribe", subscribersController.saveAllSubscriber, usersController.redirectView);
+router.post(
+  "/subscribe",
+  subscribersController.saveAllSubscriber,
+  usersController.redirectView
+);
 router.get("/profile", usersController.getUserProfile);
 
 //put
-router.use(methodOverride("_method", {
-    methods: ["POST", "GET"]
-}));
-router.put("/users/:userId/update", usersController.updateUser, usersController.redirectView);
+router.use(
+  methodOverride("_method", {
+    methods: ["POST", "GET"],
+  })
+);
+router.put(
+  "/users/:userId/update",
+  usersController.updateUser,
+  usersController.redirectView
+);
 router.delete("/users/:userId/delete", usersController.deleteUser);
-router.delete("/subscribers/:userId/delete", usersController.deleteSub, usersController.redirectView);
+router.delete(
+  "/subscribers/:userId/delete",
+  usersController.deleteSub,
+  usersController.redirectView
+);
 
 app.get("/", homeController.getIndex);
 
@@ -74,5 +128,5 @@ app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
 
 app.listen(app.get("port"), () => {
-    console.log(`Server running at http://localhost:${app.get("port")}`);
+  console.log(`Server running at http://localhost:${app.get("port")}`);
 });
