@@ -1,53 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>KiezHelp</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script
-      async
-      defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc&callback=initMap&enterLocation"
-    ></script>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
-      integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
-      crossorigin="anonymous"
-    />
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc&callback=initMap&enterLocation"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="/css/w3.css" />
     <link rel="stylesheet" type="text/css" href="/css/kiezhelp.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Raleway"
-    />
-  </head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway" />
+</head>
 
-  <body>
+<body>
     <%- include('partials/navigation') %>
-    
-    <div class="flashes">
-        <% if (flashMessages) { %> <% if (flashMessages.success) { %>
-        <div class="flash success">
-          <%= flashMessages.success %>
+
+        <div class="flashes">
+            <% if (flashMessages) { %>
+                <% if (flashMessages.success) { %>
+                    <div class="flash success">
+                        <%= flashMessages.success %>
+                    </div>
+                    <% } else if (flashMessages.error) { %>
+                        <div class="flash error" style="background:#c96b59">
+                            <%= flashMessages.error %>
+                        </div>
+                        <% } %>
+                            <% } %>
         </div>
-        <% } else if (flashMessages.error) { %>
-        <div class="flash error">
-          <%= flashMessages.error %>
+
+        <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+            <div class="w3-display-topleft w3-padding-large w3-xlarge w3-hide-small">
+                KiezHelp
+            </div>
+
+
+
+            <%- body %>
         </div>
-        <% } %> <% } %>
-      </div>
+        <%- include('partials/footer') %>
+</body>
 
-    <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
-      <div class="w3-display-topleft w3-padding-large w3-xlarge w3-hide-small">
-        KiezHelp
-      </div>
-
-      
-
-      <%- body %>
-    </div>
-    <%- include('partials/footer') %>
-  </body>
 </html>

@@ -6,6 +6,6 @@
         <% } %>
             <h1 class="w3-jumbo w3-animate-top" style="text-align: left;" id="headline">I HAVE AN<br/>ACCOUNT</h1>
             <hr class="w3-border-grey" style="margin: auto; width: 100%;" />
+            <%- include('partials/formLogin',{ buttonText: "Login" ,submitAction: "/login"}) %>
 
-            <%- include('partials/formLogin',{ buttonText: "Login" ,submitAction: "/loginAction"}) %>
 </div>

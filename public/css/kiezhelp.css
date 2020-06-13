@@ -19,7 +19,7 @@ html {
     padding: 10px 30px;
     position: absolute;
     top: 110px;
-  }
+}
 
 .bgimg {
     /* background-image: url("../images/kiezhelp_bg.jpg"); */
@@ -140,4 +140,8 @@ small {
     border: 1px solid white;
     margin: 5px;
     padding: 5px;
+}
+
+.flash .error {
+    background: red;
 }

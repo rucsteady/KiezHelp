@@ -50,6 +50,7 @@ router.use(connectFlash());
 
 router.use((req, res, next) => {
   res.locals.flashMessages = req.flash();
+  res.locals.userId = '';
   next();
 });
 
@@ -60,9 +61,12 @@ router.post(
   usersController.redirectView
 );
 router.get("/login", usersController.getLogin);
+// router.get("/login", usersController.login);
+// router.post("/login", usersController.authenticate, usersController.redirectView);
+
 router.post(
-  "/loginAction",
-  usersController.loginAction,
+  "/login",
+  usersController.authenticate,
   usersController.redirectView
 );
 //only for adding vol/req under a certain user account
