@@ -120,11 +120,13 @@ exports.deleteOneSubscriber = (req, res) => {
 
 exports.getVolSubscriptionPage = (req, res) => {
     let paramsUserId = req.params.userId;
+    // console.log("paramUserId:"+user.name.first);
     res.render("volunteer", { userId: paramsUserId });
 };
 
 exports.getReqSubscriptionPage = (req, res) => {
     let paramsUserId = req.params.userId;
+    // console.log("paramUserId:"+user.name.first);
     res.render("requester", { userId: paramsUserId });
 };
 
@@ -308,12 +310,13 @@ exports.saveFakeData = (req, res) => {
 };
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    if (redirectPath && res.locals && res.locals.userId && res.locals.subs) {
+    if (redirectPath && res.locals && res.locals.userId && res.locals.subs ){//&& res.locals.user) {
         res.redirect(url.format({
             pathname: redirectPath,
             query: {
                 "userId": res.locals.userId,
-                "subs": res.locals.subs
+                "subs": res.locals.subs,
+                // "user": res.locals.user
             }
         }));
     } else if (redirectPath) {

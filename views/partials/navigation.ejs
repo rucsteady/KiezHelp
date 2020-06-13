@@ -4,8 +4,8 @@
     <% if (userId) { %>       
             <a href="/logout">Log Out</a>
             <a href="/profile?userId=<%=userId%>">Profile</a>
-            <a href="/volunteer?userId=<%=userId%>">Volunteer</a>
-            <a href="/requester?userId=<%=userId%>">Requester</a>
+            <a href="/volunteer/<%=userId%>">Volunteer</a>
+            <a href="/requester/<%=userId%>">Requester</a>
             <a href="/locate/helpee&volunteer/allcategory">Locate</a>
             <a href="/admin">Admin</a>
             <a href="/volunteers">All Volunteers</a>

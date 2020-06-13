@@ -30,9 +30,9 @@ exports.createUser = (req, res, next) => {
     User.create(newUser)
         .then((user) => {
             req.flash("success", `${user.name.first}'s account created successfully!`);
-            res.locals.userId = user.id;
+            // res.locals.userId = user.id;
             res.locals.alerts = [];
-            res.locals.redirect = "/";
+            res.locals.redirect = "/login";
             next();
         })
         .catch((error) => {
