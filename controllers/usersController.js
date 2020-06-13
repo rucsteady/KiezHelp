@@ -7,7 +7,7 @@ const User = require("../models/user"),
     url = require("url"),
     session = require("express-session"),
     bcrypt = require("bcrypt");
-    
+
 exports.getRegister = (req, res) => {
     res.render("register");
 };
@@ -16,7 +16,7 @@ exports.getLogin = (req, res) => {
     res.render("login");
 };
 
-exports.loginFirst = (req, res,next) => {
+exports.loginFirst = (req, res, next) => {
     req.flash("error", "You must log in first before making request/volunteer.");
     res.locals.redirect = "/login";
     next();
@@ -42,7 +42,7 @@ exports.createUser = (req, res, next) => {
         aboutMe: req.body.aboutMe,
         password: req.body.password,
     };
-   
+
     User.register(newUser, req.body.password, (error, user) => {
         if (user) {
             req.flash("success", `${user.name.first}'s account created successfully!`);
@@ -185,8 +185,8 @@ exports.updateUser = (req, res, next) => {
         newAddress = req.body.address,
         newEmail = req.body.email,
         newAboutMe = req.body.aboutMe;
-      let newPassword = req.body.password;
-       
+    let newPassword = req.body.password;
+
     //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
     let alerts = [];
     alerts.push("");
@@ -211,40 +211,40 @@ exports.updateUser = (req, res, next) => {
         //hash password 
         bcrypt.hash(newPassword, 10).then(hash => {
 
-            User.findByIdAndUpdate(userId, {
-                // using $currentDate to update dateEdited as doing this: dateEdited: Date.now doesn't work
-                // you can find look up on $currentDate from MongoDB
-                $currentDate: {
-                    dateEdited: true,
-                },
-                $set: {
-                    address: newAddress,
-                    email: newEmail,
-                    password: hash,
-                    aboutMe: newAboutMe,
-                    name: {
-                        first: newFirstName,
-                        last: newLastName,
-                    },
-                },
+                User.findByIdAndUpdate(userId, {
+                        // using $currentDate to update dateEdited as doing this: dateEdited: Date.now doesn't work
+                        // you can find look up on $currentDate from MongoDB
+                        $currentDate: {
+                            dateEdited: true,
+                        },
+                        $set: {
+                            address: newAddress,
+                            email: newEmail,
+                            password: hash,
+                            aboutMe: newAboutMe,
+                            name: {
+                                first: newFirstName,
+                                last: newLastName,
+                            },
+                        },
+                    })
+                    .then((user) => {
+                        res.locals.redirect = "/profile";
+                        res.locals.alerts = alerts;
+                        next();
+                    })
+                    .catch((error) => {
+                        console.log(`Error updating user by ID: ${error.message}`);
+                        next(error);
+                    });
+
+
             })
-            .then((user) => {
-                res.locals.redirect = "/profile";
-                res.locals.alerts = alerts;
-                next();
-            })
-            .catch((error) => {
-                console.log(`Error updating user by ID: ${error.message}`);
-                next(error);
+            .catch(error => {
+                console.log(`Error in hashing password: ${error.message}`);
             });
 
 
-           })
-           .catch(error => {
-          console.log(`Error in hashing password: ${error.message}`);
-           });
-
-       
     }
 };
 
@@ -253,7 +253,7 @@ exports.deleteSub = (req, res, next) => {
     console.log("Running deleteSub");
     const subId = req.body.subId;
     let userId = '';
-    if(res.locals.currentUser){
+    if (res.locals.currentUser) {
         userId = res.locals.currentUser._id;
     }
     //first delete it from subscriber, then delete from user
@@ -284,7 +284,7 @@ exports.deleteSub = (req, res, next) => {
 exports.deleteUser = (req, res) => {
     console.log("Running deleteUser");
     let userId = '';
-    if(res.locals.currentUser){
+    if (res.locals.currentUser) {
         userId = res.locals.currentUser._id;
     }
 
@@ -310,17 +310,13 @@ exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
     // console.log("in red:" + res.locals.userId);
     let userId = '';
-    if(res.locals.currentUser){
+    if (res.locals.currentUser) {
         userId = res.locals.currentUser._id;
     }
     if (redirectPath) {
         res.redirect(
             url.format({
-                pathname: redirectPath,
-                query: {
-                    userId: userId,
-                    alerts: res.locals.alerts,
-                },
+                pathname: redirectPath
             })
         );
     } else next();

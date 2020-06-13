@@ -1,27 +1,7 @@
 const router = require("express").Router(),
-    usersController = require("../controllers/usersController");
-expressSession = require("express-session"),
-    cookieParser = require("cookie-parser"),
-    connectFlash = require("connect-flash"),
-    methodOverride = require("method-override"),
-    expressValidator = require("express-validator"),
-    passport = require("passport"),
-    User = require("../models/user");
+    usersController = require("../controllers/usersController"),
+    passport = require("passport");
 
-// router.use(passport.initialize());
-// router.use(passport.session());
-// passport.use(User.createStrategy());
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser())
-// router.use(connectFlash());
-
-// router.use((req, res, next) => {
-//     res.locals.flashMessages = req.flash();
-//     res.locals.userId = '';
-//     res.locals.loggedIn = req.isAuthenticated();
-//     res.locals.currentUser = req.user;
-//     next();
-// });
 
 router.get("/register", usersController.getRegister);
 router.post(
@@ -42,19 +22,8 @@ router.post("/login", passport.authenticate('local', {
 
 router.get("/logout", usersController.logout, usersController.redirectView);
 
-
-// router.post(
-//     "/subscribe",
-//     subscribersController.saveAllSubscriber,
-//     usersController.redirectView
-// );
 router.get("/profile", usersController.getUserProfile);
 
-// router.use(
-//     methodOverride("_method", {
-//         methods: ["POST", "GET"],
-//     })
-// );
 router.put(
     "/users/:userId/update",
     usersController.updateUser,

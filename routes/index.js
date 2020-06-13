@@ -13,15 +13,6 @@ const router = require("express").Router(),
     passport = require("passport"),
     User = require("../models/user");
 
-app.set("view engine", "ejs");
-app.set("port", process.env.PORT || 3000);
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(expressValidator());
-
-// app.use(layouts);
-app.use(express.static("public"));
-app.use("/", router);
 
 router.use(cookieParser("secret_passcode"));
 router.use(
@@ -49,6 +40,12 @@ router.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
 });
+
+router.use(
+    methodOverride("_method", {
+        methods: ["POST", "GET"],
+    })
+);
 
 router.use("/", userRoutes);
 router.use("/", subscriberRoutes);

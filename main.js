@@ -32,6 +32,7 @@ mongoose.set("useCreateIndex", true);
 
 app.set("view engine", "ejs");
 app.set("port", process.env.PORT || 3000);
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(expressValidator());
@@ -40,99 +41,6 @@ app.use(layouts);
 app.use(express.static("public"));
 app.use("/", router);
 
-router.use(cookieParser("secret_passcode"));
-router.use(
-    expressSession({
-        secret: "secret_passcode",
-        cookie: {
-            maxAge: 4000000,
-        },
-        resave: false,
-        saveUninitialized: false,
-    })
-);
-router.use(passport.initialize());
-router.use(passport.session());
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser())
-router.use(connectFlash());
-
-router.use((req, res, next) => {
-    res.locals.flashMessages = req.flash();
-    res.locals.userId = '';
-    res.locals.loggedIn = req.isAuthenticated();
-    res.locals.currentUser = req.user;
-    next();
-});
-
-// router.get("/register", usersController.getRegister);
-// router.post(
-//     "/createUser",
-//     usersController.validate,
-//     usersController.createUser,
-//     usersController.redirectView
-// );
-// router.get("/login", usersController.getLogin);
-// router.get("/loginFirst", usersController.loginFirst,  usersController.redirectView);
-
-// router.post("/login", passport.authenticate('local', {
-//     failureRedirect: "/login",
-//     failureFlash: "Email or password invalid.",
-//     successRedirect: "/",
-//     successFlash: "You have successfully logged in!"
-// }), usersController.authenticate, usersController.redirectView);
-
-// router.get("/logout", usersController.logout, usersController.redirectView);
-
-
-// router.post(
-//     "/subscribe",
-//     subscribersController.saveAllSubscriber,
-//     usersController.redirectView
-// );
-// router.get("/profile", usersController.getUserProfile);
-
-router.use(
-    methodOverride("_method", {
-        methods: ["POST", "GET"],
-    })
-);
-// router.put(
-//     "/users/:userId/update",
-//     usersController.updateUser,
-//     usersController.redirectView
-// );
-// router.delete("/users/:userId/delete", usersController.deleteUser);
-// router.delete(
-//     "/subscribers/:userId/delete",
-//     usersController.deleteSub,
-//     usersController.redirectView
-// );
-
-// app.get("/", homeController.getIndex);
-
-//fill out form
-// app.get("/volunteer", subscribersController.getVolSubscriptionPage);
-// app.get("/requester", subscribersController.getReqSubscriptionPage);
-
-//save form input
-// app.post("/subscribe", subscribersController.saveAllSubscriber);
-
-//view entries on map
-// app.get("/locate/:type/:category", subscribersController.getAllSubscribers);
-
-//view and modify db
-// app.get("/admin", subscribersController.getAdmin);
-// app.get("/volunteers", subscribersController.getAllVolSubscribers);
-// app.get("/requesters", subscribersController.getAllReqSubscribers);
-// app.post("/delete/:type", subscribersController.deleteSubscribers);
-// app.post("/deleteOne/:id", subscribersController.deleteOneSubscriber);
-// app.post("/generateFakeData", subscribersController.saveFakeData);
-
-//error
-// app.use(errorController.respondNoResourceFound);
-// app.use(errorController.respondInternalError);
 
 app.listen(app.get("port"), () => {
     console.log(`Server running at http://localhost:${app.get("port")}`);
