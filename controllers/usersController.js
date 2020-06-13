@@ -90,10 +90,14 @@ exports.authenticate = (req, res, next) => {
             if (user) {
                 res.locals.userId = user.id;
                 res.locals.alerts = [];
+                req.flash("success", `Hi, ${user.name.first}. You logged in successfully!`);
+                res.locals.user = user;
                 res.locals.redirect = "/";//"/profile";
                 next();
             } else {
-                res.render("login", { error: "Incorrect Input" });
+              req.flash("error", "Account or password incorrect.");
+              res.locals.redirect = "login";
+              next();
             }
         })
         .catch((error) => {
