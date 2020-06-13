@@ -6,8 +6,8 @@ const User = require("../models/user"),
     $ = require("cheerio"),
     url = require("url"),
     session = require("express-session");
-    // express = require('express'),
-    // { check, validationResult } = require('express-validator');
+// express = require('express'),
+// { check, validationResult } = require('express-validator');
 exports.getRegister = (req, res) => {
     res.render("register", { error: "" });
 };
@@ -15,9 +15,16 @@ exports.getRegister = (req, res) => {
 exports.getLogin = (req, res) => {
     res.render("login", { error: "" });
 };
+exports.logout = (req, res, next) => {
+    req.logout();
+    req.flash("success", "You have been logged out!");
+    res.locals.redirect = "/";
+    next();
+};
+
 
 exports.createUser = (req, res, next) => {
-  if (req.skip) next();
+    if (req.skip) next();
     let newUser = {
         name: {
             first: req.body.firstName,
@@ -46,13 +53,13 @@ exports.createUser = (req, res, next) => {
     //         next();
     //     });
     User.register(newUser, req.body.password, (error, user) => {
-          if (user) {
+        if (user) {
             req.flash("success", `${user.name.first}'s account created successfully!`);
             // res.locals.userId = user.id;
             res.locals.alerts = [];
             res.locals.redirect = "/login";
             next();
-          } else {
+        } else {
             console.log(`Error saving user: ${error.message}`);
             res.locals.redirect = "/register";
             req.flash(
@@ -60,30 +67,30 @@ exports.createUser = (req, res, next) => {
                 `Failed to create user account because ${error.message}.`
             );
             next();
-          }
-          });
+        }
+    });
 };
 
 exports.validate = (req, res, next) => {
-  req.sanitizeBody("email").normalizeEmail({
-    all_lowercase: true
-  }).trim();
-  //check email
-  req.check("email", "Email is invalid").notEmpty().isEmail();
-  //check password
-  req.check("password", "Password has to be at least 8 char").isLength({ min: 8});
-  req.check("password", "Password cannot be empty").notEmpty();
-  req.getValidationResult().then((error) => {
-    if (!error.isEmpty()) {
-      let messages = error.array().map(e => e.msg);
-      req.skip = true;
-      req.flash("error", messages.join(" and "));
-      res.locals.redirect = "/register";
-      next();
-    } else {
-      next();
-    }
-  });
+    req.sanitizeBody("email").normalizeEmail({
+        all_lowercase: true
+    }).trim();
+    //check email
+    req.check("email", "Email is invalid").notEmpty().isEmail();
+    //check password
+    req.check("password", "Password has to be at least 8 char").isLength({ min: 8 });
+    req.check("password", "Password cannot be empty").notEmpty();
+    req.getValidationResult().then((error) => {
+        if (!error.isEmpty()) {
+            let messages = error.array().map(e => e.msg);
+            req.skip = true;
+            req.flash("error", messages.join(" and "));
+            res.locals.redirect = "/register";
+            next();
+        } else {
+            next();
+        }
+    });
 }
 exports.saveProfileEdit = (req, res, next) => {
     const userId = req.body.userId,
@@ -128,24 +135,24 @@ exports.authenticate = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then((user) => {
             if (user) {
-              user.passwordComparison(req.body.password)
-              .then(passwordsMatch => {
-                if (passwordsMatch) {
-                  res.locals.userId = user.id;
-                  res.locals.alerts = [];
-                  req.flash("success", `Hi, ${user.fullname()}. You logged in successfully!`);
-                  res.locals.user = user;
-                  res.locals.redirect = "/";//"/profile";
-                } else {
-                  req.flash("error", "Failed to log in user account: Incorrect Password.");
-                  res.locals.redirect = "/login";
-                }
-                next();
-                });
+                user.passwordComparison(req.body.password)
+                    .then(passwordsMatch => {
+                        if (passwordsMatch) {
+                            res.locals.userId = user.id;
+                            res.locals.alerts = [];
+                            req.flash("success", `Hi, ${user.fullname()}. You logged in successfully!`);
+                            res.locals.user = user;
+                            res.locals.redirect = "/"; //"/profile";
+                        } else {
+                            req.flash("error", "Failed to log in user account: Incorrect Password.");
+                            res.locals.redirect = "/login";
+                        }
+                        next();
+                    });
             } else {
-              req.flash("error", "Failed to log in user account: User account not found.");
-              res.locals.redirect = "/login";
-              next();
+                req.flash("error", "Failed to log in user account: User account not found.");
+                res.locals.redirect = "/login";
+                next();
             }
         })
         .catch((error) => {

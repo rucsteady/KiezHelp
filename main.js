@@ -60,6 +60,8 @@ router.use(connectFlash());
 router.use((req, res, next) => {
     res.locals.flashMessages = req.flash();
     res.locals.userId = '';
+    res.locals.loggedIn = req.isAuthenticated();
+    res.locals.currentUser = req.user;
     next();
 });
 
@@ -80,8 +82,7 @@ router.post("/login", passport.authenticate('local', {
 }), usersController.authenticate, usersController.redirectView);
 //only for adding vol/req under a certain user account
 
-// router.get("/users/logout", usersController.logout,
-// ➥ usersController.redirectView );
+router.get("/logout", usersController.logout, usersController.redirectView);
 
 router.post(
     "/saveProfileEdit",

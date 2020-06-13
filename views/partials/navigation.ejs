@@ -1,7 +1,7 @@
 <div id="navbar">
-        <div class="w3-right">
-            <a href="/">Home</a>
-    <% if (userId) { %>       
+    <div class="w3-right">
+        <a href="/">Home</a>
+        <% if (loggedIn) { %>
             <a href="/logout">Log Out</a>
             <a href="/profile?userId=<%=userId%>">Profile</a>
             <a href="/volunteer/<%=userId%>">Volunteer</a>
@@ -10,11 +10,11 @@
             <a href="/admin">Admin</a>
             <a href="/volunteers">All Volunteers</a>
             <a href="/requesters">All Requesters</a>
-    <% }else{ %>
-            <a href="/register">Register</a>
-            <a href="/login">Log In</a>
-            <a href="/locate/helpee&volunteer/allcategory">Locate</a>
-    <% }%>
-        <a href="/admin">Admin</a>
+            <% }else{ %>
+                <a href="/register">Register</a>
+                <a href="/login">Log In</a>
+                <a href="/locate/helpee&volunteer/allcategory">Locate</a>
+                <% }%>
+                    <a href="/admin">Admin</a>
     </div>
 </div>
