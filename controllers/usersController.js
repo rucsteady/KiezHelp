@@ -8,6 +8,11 @@ const User = require("../models/user"),
     session = require("express-session"),
     bcrypt = require("bcrypt");
 
+exports.user = (req, res) => {
+    // Change the res.render("courses/index") line in the indexView action
+    res.json(res.locals.currentUser);
+};
+
 exports.getRegister = (req, res) => {
     res.render("register");
 };
@@ -46,7 +51,6 @@ exports.createUser = (req, res, next) => {
     User.register(newUser, req.body.password, (error, user) => {
         if (user) {
             req.flash("success", `${user.name.first}'s account created successfully!`);
-            res.locals.alerts = [];
             res.locals.redirect = "/login";
             next();
         } else {
@@ -93,7 +97,6 @@ exports.authenticate = (req, res, next) => {
                 user.passwordComparison(req.body.password)
                     .then(passwordsMatch => {
                         if (passwordsMatch) {
-                            res.locals.alerts = [];
                             req.flash("success", `Hi, ${user.fullname()}. You logged in successfully!`);
                             res.locals.user = user;
                             res.locals.redirect = "/"; //"/profile";
@@ -122,7 +125,6 @@ exports.loginToVol = (req, res, next) => {
         .exec()
         .then((user) => {
             if (user) {
-                res.locals.alerts = [];
                 res.locals.redirect = `/volunteer/${user.id}`;
                 next();
             } else {
@@ -137,42 +139,45 @@ exports.loginToVol = (req, res, next) => {
 
 exports.getUserProfile = (req, res) => {
     console.log("Running getUserProfile");
-
-    if (req.query.subs) {
-        console.log("reqsubs:" + req.query.subs);
-    }
-    // if (req.query.userId) {
-    if (res.locals.currentUser) {
-        User.findOne({ _id: res.locals.currentUser._id })
-            .exec()
-            .then((user) => {
-                //getting the full detail info of subscribers that have userId that matches this user
-                let subsArray = [];
-                Subscriber.find({ userId: user._id })
-                    .exec()
-                    .then((subs) => {
-                        subs.forEach((sub) => {
-                            subsArray.push(sub);
-                        });
-                    })
-                    .catch((error) => {
-                        console.log(`Error getting subs by userId: ${error.message}`);
-                        return [];
-                    })
-                    .then(() => {
-                        res.render("profile", {
-                            user: user,
-                            alerts: req.query.alerts,
-                            subs: subsArray,
-                        });
-                    });
-            })
-            .catch((error) => {
-                console.log(`Error getting user profile by Id: ${error.message}`);
-                return [];
-            });
+    if (req.query.format === "json") {
+        res.json(res.locals.currentUser);
     } else {
-        res.render("profile", { user: "" });
+
+        if (req.query.subs) {
+            console.log("reqsubs:" + req.query.subs);
+        }
+        // if (req.query.userId) {
+        if (res.locals.currentUser) {
+            User.findOne({ _id: res.locals.currentUser._id })
+                .exec()
+                .then((user) => {
+                    //getting the full detail info of subscribers that have userId that matches this user
+                    let subsArray = [];
+                    Subscriber.find({ userId: user._id })
+                        .exec()
+                        .then((subs) => {
+                            subs.forEach((sub) => {
+                                subsArray.push(sub);
+                            });
+                        })
+                        .catch((error) => {
+                            console.log(`Error getting subs by userId: ${error.message}`);
+                            return [];
+                        })
+                        .then(() => {
+                            res.render("profile", {
+                                user: user,
+                                subs: subsArray,
+                            });
+                        });
+                })
+                .catch((error) => {
+                    console.log(`Error getting user profile by Id: ${error.message}`);
+                    return [];
+                });
+        } else {
+            res.render("profile", { user: "" });
+        }
     }
 };
 
@@ -188,22 +193,23 @@ exports.updateUser = (req, res, next) => {
     let newPassword = req.body.password;
 
     //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
-    let alerts = [];
-    alerts.push("");
+    let flashString = '';
+
     //regex same as user.js
     var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //usual email regex
     var passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/; //regex for password with minimum eight characters, at least one letter, one number and one special character
     //if didn't pass test, push to alerts and reload profile with no changes updated
     if (!emailRegex.test(newEmail) || !passwordRegex.test(newPassword)) {
-        if (!emailRegex.test(newEmail))
-            alerts.push("Please provide a valid email address<br/>");
-        if (!passwordRegex.test(newPassword))
-            alerts.push(
-                "Password must have at least eight characters, at least one letter, one number and one special character<br/>"
-            );
-
+        if (!emailRegex.test(newEmail)) {
+            flashString += "Please provide a valid email address.";
+        }
+        if (!passwordRegex.test(newPassword)) {
+            flashString += "Password must have at least eight characters, at least one letter, one number and one special character.";
+        }
+        if (flashString.length > 1) {
+            req.flash("error", flashString);
+        }
         res.locals.redirect = "/profile";
-        res.locals.alerts = alerts;
         next();
     } else {
         //if passed validations, update profile
@@ -230,7 +236,6 @@ exports.updateUser = (req, res, next) => {
                     })
                     .then((user) => {
                         res.locals.redirect = "/profile";
-                        res.locals.alerts = alerts;
                         next();
                     })
                     .catch((error) => {
@@ -271,7 +276,6 @@ exports.deleteSub = (req, res, next) => {
             user.save();
             res.locals.userId = userId;
             res.locals.redirect = "/profile";
-            res.locals.alerts = [];
             next();
         })
         .catch((error) => {

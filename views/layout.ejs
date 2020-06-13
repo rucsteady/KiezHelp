@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc&callback=initMap&enterLocation"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/subscription.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="/css/w3.css" />
     <link rel="stylesheet" type="text/css" href="/css/kiezhelp.css" />
@@ -15,7 +18,9 @@
 
 <body>
     <%- include('partials/navigation') %>
-
+        <li>
+            <%- include ('partials/_subscriptionModal') %>
+        </li>
         <div class="flashes">
             <% if (flashMessages) { %>
                 <% if (flashMessages.success) { %>

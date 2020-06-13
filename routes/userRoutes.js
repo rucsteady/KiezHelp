@@ -2,7 +2,7 @@ const router = require("express").Router(),
     usersController = require("../controllers/usersController"),
     passport = require("passport");
 
-
+router.get("/user", usersController.user);
 router.get("/register", usersController.getRegister);
 router.post(
     "/createUser",
