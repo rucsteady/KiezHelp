@@ -7,44 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDT_9bLtID5aW6mCxG84wfCtgvMiasuCBc&callback=initMap&enterLocation"></script>
-    <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/subscription.js"></script>
+    <!-- <script type="text/javascript" src="/js/jquery.min.js"></script> -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <!-- <script type="text/javascript" src="/js/bootstrap.min.js"></script> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="/css/w3.css" />
     <link rel="stylesheet" type="text/css" href="/css/kiezhelp.css" />
+
+    <script type="text/javascript" src="/js/subscription.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway" />
 </head>
 
 <body>
     <%- include('partials/navigation') %>
-        <li>
-            <%- include ('partials/_subscriptionModal') %>
-        </li>
-        <div class="flashes">
-            <% if (flashMessages) { %>
-                <% if (flashMessages.success) { %>
-                    <div class="flash success">
-                        <%= flashMessages.success %>
-                    </div>
-                    <% } else if (flashMessages.error) { %>
-                        <div class="flash error" style="background:#c96b59">
-                            <%= flashMessages.error %>
-                        </div>
-                        <% } %>
-                            <% } %>
-        </div>
 
-        <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
-            <div class="w3-display-topleft w3-padding-large w3-xlarge w3-hide-small">
-                KiezHelp
+        <%- include ('partials/_subscriptionModal') %>
+            <div class="flashes">
+                <% if (flashMessages) { %>
+                    <% if (flashMessages.success) { %>
+                        <div class="flash success">
+                            <%= flashMessages.success %>
+                        </div>
+                        <% } else if (flashMessages.error) { %>
+                            <div class="flash error" style="background:#c96b59">
+                                <%= flashMessages.error %>
+                            </div>
+                            <% } %>
+                                <% } %>
             </div>
 
+            <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+                <div class="w3-display-topleft w3-padding-large w3-xlarge w3-hide-small">
+                    KiezHelp
+                </div>
 
 
-            <%- body %>
-        </div>
-        <%- include('partials/footer') %>
+
+                <%- body %>
+            </div>
+            <%- include('partials/footer') %>
 </body>
 
 </html>

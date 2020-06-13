@@ -1,29 +1,22 @@
 $(document).ready(() => {
+
     $("#modal-button").click(() => {
+        console.log("click");
         $(".modal-body").html('');
-        $(".modal-body").append(
-            `<div>
-<span class="course-title">
-hi
-</span>
-<div class="course-description">
-hey
-</div>
-</div>`
-        );
         $.get("/profile?format=json", (data) => {
-            // data.forEach((course) => {
-            //             $(".modal-body").append(
-            //                 `<div>
-            //    <span class="course-title">
-            //    hi
-            //    </span>
-            //    <div class="course-description">
-            // hey
-            //    </div>
-            //    </div>`
-            //             );
-            // });
+            console.log("data:" + data);
+
+            for (let d in data) {
+                console.log("d:" + d);
+                console.log("d.value:" + data[d]);
+                $(".modal-body").append(
+                    `<div>
+                    <span class="course-title">
+                    ${d} : ${data[d]}
+                    </span>
+                    </div>`
+                );
+            }
         });
     });
 });
