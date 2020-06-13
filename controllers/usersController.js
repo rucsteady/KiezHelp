@@ -84,19 +84,26 @@ exports.saveProfileEdit = (req, res, next) => {
 //TODO check if there's such user with the mail and correct password
 exports.authenticate = (req, res, next) => {
     console.log("Running authentication");
-    User.findOne({ email: req.body.email, password: req.body.password })
-        .exec()
+    User.findOne({ email: req.body.email })
         .then((user) => {
             if (user) {
-                res.locals.userId = user.id;
-                res.locals.alerts = [];
-                req.flash("success", `Hi, ${user.name.first}. You logged in successfully!`);
-                res.locals.user = user;
-                res.locals.redirect = "/";//"/profile";
+              user.passwordComparison(req.body.password)
+              .then(passwordsMatch => {
+                if (passwordsMatch) {
+                  res.locals.userId = user.id;
+                  res.locals.alerts = [];
+                  req.flash("success", `Hi, ${user.fullname()}. You logged in successfully!`);
+                  res.locals.user = user;
+                  res.locals.redirect = "/";//"/profile";
+                } else {
+                  req.flash("error", "Failed to log in user account: Incorrect Password.");
+                  res.locals.redirect = "/login";
+                }
                 next();
+                });
             } else {
-              req.flash("error", "Account or password incorrect.");
-              res.locals.redirect = "login";
+              req.flash("error", "Failed to log in user account: User account not found.");
+              res.locals.redirect = "/login";
               next();
             }
         })
