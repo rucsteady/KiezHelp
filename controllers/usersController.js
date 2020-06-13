@@ -6,6 +6,8 @@ const User = require("../models/user"),
     $ = require("cheerio"),
     url = require("url"),
     session = require("express-session");
+    // express = require('express'),
+    // { check, validationResult } = require('express-validator');
 exports.getRegister = (req, res) => {
     res.render("register", { error: "" });
 };
@@ -27,7 +29,7 @@ exports.createUser = (req, res, next) => {
     };
     User.create(newUser)
         .then((user) => {
-            req.flash("success", `${user.name,first}'s account created successfully!`);
+            req.flash("success", `${user.name.first}'s account created successfully!`);
             res.locals.userId = user.id;
             res.locals.alerts = [];
             res.locals.redirect = "/";
@@ -44,6 +46,27 @@ exports.createUser = (req, res, next) => {
         });
 };
 
+exports.validate = (req, res, next) => {
+  req.sanitizeBody("email").normalizeEmail({
+    all_lowercase: true
+  }).trim();
+  //check email
+  req.check("email", "Email is invalid").notEmpty().isEmail();
+  //check password
+  req.check("password", "Password has to be at least 8 char").isLength({ min: 8});
+  req.check("password", "Password cannot be empty").notEmpty();
+  req.getValidationResult().then((error) => {
+    if (!error.isEmpty()) {
+      let messages = error.array().map(e => e.msg);
+      req.skip = true;
+      req.flash("error", messages.join(" and "));
+      res.locals.redirect = "/register";
+      next();
+    } else {
+      next();
+    }
+  });
+}
 exports.saveProfileEdit = (req, res, next) => {
     const userId = req.body.userId,
         newFirstName = req.body.firstName,

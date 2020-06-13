@@ -11,7 +11,9 @@ const express = require("express"),
   expressSession = require("express-session"),
   cookieParser = require("cookie-parser"),
   connectFlash = require("connect-flash"),
-  methodOverride = require("method-override");
+  methodOverride = require("method-override"),
+  expressValidator = require("express-validator"); 
+// { check, validationResult } = require('express-validator');
 
 const mongoose = require("mongoose");
 mongoose.connect(
@@ -31,6 +33,8 @@ app.set("view engine", "ejs");
 app.set("port", process.env.PORT || 3000);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(expressValidator());
+
 app.use(layouts);
 app.use(express.static("public"));
 app.use("/", router);
@@ -57,6 +61,7 @@ router.use((req, res, next) => {
 router.get("/register", usersController.getRegister);
 router.post(
   "/createUser",
+  usersController.validate,
   usersController.createUser,
   usersController.redirectView
 );
