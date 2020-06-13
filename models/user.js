@@ -1,6 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose"),
+passportLocalMongoose = require("passport-local-mongoose") ,
     bcrypt = require("bcrypt"),
     userSchema = mongoose.Schema({
         name: {
@@ -82,5 +83,8 @@ userSchema.methods.fullname = function(){
         return `${this.name.first} ${this.name.last}`;
        };
 
+userSchema.plugin(passportLocalMongoose, {
+        usernameField: "email"
+       });
 //should also add which user posted it so they can communicate through dms
 module.exports = mongoose.model("User", userSchema);

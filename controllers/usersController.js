@@ -17,6 +17,7 @@ exports.getLogin = (req, res) => {
 };
 
 exports.createUser = (req, res, next) => {
+  if (req.skip) next();
     let newUser = {
         name: {
             first: req.body.firstName,
@@ -27,15 +28,31 @@ exports.createUser = (req, res, next) => {
         aboutMe: req.body.aboutMe,
         password: req.body.password,
     };
-    User.create(newUser)
-        .then((user) => {
+    // User.create(newUser)
+    //     .then((user) => {
+    //         req.flash("success", `${user.name.first}'s account created successfully!`);
+    //         // res.locals.userId = user.id;
+    //         res.locals.alerts = [];
+    //         res.locals.redirect = "/login";
+    //         next();
+    //     })
+    //     .catch((error) => {
+    //         console.log(`Error saving user: ${error.message}`);
+    //         res.locals.redirect = "/register";
+    //         req.flash(
+    //             "error",
+    //             `Failed to create user account because ${error.message}.`
+    //         );
+    //         next();
+    //     });
+    User.register(newUser, req.body.password, (error, user) => {
+          if (user) {
             req.flash("success", `${user.name.first}'s account created successfully!`);
             // res.locals.userId = user.id;
             res.locals.alerts = [];
             res.locals.redirect = "/login";
             next();
-        })
-        .catch((error) => {
+          } else {
             console.log(`Error saving user: ${error.message}`);
             res.locals.redirect = "/register";
             req.flash(
@@ -43,7 +60,8 @@ exports.createUser = (req, res, next) => {
                 `Failed to create user account because ${error.message}.`
             );
             next();
-        });
+          }
+          });
 };
 
 exports.validate = (req, res, next) => {
