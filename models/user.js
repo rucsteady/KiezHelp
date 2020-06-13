@@ -71,7 +71,7 @@ userSchema.pre("save", function(next) {
         .catch(error => {
        console.log(`Error in hashing password: ${error.message}`);
        next(error);
-    });
+        });
 });
 
 userSchema.methods.passwordComparison = function(inputPassword){

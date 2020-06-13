@@ -85,11 +85,11 @@ router.post("/login", passport.authenticate('local', {
 
 router.get("/logout", usersController.logout, usersController.redirectView);
 
-router.post(
-    "/saveProfileEdit",
-    usersController.saveProfileEdit,
-    usersController.redirectView
-);
+// router.post(
+//     "/saveProfileEdit",
+//     usersController.saveProfileEdit,
+//     usersController.redirectView
+// );
 
 router.post(
     "/subscribe",

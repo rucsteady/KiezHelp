@@ -5,7 +5,8 @@ const User = require("../models/user"),
     rp = require("request-promise"),
     $ = require("cheerio"),
     url = require("url"),
-    session = require("express-session");
+    session = require("express-session"),
+    bcrypt = require("bcrypt");
 // express = require('express'),
 // { check, validationResult } = require('express-validator');
 exports.getRegister = (req, res) => {
@@ -82,44 +83,54 @@ exports.validate = (req, res, next) => {
         }
     });
 }
-exports.saveProfileEdit = (req, res, next) => {
-    const newFirstName = req.body.firstName,
-        newLastName = req.body.lastName,
-        newAddress = req.body.address,
-        newEmail = req.body.email,
-        newPassword = req.body.password,
-        newAboutMe = req.body.aboutMe,
-        newDateEdited = Date.now;
-    let userId = '';
-    if(res.locals.currentUser){
-        userId = res.locals.currentUser._id;
-    }
-
-    User.update({ _id: userId }, {
-            $currentDate: {
-                dateEdited: true,
-            },
-            $set: {
-                address: newAddress,
-                email: newEmail,
-                password: newPassword,
-                aboutMe: newAboutMe,
-                name: {
-                    first: newFirstName,
-                    last: newLastName,
-                },
-            },
-        })
-        .then((user) => {
-            console.log("user:" + user);
-            res.locals.alerts = [];
-            res.locals.redirect = "/profile";
-            next();
-        })
-        .catch((error) => {
-            if (error) res.send(error);
-        });
-};
+// exports.saveProfileEdit = (req, res, next) => {
+//     const newFirstName = req.body.firstName,
+//         newLastName = req.body.lastName,
+//         newAddress = req.body.address,
+//         newEmail = req.body.email,
+//         newPassword = req.body.password,
+//         newAboutMe = req.body.aboutMe,
+//         newDateEdited = Date.now;
+//     let userId = '';
+//     console.log("add:"+req.body.address);
+//     console.log("add1:"+newAddress);
+//     if(res.locals.currentUser){
+//         userId = res.locals.currentUser._id;
+//     }
+//     let hashedPassword = newPassword;
+//      bcrypt.hash(newPassword, 10).then(hash => {
+//         hashedPassword = hash;
+//         })
+//         .catch(error => {
+//        console.log(`Error in hashing password: ${error.message}`);
+//         });
+//         console.log("new after hash:"+newAddress);
+//         console.log("hashed pass:"+ hashedPassword);
+//     User.update({ _id: userId }, {
+//             $currentDate: {
+//                 dateEdited: true,
+//             },
+//             $set: {
+//                 address: newAddress,
+//                 email: newEmail,
+//                 password: hashedPassword,
+//                 aboutMe: newAboutMe,
+//                 name: {
+//                     first: newFirstName,
+//                     last: newLastName,
+//                 },
+//             },
+//         })
+//         .then((user) => {
+//             console.log("user:" + user);
+//             res.locals.alerts = [];
+//             res.locals.redirect = "/profile";
+//             next();
+//         })
+//         .catch((error) => {
+//             if (error) res.send(error);
+//         });
+// };
 
 //TODO check if there's such user with the mail and correct password
 exports.authenticate = (req, res, next) => {
@@ -216,14 +227,14 @@ exports.getUserProfile = (req, res) => {
 //using update method from Unit4 to update profile info( except subscribers part)
 exports.updateUser = (req, res, next) => {
     console.log("Running user update");
-    const userId = res.locals.currentUser._id;
-
-    const newFirstName = req.body.firstName,
+    const userId = res.locals.currentUser._id,
+        newFirstName = req.body.firstName,
         newLastName = req.body.lastName,
         newAddress = req.body.address,
         newEmail = req.body.email,
-        newPassword = req.body.password,
         newAboutMe = req.body.aboutMe;
+      let newPassword = req.body.password;
+       
     //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
     let alerts = [];
     alerts.push("");
@@ -244,7 +255,11 @@ exports.updateUser = (req, res, next) => {
         next();
     } else {
         //if passed validations, update profile
-        User.findByIdAndUpdate(userId, {
+
+        //hash password 
+        bcrypt.hash(newPassword, 10).then(hash => {
+
+            User.findByIdAndUpdate(userId, {
                 // using $currentDate to update dateEdited as doing this: dateEdited: Date.now doesn't work
                 // you can find look up on $currentDate from MongoDB
                 $currentDate: {
@@ -253,7 +268,7 @@ exports.updateUser = (req, res, next) => {
                 $set: {
                     address: newAddress,
                     email: newEmail,
-                    password: newPassword,
+                    password: hash,
                     aboutMe: newAboutMe,
                     name: {
                         first: newFirstName,
@@ -270,6 +285,14 @@ exports.updateUser = (req, res, next) => {
                 console.log(`Error updating user by ID: ${error.message}`);
                 next(error);
             });
+
+
+           })
+           .catch(error => {
+          console.log(`Error in hashing password: ${error.message}`);
+           });
+
+       
     }
 };
 
