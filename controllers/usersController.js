@@ -17,7 +17,7 @@ exports.getLogin = (req, res) => {
 };
 exports.logout = (req, res, next) => {
     req.logout();
-    req.flash("success", "You have been logged out!");
+    req.flash("success", "You have successfully logged out!");
     res.locals.redirect = "/";
     next();
 };
@@ -121,7 +121,7 @@ exports.saveProfileEdit = (req, res, next) => {
             console.log("user:" + user);
             res.locals.alerts = [];
             res.locals.redirect = "/profile";
-            res.locals.userId = req.body.userId;
+            // res.locals.userId = req.body.userId;
             next();
         })
         .catch((error) => {
@@ -138,7 +138,7 @@ exports.authenticate = (req, res, next) => {
                 user.passwordComparison(req.body.password)
                     .then(passwordsMatch => {
                         if (passwordsMatch) {
-                            res.locals.userId = user.id;
+                            // res.locals.userId = user.id;
                             res.locals.alerts = [];
                             req.flash("success", `Hi, ${user.fullname()}. You logged in successfully!`);
                             res.locals.user = user;
@@ -168,7 +168,7 @@ exports.loginToVol = (req, res, next) => {
         .exec()
         .then((user) => {
             if (user) {
-                res.locals.userId = user.id;
+                // res.locals.userId = user.id;
                 res.locals.alerts = [];
                 res.locals.redirect = `/volunteer/${user.id}`;
                 next();
@@ -186,10 +186,11 @@ exports.getUserProfile = (req, res) => {
     console.log("Running getUserProfile");
 
     if (req.query.subs) {
-        console.log("reqsbus:" + req.query.subs);
+        console.log("reqsubs:" + req.query.subs);
     }
-    if (req.query.userId) {
-        User.findOne({ _id: req.query.userId })
+    // if (req.query.userId) {
+    if (res.locals.currentUser) {
+        User.findOne({ _id: res.locals.currentUser._id })
             .exec()
             .then((user) => {
                 //getting the full detail info of subscribers that have userId that matches this user
@@ -225,8 +226,8 @@ exports.getUserProfile = (req, res) => {
 //using update method from Unit4 to update profile info( except subscribers part)
 exports.updateUser = (req, res, next) => {
     console.log("Running user update");
-    const userId = req.params.userId;
-    res.locals.userId = userId;
+    const userId = res.locals.currentUser._id;
+    // res.locals.userId = userId;
 
     const newFirstName = req.body.firstName,
         newLastName = req.body.lastName,

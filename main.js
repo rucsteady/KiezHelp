@@ -118,8 +118,8 @@ router.delete(
 app.get("/", homeController.getIndex);
 
 //fill out form
-app.get("/volunteer/:userId", subscribersController.getVolSubscriptionPage);
-app.get("/requester/:userId", subscribersController.getReqSubscriptionPage);
+app.get("/volunteer", subscribersController.getVolSubscriptionPage);
+app.get("/requester", subscribersController.getReqSubscriptionPage);
 
 //save form input
 // app.post("/subscribe", subscribersController.saveAllSubscriber);
