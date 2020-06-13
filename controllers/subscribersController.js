@@ -19,10 +19,10 @@ exports.saveAllSubscriber = (req, res, next) => {
         message: req.body.message,
     };
     let userId = '';
-    if( res.locals.currentUser){
+    if (res.locals.currentUser) {
         newVolReqEntry.userId = res.locals.currentUser._id;
         userId = res.locals.currentUser._id;
-    }else{
+    } else {
         newVolReqEntry.userId = '';
     }
     var subId;
@@ -312,7 +312,7 @@ exports.saveFakeData = (req, res) => {
 };
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    if (redirectPath && res.locals && res.locals.subs ){//&& res.locals.user) {
+    if (redirectPath && res.locals && res.locals.subs) { //&& res.locals.user) {
         res.redirect(url.format({
             pathname: redirectPath,
             query: {

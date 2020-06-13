@@ -7,14 +7,15 @@ const express = require("express"),
     subscribersController = require("./controllers/subscribersController"),
     usersController = require("./controllers/usersController"),
     layouts = require("express-ejs-layouts"),
-    router = express.Router(),
+    // router = express.Router(),
     expressSession = require("express-session"),
     cookieParser = require("cookie-parser"),
     connectFlash = require("connect-flash"),
     methodOverride = require("method-override"),
     expressValidator = require("express-validator"),
     passport = require("passport"),
-    User = require("./models/user");
+    User = require("./models/user"),
+    router = require("./routes/index");
 
 const mongoose = require("mongoose");
 mongoose.connect(
@@ -65,73 +66,73 @@ router.use((req, res, next) => {
     next();
 });
 
-router.get("/register", usersController.getRegister);
-router.post(
-    "/createUser",
-    usersController.validate,
-    usersController.createUser,
-    usersController.redirectView
-);
-router.get("/login", usersController.getLogin);
-router.get("/loginFirst", usersController.loginFirst,  usersController.redirectView);
+// router.get("/register", usersController.getRegister);
+// router.post(
+//     "/createUser",
+//     usersController.validate,
+//     usersController.createUser,
+//     usersController.redirectView
+// );
+// router.get("/login", usersController.getLogin);
+// router.get("/loginFirst", usersController.loginFirst,  usersController.redirectView);
 
-router.post("/login", passport.authenticate('local', {
-    failureRedirect: "/login",
-    failureFlash: "Email or password invalid.",
-    successRedirect: "/",
-    successFlash: "You have successfully logged in!"
-}), usersController.authenticate, usersController.redirectView);
+// router.post("/login", passport.authenticate('local', {
+//     failureRedirect: "/login",
+//     failureFlash: "Email or password invalid.",
+//     successRedirect: "/",
+//     successFlash: "You have successfully logged in!"
+// }), usersController.authenticate, usersController.redirectView);
 
-router.get("/logout", usersController.logout, usersController.redirectView);
+// router.get("/logout", usersController.logout, usersController.redirectView);
 
 
-router.post(
-    "/subscribe",
-    subscribersController.saveAllSubscriber,
-    usersController.redirectView
-);
-router.get("/profile", usersController.getUserProfile);
+// router.post(
+//     "/subscribe",
+//     subscribersController.saveAllSubscriber,
+//     usersController.redirectView
+// );
+// router.get("/profile", usersController.getUserProfile);
 
 router.use(
     methodOverride("_method", {
         methods: ["POST", "GET"],
     })
 );
-router.put(
-    "/users/:userId/update",
-    usersController.updateUser,
-    usersController.redirectView
-);
-router.delete("/users/:userId/delete", usersController.deleteUser);
-router.delete(
-    "/subscribers/:userId/delete",
-    usersController.deleteSub,
-    usersController.redirectView
-);
+// router.put(
+//     "/users/:userId/update",
+//     usersController.updateUser,
+//     usersController.redirectView
+// );
+// router.delete("/users/:userId/delete", usersController.deleteUser);
+// router.delete(
+//     "/subscribers/:userId/delete",
+//     usersController.deleteSub,
+//     usersController.redirectView
+// );
 
-app.get("/", homeController.getIndex);
+// app.get("/", homeController.getIndex);
 
 //fill out form
-app.get("/volunteer", subscribersController.getVolSubscriptionPage);
-app.get("/requester", subscribersController.getReqSubscriptionPage);
+// app.get("/volunteer", subscribersController.getVolSubscriptionPage);
+// app.get("/requester", subscribersController.getReqSubscriptionPage);
 
 //save form input
 // app.post("/subscribe", subscribersController.saveAllSubscriber);
 
 //view entries on map
-app.get("/locate/:type/:category", subscribersController.getAllSubscribers);
+// app.get("/locate/:type/:category", subscribersController.getAllSubscribers);
 
 //view and modify db
-app.get("/admin", subscribersController.getAdmin);
-app.get("/volunteers", subscribersController.getAllVolSubscribers);
-app.get("/requesters", subscribersController.getAllReqSubscribers);
-app.post("/delete/:type", subscribersController.deleteSubscribers);
-app.post("/deleteOne/:id", subscribersController.deleteOneSubscriber);
-app.post("/generateFakeData", subscribersController.saveFakeData);
+// app.get("/admin", subscribersController.getAdmin);
+// app.get("/volunteers", subscribersController.getAllVolSubscribers);
+// app.get("/requesters", subscribersController.getAllReqSubscribers);
+// app.post("/delete/:type", subscribersController.deleteSubscribers);
+// app.post("/deleteOne/:id", subscribersController.deleteOneSubscriber);
+// app.post("/generateFakeData", subscribersController.saveFakeData);
 
 //error
-app.use(errorController.respondNoResourceFound);
-app.use(errorController.respondInternalError);
+// app.use(errorController.respondNoResourceFound);
+// app.use(errorController.respondInternalError);
 
 app.listen(app.get("port"), () => {
     console.log(`Server running at http://localhost:${app.get("port")}`);
