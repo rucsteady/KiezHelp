@@ -56,10 +56,7 @@ exports.createUser = (req, res, next) => {
         } else {
             console.log(`Error saving user: ${error.message}`);
             res.locals.redirect = "/register";
-            req.flash(
-                "error",
-                `Failed to create user account because ${error.message}.`
-            );
+            req.flash("error", `Failed to create user account because ${error.message}.`);
             next();
         }
     });
@@ -193,7 +190,7 @@ exports.updateUser = (req, res, next) => {
     let newPassword = req.body.password;
 
     //we want to show the user why their change isn't saved, so we use alerts array to store error msg from validations that didn't pass
-    let flashString = '';
+    let flashString = [];
 
     //regex same as user.js
     var emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; //usual email regex
@@ -201,19 +198,18 @@ exports.updateUser = (req, res, next) => {
     //if didn't pass test, push to alerts and reload profile with no changes updated
     if (!emailRegex.test(newEmail) || !passwordRegex.test(newPassword)) {
         if (!emailRegex.test(newEmail)) {
-            flashString += "Please provide a valid email address.";
+            flashString += "Please provide a valid email address. ";
         }
         if (!passwordRegex.test(newPassword)) {
             flashString += "Password must have at least eight characters, at least one letter, one number and one special character.";
         }
-        if (flashString.length > 1) {
+        if (flashString.length > 0) {
             req.flash("error", flashString);
         }
         res.locals.redirect = "/profile";
         next();
     } else {
         //if passed validations, update profile
-
         //hash password 
         bcrypt.hash(newPassword, 10).then(hash => {
 
