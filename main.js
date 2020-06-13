@@ -73,7 +73,8 @@ router.post(
     usersController.redirectView
 );
 router.get("/login", usersController.getLogin);
-// router.post("/login", usersController.authenticate, usersController.redirectView);
+router.get("/loginFirst", usersController.loginFirst,  usersController.redirectView);
+
 router.post("/login", passport.authenticate('local', {
     failureRedirect: "/login",
     failureFlash: "Failed to login.",

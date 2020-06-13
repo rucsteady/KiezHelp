@@ -1,16 +1,13 @@
 <div class="w3-row-padding w3-large ">
     <form class="request-form w3-animate-top" action=<%=submitAction%> method="post">
-        <% if(userId) { %>
-            <input class="w3-input w3-border" name="userId" type="text" style="display:none" value=<%=userId%> >
-                <% } %>
         <div>
             <label>Name</label> <small>*required</small>
-            <input class="w3-input w3-border" name="name" type="text" placeholder="Jane Doe" required>
+            <input class="w3-input w3-border" name="name" type="text" placeholder="Jane Doe" value="<%=currentUser.fullName%>" required>
         </div>
         <div>
             <label>Address</label> <small>*required</small>
             <input class="button w3-button w3-black locate" style="display:inline;" value="Locate">
-            <input class="w3-input w3-border w3-block" name="address" type="text" placeholder="eg. Herbert-von-Karajan-Straße 1, 10785 Berlin" required>
+            <input class="w3-input w3-border w3-block" name="address" type="text" placeholder="eg. Herbert-von-Karajan-Straße 1, 10785 Berlin" value="<%=currentUser.address%>" required>
         </div>
         <div>
             <label>Help Genre</label> <small>*required</small>

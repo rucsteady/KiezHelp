@@ -3,12 +3,11 @@
         I AM <br />HERE TO
     </h1>
     <hr class="w3-border-grey" style="margin: 10px 0px; width: 100%;" />
-    <% if (userId) { %>       
-        <a href="/volunteer/<%=userId%>"><input class="button w3-button w3-black w3-block w3-xlarge" style="margin: 10px 0px;" type="submit" name="volunteer" value="Volunteer" /></a>
-        <a href="/requester/<%=userId%>"><input class="button w3-button w3-black w3-block w3-xlarge" type="submit" name="requester" value="Request Help" /></a>    
-    <% }else{ %>
-        <a href="/login"><input class="button w3-button w3-black w3-block w3-xlarge" style="margin: 10px 0px;" type="submit" name="volunteer" value="Volunteer" /></a>
-        <a href="/login"><input class="button w3-button w3-black w3-block w3-xlarge" type="submit" name="requester" value="Request Help" /></a>    
-    <% }%>
-</div>
-
+    <% if (loggedIn) { %>
+        <a href="/volunteer"><input class="button w3-button w3-black w3-block w3-xlarge" style="margin: 10px 0px;" type="submit" name="volunteer" value="Volunteer" /></a>
+         <a href="/requester"><input class="button w3-button w3-black w3-block w3-xlarge" type="submit" name="requester" value="Request Help" /></a>
+        <% }else{ %>
+            <a href="/loginFirst"><input class="button w3-button w3-black w3-block w3-xlarge" style="margin: 10px 0px;" type="submit" name="volunteer" value="Volunteer" /></a>
+            <a href="/loginFirst"><input class="button w3-button w3-black w3-block w3-xlarge" type="submit" name="requester" value="Request Help" /></a>
+            <% }%>
+   </div>

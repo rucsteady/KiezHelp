@@ -9,12 +9,19 @@ const User = require("../models/user"),
 // express = require('express'),
 // { check, validationResult } = require('express-validator');
 exports.getRegister = (req, res) => {
-    res.render("register", { error: "" });
+    res.render("register");
 };
 
 exports.getLogin = (req, res) => {
-    res.render("login", { error: "" });
+    res.render("login");
 };
+
+exports.loginFirst = (req, res,next) => {
+    req.flash("error", "You must log in first before making request/volunteer.");
+    res.locals.redirect = "/login";
+    next();
+};
+
 exports.logout = (req, res, next) => {
     req.logout();
     req.flash("success", "You have successfully logged out!");
@@ -35,27 +42,10 @@ exports.createUser = (req, res, next) => {
         aboutMe: req.body.aboutMe,
         password: req.body.password,
     };
-    // User.create(newUser)
-    //     .then((user) => {
-    //         req.flash("success", `${user.name.first}'s account created successfully!`);
-    //         // res.locals.userId = user.id;
-    //         res.locals.alerts = [];
-    //         res.locals.redirect = "/login";
-    //         next();
-    //     })
-    //     .catch((error) => {
-    //         console.log(`Error saving user: ${error.message}`);
-    //         res.locals.redirect = "/register";
-    //         req.flash(
-    //             "error",
-    //             `Failed to create user account because ${error.message}.`
-    //         );
-    //         next();
-    //     });
+   
     User.register(newUser, req.body.password, (error, user) => {
         if (user) {
             req.flash("success", `${user.name.first}'s account created successfully!`);
-            // res.locals.userId = user.id;
             res.locals.alerts = [];
             res.locals.redirect = "/login";
             next();
@@ -93,14 +83,17 @@ exports.validate = (req, res, next) => {
     });
 }
 exports.saveProfileEdit = (req, res, next) => {
-    const userId = req.body.userId,
-        newFirstName = req.body.firstName,
+    const newFirstName = req.body.firstName,
         newLastName = req.body.lastName,
         newAddress = req.body.address,
         newEmail = req.body.email,
         newPassword = req.body.password,
         newAboutMe = req.body.aboutMe,
         newDateEdited = Date.now;
+    let userId = '';
+    if(res.locals.currentUser){
+        userId = res.locals.currentUser._id;
+    }
 
     User.update({ _id: userId }, {
             $currentDate: {
@@ -121,7 +114,6 @@ exports.saveProfileEdit = (req, res, next) => {
             console.log("user:" + user);
             res.locals.alerts = [];
             res.locals.redirect = "/profile";
-            // res.locals.userId = req.body.userId;
             next();
         })
         .catch((error) => {
@@ -138,7 +130,6 @@ exports.authenticate = (req, res, next) => {
                 user.passwordComparison(req.body.password)
                     .then(passwordsMatch => {
                         if (passwordsMatch) {
-                            // res.locals.userId = user.id;
                             res.locals.alerts = [];
                             req.flash("success", `Hi, ${user.fullname()}. You logged in successfully!`);
                             res.locals.user = user;
@@ -168,7 +159,6 @@ exports.loginToVol = (req, res, next) => {
         .exec()
         .then((user) => {
             if (user) {
-                // res.locals.userId = user.id;
                 res.locals.alerts = [];
                 res.locals.redirect = `/volunteer/${user.id}`;
                 next();
@@ -227,7 +217,6 @@ exports.getUserProfile = (req, res) => {
 exports.updateUser = (req, res, next) => {
     console.log("Running user update");
     const userId = res.locals.currentUser._id;
-    // res.locals.userId = userId;
 
     const newFirstName = req.body.firstName,
         newLastName = req.body.lastName,
@@ -287,8 +276,11 @@ exports.updateUser = (req, res, next) => {
 //Unit 4 delete
 exports.deleteSub = (req, res, next) => {
     console.log("Running deleteSub");
-    const userId = req.params.userId,
-        subId = req.body.subId;
+    const subId = req.body.subId;
+    let userId = '';
+    if(res.locals.currentUser){
+        userId = res.locals.currentUser._id;
+    }
     //first delete it from subscriber, then delete from user
     Subscriber.findByIdAndRemove(subId)
         .then()
@@ -316,8 +308,11 @@ exports.deleteSub = (req, res, next) => {
 //if we delete a user, we also need to delete the subscribers that relates to them
 exports.deleteUser = (req, res) => {
     console.log("Running deleteUser");
-    const userId = req.params.userId;
-    console.log("userId:" + userId);
+    let userId = '';
+    if(res.locals.currentUser){
+        userId = res.locals.currentUser._id;
+    }
+
     //first delete subscribers, then delete the user
 
     Subscriber.deleteMany({ userId: userId })
@@ -339,12 +334,16 @@ exports.deleteUser = (req, res) => {
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
     // console.log("in red:" + res.locals.userId);
+    let userId = '';
+    if(res.locals.currentUser){
+        userId = res.locals.currentUser._id;
+    }
     if (redirectPath) {
         res.redirect(
             url.format({
                 pathname: redirectPath,
                 query: {
-                    userId: res.locals.userId,
+                    userId: userId,
                     alerts: res.locals.alerts,
                 },
             })

@@ -9,7 +9,6 @@ const $ = require("cheerio");
 
 exports.saveAllSubscriber = (req, res, next) => {
     let newVolReqEntry = {
-        userId: req.body.userId,
         type: req.body.type,
         name: req.body.name,
         address: req.body.address,
@@ -19,11 +18,18 @@ exports.saveAllSubscriber = (req, res, next) => {
         durato: req.body.durato,
         message: req.body.message,
     };
+    let userId = '';
+    if( res.locals.currentUser){
+        newVolReqEntry.userId = res.locals.currentUser._id;
+        userId = res.locals.currentUser._id;
+    }else{
+        newVolReqEntry.userId = '';
+    }
     var subId;
     Subscriber.create(newVolReqEntry)
         .then((entry) => {
             subId = entry._id;
-            User.findOne({ _id: req.body.userId })
+            User.findOne({ _id: userId })
                 .then((user) => {
                     user.subscribers.push(subId);
                     //TODO need to update the subscribers id whenever there's a deletion in admin so user don't have subs that are already deleted
@@ -37,7 +43,7 @@ exports.saveAllSubscriber = (req, res, next) => {
                     if (error) res.send(error);
                 });
             res.locals.redirect = '/profile';
-            res.locals.userId = req.body.userId;
+            // res.locals.userId = req.body.userId;
             next();
             // res.render("success", { action: "SUBMIT" });
         })
@@ -119,15 +125,11 @@ exports.deleteOneSubscriber = (req, res) => {
 };
 
 exports.getVolSubscriptionPage = (req, res) => {
-    let paramsUserId = req.params.userId;
-    // console.log("paramUserId:"+user.name.first);
-    res.render("volunteer", { userId: paramsUserId });
+    res.render("volunteer");
 };
 
 exports.getReqSubscriptionPage = (req, res) => {
-    let paramsUserId = req.params.userId;
-    // console.log("paramUserId:"+user.name.first);
-    res.render("requester", { userId: paramsUserId });
+    res.render("requester");
 };
 
 exports.getAllSubscribers = (req, res) => {
@@ -310,11 +312,10 @@ exports.saveFakeData = (req, res) => {
 };
 exports.redirectView = (req, res, next) => {
     let redirectPath = res.locals.redirect;
-    if (redirectPath && res.locals && res.locals.userId && res.locals.subs ){//&& res.locals.user) {
+    if (redirectPath && res.locals && res.locals.subs ){//&& res.locals.user) {
         res.redirect(url.format({
             pathname: redirectPath,
             query: {
-                "userId": res.locals.userId,
                 "subs": res.locals.subs,
                 // "user": res.locals.user
             }
