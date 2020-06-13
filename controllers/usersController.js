@@ -7,8 +7,7 @@ const User = require("../models/user"),
     url = require("url"),
     session = require("express-session"),
     bcrypt = require("bcrypt");
-// express = require('express'),
-// { check, validationResult } = require('express-validator');
+    
 exports.getRegister = (req, res) => {
     res.render("register");
 };
@@ -83,54 +82,7 @@ exports.validate = (req, res, next) => {
         }
     });
 }
-// exports.saveProfileEdit = (req, res, next) => {
-//     const newFirstName = req.body.firstName,
-//         newLastName = req.body.lastName,
-//         newAddress = req.body.address,
-//         newEmail = req.body.email,
-//         newPassword = req.body.password,
-//         newAboutMe = req.body.aboutMe,
-//         newDateEdited = Date.now;
-//     let userId = '';
-//     console.log("add:"+req.body.address);
-//     console.log("add1:"+newAddress);
-//     if(res.locals.currentUser){
-//         userId = res.locals.currentUser._id;
-//     }
-//     let hashedPassword = newPassword;
-//      bcrypt.hash(newPassword, 10).then(hash => {
-//         hashedPassword = hash;
-//         })
-//         .catch(error => {
-//        console.log(`Error in hashing password: ${error.message}`);
-//         });
-//         console.log("new after hash:"+newAddress);
-//         console.log("hashed pass:"+ hashedPassword);
-//     User.update({ _id: userId }, {
-//             $currentDate: {
-//                 dateEdited: true,
-//             },
-//             $set: {
-//                 address: newAddress,
-//                 email: newEmail,
-//                 password: hashedPassword,
-//                 aboutMe: newAboutMe,
-//                 name: {
-//                     first: newFirstName,
-//                     last: newLastName,
-//                 },
-//             },
-//         })
-//         .then((user) => {
-//             console.log("user:" + user);
-//             res.locals.alerts = [];
-//             res.locals.redirect = "/profile";
-//             next();
-//         })
-//         .catch((error) => {
-//             if (error) res.send(error);
-//         });
-// };
+
 
 //TODO check if there's such user with the mail and correct password
 exports.authenticate = (req, res, next) => {

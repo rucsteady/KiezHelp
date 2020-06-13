@@ -77,19 +77,13 @@ router.get("/loginFirst", usersController.loginFirst,  usersController.redirectV
 
 router.post("/login", passport.authenticate('local', {
     failureRedirect: "/login",
-    failureFlash: "Failed to login.",
+    failureFlash: "Email or password invalid.",
     successRedirect: "/",
-    successFlash: "Logged in!"
+    successFlash: "You have successfully logged in!"
 }), usersController.authenticate, usersController.redirectView);
-//only for adding vol/req under a certain user account
 
 router.get("/logout", usersController.logout, usersController.redirectView);
 
-// router.post(
-//     "/saveProfileEdit",
-//     usersController.saveProfileEdit,
-//     usersController.redirectView
-// );
 
 router.post(
     "/subscribe",
@@ -98,7 +92,6 @@ router.post(
 );
 router.get("/profile", usersController.getUserProfile);
 
-//put
 router.use(
     methodOverride("_method", {
         methods: ["POST", "GET"],
