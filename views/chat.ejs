@@ -3,11 +3,11 @@
     <form id="chatForm">
         <input id="chat-input" type="text">
         <% if (currentUser) { %>
-            <input id="chat-user-id" type="hidden" value="<%=currentUser._id %>">
-            <input id="chat-user-name" type="hidden" value="<%=currentUser.fullName %>">
+            <input id="chat-user-id" type="hidden" value="<%=currentUser._id%>">
+            <input id="chat-user-name" type="hidden" value="<%=currentUser.fullName%>">
             <% }else{ %>
                 <input id="chat-user-name" type="hidden" value="Stranger">
-                <input id="chat-user-id" type="hidden" value="id">
+                <input id="chat-user-id" type="hidden" value="userId">
                 <% } %>
                     <input type="submit" value="Send">
     </form>

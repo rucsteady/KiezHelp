@@ -24,10 +24,16 @@ socket.on("message", (message) => {
     displayMessage(message);
 });
 
+socket.on("load all messages", (data) => {
+    data.forEach(message => {
+        displayMessage(message);
+    });
+});
+
 let displayMessage = (message) => {
     $("#chat").prepend(
         $("<p>").html(`
-        <strong class="message ${getCurrentUserClass(message.user )}">
+        <strong class="message ${getCurrentUserClass(message.userId)}">
             ${message.userName}
             </strong>: ${message.content}
             `)
