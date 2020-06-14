@@ -13,7 +13,7 @@ const User = require("../models/user"),
 exports.latestRequests = (req, res, next) => {
     let subArray;
     console.log("running latestRequests in userscontroller");
-    Subscriber.find().sort({ 'dateCreated': -1 }).limit(5).then(
+    Subscriber.find({ 'acceptanceStatus': 'unaccepted' }).sort({ 'dateCreated': -1 }).limit(5).then(
         item => {
             res.json(item);
         }

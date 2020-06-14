@@ -30,6 +30,30 @@ $(document).ready(() => {
                `);
             });
 
+        }).then(() => {
+            addAcceptButtonListener();
         });
+
     });
 });
+
+let addAcceptButtonListener = () => {
+    //res.locals.currentUser._id
+    $(".accept-button").click((event) => {
+        let $button = $(event.target),
+            requestId = $button.data("id");
+        $.get(`/requests/accept/${requestId}`, (results = {}) => {
+            // console.log("results:" + results);
+            // console.log("results.data:" + results.data);
+            let data = results.data;
+            // if (data && data.success) {
+            $button
+                .text("Accepted")
+                .addClass("accepted-button")
+                .removeClass("accept-button");
+            // } else {
+            //     $button.text("Try again");
+            // }
+        });
+    });
+}

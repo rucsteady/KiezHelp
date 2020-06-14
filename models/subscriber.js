@@ -16,6 +16,15 @@ const mongoose = require("mongoose"),
             required: 'userId is required',
             trim: true
         },
+        acceptedUserId: {
+            type: String,
+            optional: true
+        },
+        acceptanceStatus: {
+            type: String,
+            default: 'unaccepted',
+            enum: ['accepted', 'unaccepted']
+        },
         type: {
             type: String,
             required: 'Type is required',

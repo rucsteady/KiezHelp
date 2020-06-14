@@ -7,6 +7,26 @@ const Subscriber = require("../models/subscriber"),
 
 
 
+exports.acceptRequest = (req, res, next) => {
+    console.log("running accept request");
+    let requestId = req.params.requestId;
+    Subscriber.updateOne({ _id: requestId }, {
+            "$set": {
+                "acceptanceStatus": "accepted"
+            }
+        })
+        .exec()
+        .then(result => {
+            res.locals.redirect = "/profile";
+            next();
+            // return (result);
+        })
+        .catch((error) => {
+            console.log(error.message);
+            return [];
+        });
+};
+
 exports.saveAllSubscriber = (req, res, next) => {
     let newVolReqEntry = {
         type: req.body.type,

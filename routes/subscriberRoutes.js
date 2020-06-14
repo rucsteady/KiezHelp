@@ -7,6 +7,9 @@ router.post(
     subscribersController.saveAllSubscriber,
     usersController.redirectView
 );
+
+
+router.get("/requests/accept/:requestId", subscribersController.acceptRequest, usersController.redirectView);
 router.get("/volunteer", subscribersController.getVolSubscriptionPage);
 router.get("/requester", subscribersController.getReqSubscriptionPage);
 router.get("/locate/:type/:category", subscribersController.getAllSubscribers);
