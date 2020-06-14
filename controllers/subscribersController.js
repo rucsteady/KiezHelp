@@ -16,12 +16,13 @@ exports.acceptRequest = (req, res, next) => {
             }
         })
         .exec()
-        .then(result => {
+        .then(() => {
             res.locals.redirect = "/profile";
+            res.locals.success = true;
             next();
-            // return (result);
         })
-        .catch((error) => {
+        .catch(error => {
+            // next(error);
             console.log(error.message);
             return [];
         });

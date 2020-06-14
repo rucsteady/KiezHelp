@@ -45,6 +45,7 @@ let addAcceptButtonListener = () => {
         $.get(`/requests/accept/${requestId}`, (results = {}) => {
             // console.log("results:" + results);
             // console.log("results.data:" + results.data);
+            // console.log("success:" + res.locals.success);
             let data = results.data;
             // if (data && data.success) {
             $button
