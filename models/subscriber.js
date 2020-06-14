@@ -68,6 +68,10 @@ const mongoose = require("mongoose"),
             default: '',
             optional: true,
             maxlength: 100
+        },
+        dateCreated: {
+            type: Date,
+            default: Date.now
         }
     });
 //should also add which user posted it so they can communicate through dms

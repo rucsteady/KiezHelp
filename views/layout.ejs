@@ -15,13 +15,14 @@
     <link rel="stylesheet" type="text/css" href="/css/kiezhelp.css" />
 
     <script type="text/javascript" src="/js/subscription.js"></script>
+    <script type="text/javascript" src="/js/latestRequest.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway" />
 </head>
 
 <body>
     <%- include('partials/navigation') %>
 
-        <%- include ('partials/_subscriptionModal') %>
+        <%- include ('partials/_latestRequestsModal') %>
             <div class="flashes">
                 <% if (flashMessages) { %>
                     <% if (flashMessages.success) { %>

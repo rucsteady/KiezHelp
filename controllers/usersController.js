@@ -9,6 +9,17 @@ const User = require("../models/user"),
     bcrypt = require("bcrypt"),
     httpStatus = require("http-status-codes");
 
+
+exports.latestRequests = (req, res, next) => {
+    let subArray;
+    console.log("running latestRequests in userscontroller");
+    Subscriber.find().sort({ 'dateCreated': -1 }).limit(5).then(
+        item => {
+            res.json(item);
+        }
+    );
+};
+
 exports.userapi = (req, res) => {
     console.log("running userapi in userscontroller");
     res.json(res.locals.currentUser);
