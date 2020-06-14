@@ -2,6 +2,7 @@
 
 const express = require("express"),
     app = express(),
+    helmet = require("helmet"),
     layouts = require("express-ejs-layouts"),
     expressValidator = require("express-validator"),
     router = require("./routes/index"),
@@ -27,6 +28,7 @@ app.get("token");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(expressValidator());
+app.use(helmet());
 
 app.use(layouts);
 app.use(express.static("public"));

@@ -1,17 +1,18 @@
 <div id="navbar">
     <div class="w3-right">
-        <% if (loggedIn) { %>
-            <a href="/" style="pointer-events: none; text-decoration:underline">Hi, <%= currentUser.name.first %></a>
-            <a href="/">Home</a>
-            <a href="/logout">Log Out</a>
-            <a href="/profile">Profile</a>
-            <a href="/locate/helpee&volunteer/allcategory">Locate</a>
-            <% }else{ %>
+        <%- include ('./_latestRequestsModal') %>
+            <% if (loggedIn) { %>
+                <a href="/" style="pointer-events: none; text-decoration:underline">Hi, <%= currentUser.name.first %></a>
                 <a href="/">Home</a>
-                <a href="/register">Register</a>
-                <a href="/login">Log In</a>
+                <a href="/logout">Log Out</a>
+                <a href="/profile">Profile</a>
                 <a href="/locate/helpee&volunteer/allcategory">Locate</a>
-                <% }%>
-                    <a href="/admin">Admin</a>
+                <% }else{ %>
+                    <a href="/">Home</a>
+                    <a href="/register">Register</a>
+                    <a href="/login">Log In</a>
+                    <a href="/locate/helpee&volunteer/allcategory">Locate</a>
+                    <% }%>
+                        <a href="/admin">Admin</a>
     </div>
 </div>

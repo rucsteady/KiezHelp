@@ -20,33 +20,33 @@
 </head>
 
 <body>
+    <div class="w3-panel" style="padding:10px; text-align: center;  z-index: 5; bottom: 5px; width:100%; position: fixed; background: rgba(255,255,255,0.7)">
+        <h4 style="font-weight:bolder; display: inline;"> We use Cookie 🍪...</h4>
+        <span class="closebtn" onclick="this.parentElement.style.display='none';" style="float:right;">&times;</span>
+        <button class="js-cookie-dismiss button w3-button w3-black w3-block" onclick="this.parentElement.style.display='none';" style="width:auto; display:inline;">I Accept</button>
+        <button class="js-cookie-dismiss button w3-button w3-black w3-block" onclick="this.parentElement.style.display='none';" style="width:auto;  display:inline;">I don't accept</button>
+    </div>
     <%- include('partials/navigation') %>
-
-        <%- include ('partials/_latestRequestsModal') %>
-            <div class="flashes">
-                <% if (flashMessages) { %>
-                    <% if (flashMessages.success) { %>
-                        <div class="flash success">
-                            <%= flashMessages.success %>
+        <div class="flashes">
+            <% if (flashMessages) { %>
+                <% if (flashMessages.success) { %>
+                    <div class="flash success">
+                        <%= flashMessages.success %>
+                    </div>
+                    <% } else if (flashMessages.error) { %>
+                        <div class="flash error" style="background:#c96b59">
+                            <%= flashMessages.error %>
                         </div>
-                        <% } else if (flashMessages.error) { %>
-                            <div class="flash error" style="background:#c96b59">
-                                <%= flashMessages.error %>
-                            </div>
+                        <% } %>
                             <% } %>
-                                <% } %>
+        </div>
+        <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+            <div class="w3-display-topleft w3-padding-large w3-xlarge w3-hide-small">
+                KiezHelp
             </div>
-
-            <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
-                <div class="w3-display-topleft w3-padding-large w3-xlarge w3-hide-small">
-                    KiezHelp
-                </div>
-
-
-
-                <%- body %>
-            </div>
-            <%- include('partials/footer') %>
+            <%- body %>
+        </div>
+        <%- include('partials/footer') %>
 </body>
 
 </html>
