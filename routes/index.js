@@ -3,6 +3,7 @@ const router = require("express").Router(),
     subscriberRoutes = require("./subscriberRoutes"),
     errorRoutes = require("./errorRoutes"),
     homeRoutes = require("./homeRoutes"),
+    apiRoutes = require("./apiRoutes"),
     express = require("express"),
     app = express(),
     expressSession = require("express-session"),
@@ -51,5 +52,6 @@ router.use("/", userRoutes);
 router.use("/", subscriberRoutes);
 router.use("/", homeRoutes);
 router.use("/", errorRoutes);
+// router.use("/", apiRoutes);
 
 module.exports = router;

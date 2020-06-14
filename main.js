@@ -2,19 +2,8 @@
 
 const express = require("express"),
     app = express(),
-    homeController = require("./controllers/homeController"),
-    errorController = require("./controllers/errorController"),
-    subscribersController = require("./controllers/subscribersController"),
-    usersController = require("./controllers/usersController"),
     layouts = require("express-ejs-layouts"),
-    // router = express.Router(),
-    expressSession = require("express-session"),
-    cookieParser = require("cookie-parser"),
-    connectFlash = require("connect-flash"),
-    methodOverride = require("method-override"),
     expressValidator = require("express-validator"),
-    passport = require("passport"),
-    User = require("./models/user"),
     router = require("./routes/index");
 
 const mongoose = require("mongoose");

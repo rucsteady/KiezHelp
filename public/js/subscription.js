@@ -3,7 +3,7 @@ $(document).ready(() => {
     $("#modal-button").click(() => {
         console.log("click");
         $(".modal-body").html('');
-        $.get("/profile?format=json", (data) => {
+        $.get("/api/user", (data) => {
             console.log("data:" + data);
 
             for (let d in data) {

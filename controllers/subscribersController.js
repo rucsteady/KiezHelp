@@ -1,9 +1,9 @@
 "use strict";
 
-const Subscriber = require("../models/subscriber");
-const User = require("../models/user");
-const rp = require("request-promise");
-const $ = require("cheerio");
+const Subscriber = require("../models/subscriber"),
+    User = require("../models/user"),
+    rp = require("request-promise"),
+    $ = require("cheerio");
 
 
 
