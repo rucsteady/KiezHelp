@@ -42,6 +42,9 @@ let addAcceptButtonListener = () => {
     $(".accept-button").click((event) => {
         let $button = $(event.target),
             requestId = $button.data("id");
+        // console.log("loggedin:" + res.locals.loggedIn);
+        // console.log("authen:" + req.isAuthenticated());
+        // if (res.locals.loggedIn) {
         $.get(`/requests/accept/${requestId}`, (results = {}) => {
             // console.log("results:" + results);
             // console.log("results.data:" + results.data);
@@ -56,5 +59,11 @@ let addAcceptButtonListener = () => {
             //     $button.text("Try again");
             // }
         });
+        // } else {
+        //     $.get(`/loginFirst`, (results = {}) => {
+
+        //     });
+        // }
+
     });
 }

@@ -9,23 +9,31 @@ const Subscriber = require("../models/subscriber"),
 
 exports.acceptRequest = (req, res, next) => {
     console.log("running accept request");
-    let requestId = req.params.requestId;
-    Subscriber.updateOne({ _id: requestId }, {
-            "$set": {
-                "acceptanceStatus": "accepted"
-            }
-        })
-        .exec()
-        .then(() => {
-            res.locals.redirect = "/profile";
-            res.locals.success = true;
-            next();
-        })
-        .catch(error => {
-            // next(error);
-            console.log(error.message);
-            return [];
-        });
+    if (res.locals.currentUser) {
+        console.log("has currentuser");
+        let requestId = req.params.requestId;
+        Subscriber.updateOne({ _id: requestId }, {
+                "$set": {
+                    "acceptanceStatus": "accepted"
+                }
+            })
+            .exec()
+            .then(() => {
+                res.locals.redirect = "/profile";
+                res.locals.success = true;
+                next();
+            })
+            .catch(error => {
+                // next(error);
+                console.log(error.message);
+                return [];
+            });
+    } else {
+        console.log("no currentuser");
+        // res.locals.redirect = "/loginFirst";
+        res.render("login");
+        // next();
+    }
 };
 
 exports.saveAllSubscriber = (req, res, next) => {
