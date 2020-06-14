@@ -22,6 +22,9 @@ $(document).ready(function() {
 
 socket.on("message", (message) => {
     displayMessage(message);
+    for (let i = 0; i < 2; i++) {
+        $(".chat-icon").fadeOut(200).fadeIn(200);
+    }
 });
 
 socket.on("load all messages", (data) => {
