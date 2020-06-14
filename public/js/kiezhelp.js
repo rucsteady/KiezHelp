@@ -1,25 +1,39 @@
 const socket = io();
 
-$(document).ready(function () {
+$(document).ready(function() {
     $("#chatForm").submit((event) => {
-        event.preventDefault();
-        let text = $("#chat_input").val();
+        console.log("running submit");
+        // event.preventDefault();
+        let text = $("#chat-input").val(),
+            userId = $("#chat-user-id").val();
+        userName = $("#chat-user-name").val();
+        console.log("text:" + text);
+        console.log("usernmae:" + userName);
         socket.emit("message", {
-            content: text
-            });
+            content: text,
+            userName: userName,
+            userId: userId
+        });
+
         $("#chat-input").val("");
         return false;
     });
 });
 
 socket.on("message", (message) => {
-    displayMessage(message.content);
-   });
+    displayMessage(message);
+});
 
 let displayMessage = (message) => {
-    let userName = "Stranger";
-    // if(res.local.currentUser){
-    //     userName = res.local.currentUser.fullName;
-    // }
-    $("#chat").prepend($("<p>").html(userName +" : "+message));
-   };
+    $("#chat").prepend(
+        $("<p>").html(`
+        <strong class="message ${getCurrentUserClass(message.user )}">
+            ${message.userName}
+            </strong>: ${message.content}
+            `)
+    );
+};
+let getCurrentUserClass = (id) => {
+    let userId = $("#chat-user-id").val();
+    return userId === id ? "current-user" : "";
+};

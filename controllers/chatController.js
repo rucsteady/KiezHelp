@@ -7,9 +7,12 @@ module.exports = io => {
         });
 
         client.on("message", data => {
-            io.emit("message", {
-            content:  data.content 
-            });
+            let messageAttributes = {
+                content: data.content,
+                userName: data.userName,
+                user: data.userId
+                };
+            io.emit("message", messageAttributes);
         });
     });
 };
