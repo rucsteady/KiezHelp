@@ -3,11 +3,12 @@ const router = require("express").Router(),
     passport = require("passport");
 
 
-router.get("/latestRequests", usersController.latestRequests, usersController.respondJSON);
-router.get("/api/user", usersController.userapi, usersController.respondJSON);
-router.use(usersController.errorJSON);
+// router.use(usersController.verifyToken);
+// router.get("/latestRequests", usersController.latestRequests, usersController.respondJSON);
+// router.get("/api/user", usersController.userapi, usersController.respondJSON);
+// router.use(usersController.errorJSON);
 
-router.get("/user", usersController.user);
+// router.get("/user", usersController.user);
 
 router.get("/register", usersController.getRegister);
 router.post(

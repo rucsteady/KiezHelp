@@ -52,6 +52,6 @@ router.use("/", userRoutes);
 router.use("/", subscriberRoutes);
 router.use("/", homeRoutes);
 router.use("/", errorRoutes);
-// router.use("/", apiRoutes);
+router.use("/", apiRoutes);
 
 module.exports = router;

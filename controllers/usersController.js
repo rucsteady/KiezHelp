@@ -9,9 +9,30 @@ const User = require("../models/user"),
     bcrypt = require("bcrypt"),
     httpStatus = require("http-status-codes");
 
+exports.verifyToken = (req, res, next) => {
+    console.log("running verifytoken");
+    let token = res.locals.currentUser.apiToken;
+    if (token) {
+        User.findOne({ apiToken: token })
+            .then(user => {
+                if (user) {
+                    console.log("found user with token");
+                    next();
+                } else {
+                    console.log("can't find user with token");
+                    next(new Error("Invalid API token."));
+                }
+            })
+            .catch(error => {
+                next(new Error(error.message));
+            });
+    } else {
+        console.log("token doesn't exist");
+        next(new Error("Invalid API token."));
+    }
+}
 
 exports.latestRequests = (req, res, next) => {
-    let subArray;
     console.log("running latestRequests in userscontroller");
     Subscriber.find({ 'acceptanceStatus': 'unaccepted' }).sort({ 'dateCreated': -1 }).limit(5).then(
         item => {

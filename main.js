@@ -4,9 +4,8 @@ const express = require("express"),
     app = express(),
     layouts = require("express-ejs-layouts"),
     expressValidator = require("express-validator"),
-    router = require("./routes/index");
-
-const mongoose = require("mongoose");
+    router = require("./routes/index"),
+    mongoose = require("mongoose");
 mongoose.connect(
     process.env.MONGODB_URI ||
     "mongodb://kiezhelp1:kiezhelp1@ds261479.mlab.com:61479/heroku_w4qr4v2r", {
@@ -19,8 +18,11 @@ db.once("open", () => {
 });
 mongoose.set("useCreateIndex", true);
 
+
 app.set("view engine", "ejs");
 app.set("port", process.env.PORT || 3000);
+app.set("token", process.env.TOKEN || "kiezhelpT0k3n"); //app.get("token")
+app.get("token");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
