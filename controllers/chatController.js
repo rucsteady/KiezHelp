@@ -9,7 +9,7 @@ module.exports = io => {
             })
             .limit(10)
             .then(messages => {
-                client.emit("load all messages", messages.reverse());
+                client.emit("load all messages", messages.reverse());//
             });
 
         client.on("disconnect", () => {
@@ -26,6 +26,16 @@ module.exports = io => {
             m.save()
                 .then(() => {
                     io.emit("message", messageAttributes);
+                    // io.emit("message", messageAttributes);
+                    // Message.find({})
+                    // .sort({
+                    //     createdAt: -1
+                    // })
+                    // .limit(10)
+                    // .then(messages => {
+                    //     client.emit("load all messages", messages);//.reverse());//
+                    // });
+                    // client.push(messageAttributes);
                 })
                 .catch(error => console.log(`error: ${error.message}`));
         });
