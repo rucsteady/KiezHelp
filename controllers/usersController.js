@@ -91,11 +91,13 @@ exports.verifyToken = (req, res, next) => {
 
 exports.latestRequests = (req, res, next) => {
     console.log("running latestRequests in userscontroller");
-    Subscriber.find({ 'acceptanceStatus': 'unaccepted' }).sort({ 'dateCreated': -1 }).limit(5).then(
-        item => {
-            res.json(item);
-        }
-    );
+    //shouldn't have your own request
+    Subscriber.find({ 'acceptanceStatus': 'unaccepted' }).sort({ 'dateCreated': -1 })
+        .limit(10).then(
+            item => {
+                res.json(item);
+            }
+        );
 };
 
 exports.userapi = (req, res) => {

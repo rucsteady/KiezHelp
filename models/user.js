@@ -38,10 +38,6 @@ const mongoose = require("mongoose"),
             optional: true,
             maxlength: 200
         },
-        subscribers: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Subscriber"
-        }],
         password: {
             type: String,
             required: 'Password is required',
@@ -59,6 +55,36 @@ const mongoose = require("mongoose"),
             default: Date.now,
             optional: true
         },
+        subscribers: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Subscriber"
+        }],
+        acceptedSubscribers: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Subscriber"
+        }],
+        messagesWithPeople:[{
+            with: [{
+                target: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "User"
+                },
+                messages:[{
+                    content: {
+                        type: String,
+                        default: ''
+                    },
+                    from: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: "User"
+                    },
+                    createdAt: {
+                        type: Date,
+                        default: Date.now
+                    }
+                }]
+            }]
+        }]
     });
 
 // userSchema.pre("save", function(next) {

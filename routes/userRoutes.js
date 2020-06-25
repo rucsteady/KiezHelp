@@ -4,7 +4,7 @@ const router = require("express").Router(),
 
 
 // router.use(usersController.verifyToken);
-// router.get("/latestRequests", usersController.latestRequests, usersController.respondJSON);
+router.get("/latestRequests", usersController.latestRequests, usersController.respondJSON);
 // router.get("/api/user", usersController.userapi, usersController.respondJSON);
 // router.use(usersController.errorJSON);
 

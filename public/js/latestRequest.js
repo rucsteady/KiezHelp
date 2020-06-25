@@ -19,7 +19,9 @@ $(document).ready(() => {
                     </tr>
                     </thead>
                     <tr>
-                    <td> ${request.name}</td>
+                    <td> ${request.name}
+                    <button class="accept-button w3-button w3-black" data-id="${request._id}">chat</button>
+                    </td>
                     <td> ${request.address}</td>
                     <td> ${request.option}</td>
                     </tr>
@@ -43,28 +45,14 @@ let addAcceptButtonListener = () => {
     $(".accept-button").click((event) => {
         let $button = $(event.target),
             requestId = $button.data("id");
-        // console.log("loggedin:" + res.locals.loggedIn);
-        // console.log("authen:" + req.isAuthenticated());
-        // if (res.locals.loggedIn) {
+
         $.get(`/requests/accept/${requestId}`, (results = {}) => {
-            // console.log("results:" + results);
-            // console.log("results.data:" + results.data);
-            // console.log("success:" + res.locals.success);
-            let data = results.data;
-            // if (data && data.success) {
+
             $button
                 .text("Accepted")
                 .addClass("accepted-button")
                 .removeClass("accept-button");
-            // } else {
-            //     $button.text("Try again");
-            // }
         });
-        // } else {
-        //     $.get(`/loginFirst`, (results = {}) => {
-
-        //     });
-        // }
 
     });
 }

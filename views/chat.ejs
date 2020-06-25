@@ -1,19 +1,27 @@
 <%- include('partials/profileSidebar') %>
-<div class="form-container w3-jumbo" style="width:85% !important; margin-left:15% !important;">
-    <div class="container" style="font-size:15px !important">
-        <h1>Chat</h1>
-        
-        <div id="chat" style="border:double; height:50vh; width: 100%; padding:10px"></div>
-        <form id="chatForm" style="width: 100%">
-            <input id="chat-input" type="text" style="width: 85%">
-            <% if (currentUser) { %>
-                <input id="chat-user-id" type="hidden" value="<%=currentUser._id%>">
-                <input id="chat-user-name" type="hidden" value="<%=currentUser.fullName%>">
-                <% }else{ %>
-                    <input id="chat-user-name" type="hidden" value="Stranger">
-                    <input id="chat-user-id" type="hidden" value="userId">
-                    <% } %>
-                        <input type="submit" value="Send" style="width: 10%">
-        </form>
+    <div class="form-container w3-jumbo" style="width:85% !important; margin-left:15% !important;">
+        <div class="container" style="font-size:15px !important">
+            <h1>Chat</h1>
+            <form id="searchUserForm" style="width: 100%">
+                <input id="chat-input" type="text" style="width: 85%" placeholder="search user name..." value="">
+                <input type="submit" value="Find" style="width: 10%">
+            </form>
+
+            <br/>
+            <h1>To:
+                <%= currentUser.fullName %>
+            </h1>
+            <div id="chat" style="border:double; height:50vh; width: 100%; padding:10px"></div>
+            <form id="chatForm" style="width: 100%">
+                <input id="chat-input" type="text" style="width: 85%">
+                <% if (currentUser) { %>
+                    <input id="chat-user-id" type="hidden" value="<%=currentUser._id%>">
+                    <input id="chat-user-name" type="hidden" value="<%=currentUser.fullName%>">
+                    <% }else{ %>
+                        <input id="chat-user-name" type="hidden" value="Stranger">
+                        <input id="chat-user-id" type="hidden" value="userId">
+                        <% } %>
+                            <input type="submit" value="Send" style="width: 10%">
+            </form>
+        </div>
     </div>
-</div>

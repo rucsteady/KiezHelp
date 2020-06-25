@@ -16,7 +16,7 @@ const mongoose = require("mongoose"),
             required: 'userId is required',
             trim: true
         },
-        acceptedUserId: {
+        acceptedByUserId: {
             type: String,
             optional: true
         },

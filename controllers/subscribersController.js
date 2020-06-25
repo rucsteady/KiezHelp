@@ -14,25 +14,38 @@ exports.acceptRequest = (req, res, next) => {
         let requestId = req.params.requestId;
         Subscriber.updateOne({ _id: requestId }, {
                 "$set": {
-                    "acceptanceStatus": "accepted"
+                    "acceptanceStatus": "accepted",
+                    "acceptedByUserId": res.locals.currentUser.userId
                 }
             })
             .exec()
             .then(() => {
-                res.locals.redirect = "/profile";
-                res.locals.success = true;
-                next();
+                //update accepting user's acceptedSub
+                User.findOne({ _id: res.locals.currentUser.userId })
+                    .then((user) => {
+                        user.acceptedSubscribers.push(requestId);
+                        //TODO need to update the subscribers id whenever there's a deletion in admin so user don't have subs that are already deleted
+                        user.save();
+                        Subscriber.populate(user, "acceptedSubscribers").then((populatedUser) => {
+                            // console.log("sub:"+populatedUser);
+                            console.log("subs");
+                            res.locals.subs = populatedUser.subscribers;
+                            res.locals.redirect = "/acceptedSubs";
+                            res.locals.success = true;
+                            next();
+                        });
+                    }).catch((error) => {
+                        if (error) res.send(error);
+                    });
+
             })
             .catch(error => {
                 // next(error);
-                console.log(error.message);
+                console.log("cant find the sub that the user accepted: " + error.message);
                 return [];
             });
     } else {
         console.log("no currentuser");
-        // res.locals.redirect = "/loginFirst";
-        res.render("login");
-        // next();
     }
 };
 
